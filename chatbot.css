@@ -4,8 +4,8 @@
   right: 20px;
   width: 50px;
   height: 50px;
-  background: #007bff;
-  color: white;
+  background: #006f32;
+  color: #f8f7f9;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -37,8 +37,8 @@
 }
 
 .chat-header {
-  background: #007bff;
-  color: white;
+  background: #006f32;
+  color: #f8f7f9;
   padding: 10px;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
@@ -69,7 +69,7 @@
   transform: translateY(-50%);
   background: none;
   border: none;
-  color: white;
+  color: #f8f7f9;
   font-size: 20px;
   font-weight: bold;
   cursor: pointer;
@@ -78,7 +78,7 @@
 }
 
 #close-button:hover {
-  color: #ff4444;
+  color: #95c11f;
 }
 
 .chat-body {
@@ -115,7 +115,7 @@
 }
 
 .user-message {
-  background: #007bff;
+  background: #00973a;
   color: white;
   padding: 8px 12px;
   border-radius: 10px;
@@ -162,7 +162,7 @@
 #sendButton.btn {
   position: relative;
   border: none;
-  background-color: var(--primary, #007bff);
+  background-color: var(--primary, #006f32);
   transition: background-color 0.2s ease;
 }
 
@@ -175,7 +175,7 @@
 }
 
 #sendButton.btn:hover {
-  background-color: var(--primary-hover, #0056b3);
+  background-color: var(--primary-hover, #093a21);
 }
 
 #sendButton.btn:hover::before {
@@ -215,8 +215,8 @@
 }
 
 :root {
-  --primary: #007bff;
-  --primary-hover: #0056b3;
+  --primary: #0f7b35;
+  --primary-hover: #093a21;
 }
 
 /* Media queries para pantallas pequeñas */

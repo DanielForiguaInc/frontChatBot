@@ -86,7 +86,7 @@ updateSendButtonState();
     messageDiv.className = `chat-message ${sender === 'bot' ? 'bot-message' : 'user-message'}`;
     if (sender === 'bot') {
       const img = document.createElement('img');
-      img.src = 'images/IncomelecProfile1.png';
+      img.src = 'images/IncomelecRounded2.svg';
       img.alt = 'Bot Avatar';
       const span = document.createElement('span');
       span.textContent = text;
