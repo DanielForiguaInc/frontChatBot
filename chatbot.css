@@ -28,7 +28,7 @@
   max-width: 400px;
   height: 70vh;
   max-height: 500px;
-  background: white;
+  background: #f8f7f9;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0,0,0,0.3);
   display: flex;
@@ -89,6 +89,7 @@
   font-size: 14px;
   display: flex;
   flex-direction: column;
+  border-bottom: 1px solid transparent;
 }
 
 .bot-message {
@@ -128,14 +129,47 @@
 .chat-footer {
   padding: 10px;
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: stretch;
+  background: #ffffff;
+  border-radius: 18px;
+  border: 0.25px solid #f5f5f5;
+  margin: 10px 10px 10px 10px;
+}
+
+.input-row {
+  display: flex;
   align-items: center;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.input-group .btn {
+  border-radius: 50%;
+  border: 1px solid #e0e0e0;
+}
+
+.button-row {
+  display: flex;
+  justify-content: flex-start;
+  gap: 8px;
 }
 
 .chat-input.form-control {
   font-size: 14px;
-  padding: 8px;
+  padding: 0px;
   height: 36px;
+  border: 1px solid #ffffff00;
+  border-radius: 8px;
+}
+
+.chat-input.form-control:focus {
+  box-shadow: 0 0 0 0.2rem rgba(0, 151, 58, 0);
+  border-color: #ffffff00;
 }
 
 .chat-button.btn,
@@ -160,26 +194,33 @@
 }
 
 #sendButton.btn {
-  position: relative;
-  border: none;
-  background-color: var(--primary, #006f32);
-  transition: background-color 0.2s ease;
-}
-
-#sendButton.btn::before {
-  content: "";
-  width: 18px;
-  height: 18px;
   background: url('images/send-white.svg') center/contain no-repeat;
-  display: block;
+  background-color: #00973a;
+  background-size: 14px 14px;
+  border: 1px solid #ffffff00;
+  border-radius: 50%;
+  width: 36px;
+  height: 32.5px;
+  transition: background-color 0.2s ease, background-image 0.2s ease;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 #sendButton.btn:hover {
-  background-color: var(--primary-hover, #093a21);
+  background: url('images/send-white.svg') center/contain no-repeat;
+  background-color: #00973a;
+  background-size: 14px 14px;
+  transform: none;
+}
+
+#sendButton.btn::before {
+  display: none;
 }
 
 #sendButton.btn:hover::before {
-  background: url('images/send-white.svg') center/contain no-repeat;
+  display: none;
 }
 
 .chat-message {
@@ -241,12 +282,6 @@
     padding: 0 8px;
   }
 
-  .chat-input.form-control {
-    font-size: 12px;
-    padding: 6px;
-    height: 32px;
-  }
-
   .chat-button.btn,
   .voice-button.btn,
   .history-button.btn,
@@ -269,5 +304,27 @@
   .option-button {
     font-size: 10px;
     padding: 5px 10px;
+  }
+
+  .chat-input.form-control {
+    font-size: 12px;
+    padding: 6px;
+    height: 32px;
+    border-radius: 16px;
+  }
+
+  #sendButton.btn,
+  .chat-button.btn,
+  .voice-button.btn,
+  .history-button.btn,
+  .download-button.btn {
+    width: 32px;
+    height: 32px;
+    font-size: 10px;
+    border-radius: 50%;
+  }
+
+  .input-group .btn {
+    border-radius: 50%;
   }
 }

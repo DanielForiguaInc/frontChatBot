@@ -22,13 +22,17 @@
     <div class="chat-body" id="chatBody"></div>
 
 <div class="chat-footer">
-  <div class="input-group">
-    <input type="text" id="chatInput" class="form-control chat-input" placeholder="Describe tu problema...">
-    <button id="sendButton" class="btn btn-primary chat-button" disabled></button>
+  <div class="input-row mb-2">
+    <div class="input-group">
+      <input type="text" id="chatInput" class="form-control chat-input" placeholder="Describe tu problema...">
+    </div>
+    <button id="sendButton" class="btn btn-primary chat-button ms-2" disabled></button>
   </div>
-  <button id="voiceButton" class="btn btn-info voice-button ms-1">🎤</button>
-  <button id="historyButton" class="btn btn-warning history-button ms-1">📜</button>
-  <button id="downloadButton" class="btn btn-success download-button ms-1">📥</button>
+  <div class="button-row">
+    <button id="voiceButton" class="btn btn-info voice-button me-1">🎤</button>
+    <button id="historyButton" class="btn btn-warning history-button me-1">📜</button>
+    <button id="downloadButton" class="btn btn-success download-button">📥</button>
+  </div>
 </div>
 
   <script src="knowledge_base.js"></script>

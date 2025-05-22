@@ -163,6 +163,7 @@ updateSendButtonState();
     if (input) {
       processUserInput(input);
       chatInput.value = '';
+      updateSendButtonState(); // Actualizar el estado del botón después de limpiar el textarea
     }
   });
   chatInput.addEventListener('keypress', (e) => {
@@ -178,6 +179,7 @@ updateSendButtonState();
         const transcript = event.results[0][0].transcript;
         chatInput.value = transcript;
         sendButton.click();
+        updateSendButtonState(); // Actualizar el estado del botón después de enviar por voz
       };
       recognition.onerror = (event) => {
         addMessage('bot', 'Error en reconocimiento de voz. Usa texto, por favor.');
