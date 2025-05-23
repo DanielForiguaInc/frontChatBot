@@ -20,14 +20,14 @@
   transform: scale(1.1);
 }
 
+/* Contenedor principal con altura fija */
 .chat-container {
   position: fixed;
   bottom: 80px;
   right: 20px;
   width: 90%;
   max-width: 400px;
-  height: 70vh;
-  max-height: 500px;
+  height: 500px;
   background: #f8f7f9;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0,0,0,0.3);
@@ -36,6 +36,7 @@
   z-index: 1000;
 }
 
+/* Header del chat */
 .chat-header {
   background: #006f32;
   color: #f8f7f9;
@@ -48,6 +49,7 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  flex-shrink: 0;
 }
 
 .header-content {
@@ -81,6 +83,7 @@
   color: #95c11f;
 }
 
+/* Body del chat con altura calculada */
 .chat-body {
   flex-grow: 1;
   padding: 10px;
@@ -92,6 +95,69 @@
   border-bottom: 1px solid transparent;
 }
 
+/* Footer dinámico */
+.chat-footer {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  background: #ffffff;
+  border-radius: 18px;
+  border: 1px solid #f5f5f5;
+  margin: 10px 10px 10px 10px;
+  flex-shrink: 0;
+  min-height: 60px;
+}
+
+/* Ajuste del input group y textarea */
+.input-row {
+  display: flex;
+  align-items: flex-start;
+}
+
+.input-group {
+  display: flex;
+  align-items: flex-start;
+  gap: 5px;
+  flex-grow: 1;
+}
+
+.input-group .btn {
+  border-radius: 50%;
+  border: 1px solid #e0e0e0;
+}
+
+.button-row {
+  display: flex;
+  justify-content: flex-start;
+  gap: 8px;
+  margin-top: 5px;
+  flex-shrink: 0;
+}
+
+.chat-input.form-control {
+  font-size: 14px;
+  padding: 8px;
+  min-height: 38px;
+  max-height: 150px;
+  border: 1px solid #ffffff00;
+  border-radius: 8px;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  resize: none;
+  line-height: 1.5;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+.chat-input.form-control:focus {
+  box-shadow: 0 0 0 0.2rem rgba(0, 151, 58, 0);
+  border-color: #ffffff00;
+}
+
+/* Estilos de los mensajes */
 .bot-message {
   background: #e9ecef;
   padding: 8px 12px;
@@ -126,52 +192,7 @@
   align-self: flex-end;
 }
 
-.chat-footer {
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  background: #ffffff;
-  border-radius: 18px;
-  border: 0.25px solid #f5f5f5;
-  margin: 10px 10px 10px 10px;
-}
-
-.input-row {
-  display: flex;
-  align-items: center;
-}
-
-.input-group {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.input-group .btn {
-  border-radius: 50%;
-  border: 1px solid #e0e0e0;
-}
-
-.button-row {
-  display: flex;
-  justify-content: flex-start;
-  gap: 8px;
-}
-
-.chat-input.form-control {
-  font-size: 14px;
-  padding: 0px;
-  height: 36px;
-  border: 1px solid #ffffff00;
-  border-radius: 8px;
-}
-
-.chat-input.form-control:focus {
-  box-shadow: 0 0 0 0.2rem rgba(0, 151, 58, 0);
-  border-color: #ffffff00;
-}
-
+/* Estilos de los botones */
 .chat-button.btn,
 .voice-button.btn,
 .history-button.btn,
@@ -199,8 +220,8 @@
   background-size: 14px 14px;
   border: 1px solid #ffffff00;
   border-radius: 50%;
-  width: 36px;
-  height: 32.5px;
+  width: 38px;
+  height: 34px;
   transition: background-color 0.2s ease, background-image 0.2s ease;
   padding: 0;
   display: flex;
@@ -266,6 +287,7 @@
     width: 95%;
     bottom: 10px;
     right: 10px;
+    height: 400px;
   }
 
   .chat-header {
@@ -275,20 +297,6 @@
   .profile-img {
     width: 25px;
     height: 25px;
-  }
-
-  #close-button {
-    font-size: 16px;
-    padding: 0 8px;
-  }
-
-  .chat-button.btn,
-  .voice-button.btn,
-  .history-button.btn,
-  .download-button.btn {
-    width: 32px;
-    height: 32px;
-    font-size: 10px;
   }
 
   .chat-message {
@@ -309,8 +317,23 @@
   .chat-input.form-control {
     font-size: 12px;
     padding: 6px;
-    height: 32px;
+    min-height: 32px;
+    max-height: 120px;
     border-radius: 16px;
+  }
+
+  #close-button {
+    font-size: 16px;
+    padding: 0 8px;
+  }
+
+  .chat-button.btn,
+  .voice-button.btn,
+  .history-button.btn,
+  .download-button.btn {
+    width: 32px;
+    height: 32px;
+    font-size: 10px;
   }
 
   #sendButton.btn,
@@ -322,6 +345,10 @@
     height: 32px;
     font-size: 10px;
     border-radius: 50%;
+  }
+
+  .chat-footer {
+    min-height: 50px;
   }
 
   .input-group .btn {

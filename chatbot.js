@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const voiceButton = document.getElementById('voiceButton');
   const historyButton = document.getElementById('historyButton');
   const downloadButton = document.getElementById('downloadButton');
-  const closeButton = document.getElementById('close-button'); // Actualizado a close-button
+  const closeButton = document.getElementById('close-button');
 
   // Mostrar/Ocultar chat y mostrar mensaje de bienvenida la primera vez
   chatBubble.addEventListener('click', () => {
@@ -52,14 +52,44 @@ document.addEventListener('DOMContentLoaded', function() {
       chatContainer.style.display = 'none';
     }
   });
-  
-  function updateSendButtonState() {
-  sendButton.disabled = chatInput.value.trim() === '';
-}
 
-chatInput.addEventListener('input', updateSendButtonState);
-// Inicializa el estado
-updateSendButtonState();
+  function updateSendButtonState() {
+    sendButton.disabled = chatInput.value.trim() === '';
+  }
+
+  // Ajustar la altura del textarea dinámicamente
+  function adjustTextareaHeight() {
+    // Resetear altura para calcular correctamente
+    chatInput.style.height = 'auto';
+
+    // Contar las líneas basadas en saltos de línea (\n)
+    const content = chatInput.value;
+    const numberOfLines = content === '' ? 1 : content.split('\n').length;
+    const minHeight = parseFloat(getComputedStyle(chatInput).minHeight); // 38px
+    const maxHeight = 150; // Límite en píxeles
+
+    if (numberOfLines <= 1) {
+      // Si hay 1 línea o menos, mantener la altura mínima
+      chatInput.style.height = `${minHeight}px`;
+    } else {
+      // Si hay más de 1 línea, ajustar la altura dinámicamente
+      const newHeight = Math.min(chatInput.scrollHeight, maxHeight);
+      chatInput.style.height = `${newHeight}px`;
+    }
+
+    // Desplazar al final si hay overflow
+    if (chatInput.scrollHeight > maxHeight) {
+      chatInput.scrollTop = chatInput.scrollHeight;
+    }
+  }
+
+  chatInput.addEventListener('input', () => {
+    updateSendButtonState();
+    adjustTextareaHeight();
+  });
+
+  // Ajustar altura inicial
+  adjustTextareaHeight();
 
   // Cerrar chat
   closeButton.addEventListener('click', () => {
@@ -157,17 +187,25 @@ updateSendButtonState();
     }
   }
 
-  // Enviar mensaje al presionar Enter o el botón
+  // Enviar mensaje al presionar el botón
   sendButton.addEventListener('click', () => {
     const input = chatInput.value.trim();
     if (input) {
       processUserInput(input);
       chatInput.value = '';
-      updateSendButtonState(); // Actualizar el estado del botón después de limpiar el textarea
+      // Forzar altura mínima después de enviar
+      chatInput.style.height = parseFloat(getComputedStyle(chatInput).minHeight) + 'px';
+      updateSendButtonState();
     }
   });
-  chatInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') sendButton.click();
+
+  // Enviar mensaje al presionar Enter (Shift + Enter manejado por textarea)
+  chatInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendButton.click();
+      updateSendButtonState();
+    }
   });
 
   // Soporte para voz (Web Speech API)
@@ -179,7 +217,7 @@ updateSendButtonState();
         const transcript = event.results[0][0].transcript;
         chatInput.value = transcript;
         sendButton.click();
-        updateSendButtonState(); // Actualizar el estado del botón después de enviar por voz
+        updateSendButtonState();
       };
       recognition.onerror = (event) => {
         addMessage('bot', 'Error en reconocimiento de voz. Usa texto, por favor.');
