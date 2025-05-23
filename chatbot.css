@@ -64,6 +64,14 @@
   margin-right: 10px;
 }
 
+.incomelec-img {
+  width: fit-content;
+  height: 23px;
+  margin-right: 10px;
+  margin-left: 5px;
+  background-color: #ffffff00;
+}
+
 #close-button {
   position: absolute;
   top: 50%;
@@ -93,6 +101,31 @@
   display: flex;
   flex-direction: column;
   border-bottom: 1px solid transparent;
+}
+
+/* Estilizar el scrollbar del chat-body */
+.chat-body::-webkit-scrollbar {
+  width: 4px;
+}
+
+.chat-body::-webkit-scrollbar-track {
+  background: #ffffff00;
+  border-radius: 2px;
+}
+
+.chat-body::-webkit-scrollbar-thumb {
+  background: rgba(136, 136, 136, 0.5);
+  border-radius: 2px;
+}
+
+.chat-body::-webkit-scrollbar-thumb:hover {
+  background: rgba(85, 85, 85, 0.7);
+}
+
+/* Compatibilidad con Firefox para chat-body */
+.chat-body {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(136, 136, 136, 0.5) #ffffff00;
 }
 
 /* Footer dinámico */
@@ -158,7 +191,7 @@
 }
 
 .chat-input.form-control::-webkit-scrollbar-track {
-  background: rgba(241, 241, 241, 0.5);
+  background: #ffffff00;
   border-radius: 2px;
 }
 
@@ -171,10 +204,10 @@
   background: rgba(85, 85, 85, 0.7);
 }
 
-/* Compatibilidad con Firefox */
+/* Compatibilidad con Firefox para textarea */
 .chat-input.form-control {
   scrollbar-width: thin;
-  scrollbar-color: rgba(136, 136, 136, 0.5) rgba(241, 241, 241, 0.5);
+  scrollbar-color: rgba(136, 136, 136, 0.5) #ffffff00;
 }
 
 .chat-input.form-control:focus {
@@ -347,13 +380,13 @@
     border-radius: 16px;
   }
 
-  /* Estilizar el scrollbar en pantallas pequeñas */
+  /* Estilizar el scrollbar del textarea en pantallas pequeñas */
   .chat-input.form-control::-webkit-scrollbar {
     width: 3px;
   }
 
   .chat-input.form-control::-webkit-scrollbar-track {
-    background: rgba(241, 241, 241, 0.5);
+    background: #ffffff00;
     border-radius: 1.5px;
   }
 
@@ -363,6 +396,25 @@
   }
 
   .chat-input.form-control::-webkit-scrollbar-thumb:hover {
+    background: rgba(85, 85, 85, 0.7);
+  }
+
+  /* Estilizar el scrollbar del chat-body en pantallas pequeñas */
+  .chat-body::-webkit-scrollbar {
+    width: 3px;
+  }
+
+  .chat-body::-webkit-scrollbar-track {
+    background: #ffffff00;
+    border-radius: 1.5px;
+  }
+
+  .chat-body::-webkit-scrollbar-thumb {
+    background: rgba(136, 136, 136, 0.5);
+    border-radius: 1.5px;
+  }
+
+  .chat-body::-webkit-scrollbar-thumb:hover {
     background: rgba(85, 85, 85, 0.7);
   }
 

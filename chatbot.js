@@ -120,7 +120,7 @@ document.addEventListener('DOMContentLoaded', function() {
     messageDiv.className = `chat-message ${sender === 'bot' ? 'bot-message' : 'user-message'}`;
     if (sender === 'bot') {
       const img = document.createElement('img');
-      img.src = 'images/IncomelecRounded2.svg';
+      img.src = 'images/IncomelecRounded.svg';
       img.alt = 'Bot Avatar';
       const span = document.createElement('span');
       span.textContent = text;
