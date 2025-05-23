@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
     sendButton.disabled = chatInput.value.trim() === '';
   }
 
-  // Ajustar la altura del textarea dinámicamente
+  // Ajustar la altura del textarea dinámicamente y controlar el scrollbar
   function adjustTextareaHeight() {
     // Resetear altura para calcular correctamente
     chatInput.style.height = 'auto';
@@ -71,15 +71,19 @@ document.addEventListener('DOMContentLoaded', function() {
     if (numberOfLines <= 1) {
       // Si hay 1 línea o menos, mantener la altura mínima
       chatInput.style.height = `${minHeight}px`;
+      chatInput.style.overflowY = 'hidden'; // Ocultar scrollbar
     } else {
       // Si hay más de 1 línea, ajustar la altura dinámicamente
       const newHeight = Math.min(chatInput.scrollHeight, maxHeight);
       chatInput.style.height = `${newHeight}px`;
-    }
 
-    // Desplazar al final si hay overflow
-    if (chatInput.scrollHeight > maxHeight) {
-      chatInput.scrollTop = chatInput.scrollHeight;
+      // Mostrar scrollbar solo si el contenido excede el max-height
+      if (chatInput.scrollHeight > maxHeight) {
+        chatInput.style.overflowY = 'auto';
+        chatInput.scrollTop = chatInput.scrollHeight; // Desplazar al final
+      } else {
+        chatInput.style.overflowY = 'hidden';
+      }
     }
   }
 
@@ -195,6 +199,7 @@ document.addEventListener('DOMContentLoaded', function() {
       chatInput.value = '';
       // Forzar altura mínima después de enviar
       chatInput.style.height = parseFloat(getComputedStyle(chatInput).minHeight) + 'px';
+      chatInput.style.overflowY = 'hidden'; // Ocultar scrollbar después de enviar
       updateSendButtonState();
     }
   });

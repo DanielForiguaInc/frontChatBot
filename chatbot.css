@@ -149,7 +149,32 @@
   line-height: 1.5;
   width: 100%;
   box-sizing: border-box;
-  overflow-y: auto;
+  overflow-y: hidden;
+}
+
+/* Estilizar el scrollbar del textarea */
+.chat-input.form-control::-webkit-scrollbar {
+  width: 4px;
+}
+
+.chat-input.form-control::-webkit-scrollbar-track {
+  background: rgba(241, 241, 241, 0.5);
+  border-radius: 2px;
+}
+
+.chat-input.form-control::-webkit-scrollbar-thumb {
+  background: rgba(136, 136, 136, 0.5);
+  border-radius: 2px;
+}
+
+.chat-input.form-control::-webkit-scrollbar-thumb:hover {
+  background: rgba(85, 85, 85, 0.7);
+}
+
+/* Compatibilidad con Firefox */
+.chat-input.form-control {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(136, 136, 136, 0.5) rgba(241, 241, 241, 0.5);
 }
 
 .chat-input.form-control:focus {
@@ -320,6 +345,25 @@
     min-height: 32px;
     max-height: 120px;
     border-radius: 16px;
+  }
+
+  /* Estilizar el scrollbar en pantallas pequeñas */
+  .chat-input.form-control::-webkit-scrollbar {
+    width: 3px;
+  }
+
+  .chat-input.form-control::-webkit-scrollbar-track {
+    background: rgba(241, 241, 241, 0.5);
+    border-radius: 1.5px;
+  }
+
+  .chat-input.form-control::-webkit-scrollbar-thumb {
+    background: rgba(136, 136, 136, 0.5);
+    border-radius: 1.5px;
+  }
+
+  .chat-input.form-control::-webkit-scrollbar-thumb:hover {
+    background: rgba(85, 85, 85, 0.7);
   }
 
   #close-button {
