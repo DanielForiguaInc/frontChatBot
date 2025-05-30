@@ -76,19 +76,32 @@
   position: absolute;
   top: 50%;
   right: 10px;
-  transform: translateY(-50%);
-  background: none;
+  transform: translateY(-50%); /* Centrado vertical */
+  background: url('images/minimizeWhite.svg') center/contain no-repeat;
+  background-color: #ffffff00;
+  background-size: 18px 24px;
+  background-position: center;
+  width: 30px;
+  height: 30px;
   border: none;
-  color: #f8f7f9;
-  font-size: 20px;
-  font-weight: bold;
+  border-radius: 50%;
   cursor: pointer;
-  padding: 0 10px;
-  transition: color 0.3s ease;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0);
+  transition: transform 0.2s ease, background-color 0.2s ease, background-image 0s ease, opacity 0.2s ease; /* Añadimos transición para opacity */
 }
 
 #close-button:hover {
-  color: #95c11f;
+  background: url('images/minimizeGreen.svg') center/contain no-repeat;
+  background-color: #0f7b35;
+  box-shadow: 0 2px 4px rgba(0,0,0,0);
+  transform: translateY(-50%) scale(1); /* Combinamos ambas transformaciones */
+  background-size: 18px 24px;
+  background-position: center;
+  opacity: 0.7; /* Añadimos efecto de transparencia al hover */
 }
 
 /* Body del chat con altura calculada */
@@ -297,13 +310,13 @@
 
 /* Botón de descarga */
 .download-button.btn {
-  background: url('images/DownloadWhite2.svg') center/contain no-repeat;
+  background: url('images/downloadWhite2.svg') center/contain no-repeat;
   background-color: #007bff;
   background-size: 18px 18px;
 }
 
 .download-button.btn:hover {
-  background: url('images/DownloadWhite2.svg') center/contain no-repeat;
+  background: url('images/downloadWhite2.svg') center/contain no-repeat;
   background-color: #0056b3;
   background-size: 18px 18px;
   transform: scale(1.1);
@@ -456,7 +469,10 @@
   }
 
   #close-button {
-    font-size: 16px;
+    width: 25px;
+    height: 25px;
+    background-size: 16px 16px;
+    font-size: 12px;
     padding: 0 8px;
   }
 
@@ -468,7 +484,7 @@
     height: 32px;
     font-size: 10px;
     background-size: 16px 16px;
-    border-radius: 6px; /* Ajustado para pantallas pequeñas, de 50% a 6px */
+    border-radius: 6px;
   }
 
   #sendButton.btn,
