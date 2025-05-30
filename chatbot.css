@@ -256,20 +256,57 @@
 .history-button.btn,
 .download-button.btn {
   font-size: 12px;
-  padding: 0;
-  width: 36px;
+  width: 66px;
   height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.2s ease;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease, background-color 0.2s ease, background-image 0.2s ease;
 }
 
-.chat-button.btn:hover,
-.voice-button.btn:hover,
-.history-button.btn:hover,
+/* Botón de voz */
+.voice-button.btn {
+  background: url('images/MicrophoneWhite2.svg') center/contain no-repeat;
+  background-color: #006f32;
+  background-size: 18px 18px;
+}
+
+.voice-button.btn:hover {
+  background: url('images/MicrophoneWhite2.svg') center/contain no-repeat;
+  background-color: #004d23;
+  background-size: 18px 18px;
+  transform: scale(1.1);
+}
+
+/* Botón de historial */
+.history-button.btn {
+  background: url('images/HistoryWhite2.svg') center/contain no-repeat;
+  background-color: #ffc107;
+  background-size: 18px 18px;
+}
+
+.history-button.btn:hover {
+  background: url('images/HistoryWhite2.svg') center/contain no-repeat;
+  background-color: #e0a800;
+  background-size: 18px 18px;
+  transform: scale(1.1);
+}
+
+/* Botón de descarga */
+.download-button.btn {
+  background: url('images/DownloadWhite2.svg') center/contain no-repeat;
+  background-color: #007bff;
+  background-size: 18px 18px;
+}
+
 .download-button.btn:hover {
-  transform: scale(1.05);
+  background: url('images/DownloadWhite2.svg') center/contain no-repeat;
+  background-color: #0056b3;
+  background-size: 18px 18px;
+  transform: scale(1.1);
 }
 
 #sendButton.btn {
@@ -430,6 +467,8 @@
     width: 32px;
     height: 32px;
     font-size: 10px;
+    background-size: 16px 16px;
+    border-radius: 6px; /* Ajustado para pantallas pequeñas, de 50% a 6px */
   }
 
   #sendButton.btn,
@@ -440,7 +479,6 @@
     width: 32px;
     height: 32px;
     font-size: 10px;
-    border-radius: 50%;
   }
 
   .chat-footer {
