@@ -8,7 +8,7 @@
    viewBox="0 0 14.0055 19.02"
    version="1.1"
    id="svg1"
-   sodipodi:docname="microphone-4-svgrepo-com.svg"
+   sodipodi:docname="MicrophoneGreen2.svg"
    inkscape:version="1.4 (86a8ad7, 2024-10-11)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -37,5 +37,5 @@
   <path
      d="m 7.0046502,0.01027415 c -1.657,0 -3,1.34299995 -3,2.99999995 v 6 c 0,1.6569999 1.343,2.9999999 3,2.9999999 1.657,0 2.9999998,-1.343 2.9999998,-2.9999999 v -6 c 0,-1.657 -1.3429998,-2.99999995 -2.9999998,-2.99999995 z m 0,1.99999995 c 0.551,0 1,0.449 1,1 v 6 c 0,0.551 -0.449,0.9999999 -1,0.9999999 -0.551,0 -1,-0.4489999 -1,-0.9999999 v -6 c 0,-0.551 0.449,-1 1,-1 z m -7,7 c 0,3.5252959 2.6093644,6.4332259 6,6.9199219 v 3.080078 h 2 V 15.930196 C 11.395286,15.4435 14.00465,12.53557 14.00465,9.0102741 h -2 c 0,2.7609999 -2.2389998,4.9999999 -4.9999998,4.9999999 -2.761,0 -5,-2.239 -5,-4.9999999 z"
      id="path1"
-     style="fill:#006f32;fill-opacity:1" />
+     style="fill:#95c11f;fill-opacity:1" />
 </svg>

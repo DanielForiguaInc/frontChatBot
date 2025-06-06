@@ -1,3 +1,91 @@
+/* Estilos comunes para los botones del header */
+#themeToggle, #languageButton, #close-button {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #006f32;
+  background-size: 18px 18px;
+  background-repeat: no-repeat;
+  background-position: center;
+  transition: background-color 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+}
+
+/* Botón de cambiar idioma */
+#languageButton {
+  background-image: url('images/language-white.svg');
+  background-size: 14px;
+}
+
+#languageButton:hover {
+  background-image: url('images/language-white.svg');
+  background-color: #00973a;
+  transform: scale(1);
+  opacity: 0.8;
+}
+
+/* Botón de cambiar tema */
+#themeToggle {
+  background-image: url('images/LightbulbOn-Green1.svg');
+}
+
+#themeToggle:hover {
+  background-image: url('images/LightbulbOn-White.svg');
+  background-color: #00973a;
+  transform: scale(1);
+  opacity: 0.8;
+}
+
+#themeToggle.dark-mode {
+  background-image: url('images/LightbulbOff-Green1.svg');
+}
+
+#themeToggle.dark-mode:hover {
+  background-image: url('images/LightbulbOff-White.svg');
+  background-color: #00973a;
+  transform: scale(1);
+  opacity: 0.8;
+}
+
+/* Hover para los botones del header */
+#themeToggle:hover, #languageButton:hover, #close-button:hover {
+  background-color: #00973a;
+  transform: scale(1);
+  opacity: 0.8;
+}
+
+/* Botón de cerrar */
+#close-button {
+  background-image: url('images/minimizeWhite.svg');
+}
+
+#close-button:hover {
+  background-image: url('images/minimizeGreen.svg');
+  background-color: #00973a;
+  transform: scale(1);
+}
+
+/* Forzar el hover en modo oscuro */
+body.dark-mode #themeToggle:hover,
+body.dark-mode #languageButton:hover,
+body.dark-mode #close-button:hover {
+  background-color: #00973a;
+  transform: scale(1);
+  opacity: 0.8;
+}
+
+/* Mantener los botones del header en modo oscuro */
+body.dark-mode #themeToggle,
+body.dark-mode #languageButton,
+body.dark-mode #close-button {
+  background-color: #006f32;
+}
+
+/* Contenedor principal */
 .chat-bubble {
   position: fixed;
   bottom: 20px;
@@ -20,7 +108,6 @@
   transform: scale(1.1);
 }
 
-/* Contenedor principal con altura fija */
 .chat-container {
   position: fixed;
   bottom: 80px;
@@ -38,23 +125,26 @@
 
 /* Header del chat */
 .chat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
   background: #006f32;
   color: #f8f7f9;
-  padding: 10px;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
-  font-weight: bold;
-  font-size: 16px;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  flex-shrink: 0;
 }
 
 .header-content {
   display: flex;
   align-items: center;
+  gap: 8px;
+}
+
+.header-buttons {
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .profile-img {
@@ -66,45 +156,25 @@
 
 .incomelec-img {
   width: fit-content;
-  height: 23px;
-  margin-right: 10px;
-  margin-left: 5px;
-  background-color: #ffffff00;
+  height: 20px;
 }
 
-#close-button {
+/* Notificación */
+.notification {
   position: absolute;
-  top: 50%;
-  right: 10px;
-  transform: translateY(-50%); /* Centrado vertical */
-  background: url('images/minimizeWhite.svg') center/contain no-repeat;
-  background-color: #ffffff00;
-  background-size: 18px 24px;
-  background-position: center;
-  width: 30px;
-  height: 30px;
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 4px rgba(0,0,0,0);
-  transition: transform 0.2s ease, background-color 0.2s ease, background-image 0s ease, opacity 0.2s ease; /* Añadimos transición para opacity */
+  top: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #4caf50;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  display: none;
+  z-index: 10;
+  font-size: 12px;
 }
 
-#close-button:hover {
-  background: url('images/minimizeGreen.svg') center/contain no-repeat;
-  background-color: #0f7b35;
-  box-shadow: 0 2px 4px rgba(0,0,0,0);
-  transform: translateY(-50%) scale(1); /* Combinamos ambas transformaciones */
-  background-size: 18px 2px;
-  background-position: center;
-  opacity: 0.7; /* Añadimos efecto de transparencia al hover */
-}
-
-/* Body del chat con altura calculada */
+/* Body del chat */
 .chat-body {
   flex-grow: 1;
   padding: 10px;
@@ -116,7 +186,6 @@
   border-bottom: 1px solid transparent;
 }
 
-/* Estilizar el scrollbar del chat-body */
 .chat-body::-webkit-scrollbar {
   width: 4px;
 }
@@ -135,7 +204,6 @@
   background: rgba(85, 85, 85, 0.7);
 }
 
-/* Compatibilidad con Firefox para chat-body */
 .chat-body {
   scrollbar-width: thin;
   scrollbar-color: rgba(136, 136, 136, 0.5) #ffffff00;
@@ -155,24 +223,34 @@
   min-height: 60px;
 }
 
-/* Ajuste del input group y textarea */
+/* Ajuste del input row */
 .input-row {
   display: flex;
-  align-items: flex-start;
+  align-items: stretch;
+  justify-content: flex-start;
+  width: 100%;
+  flex-wrap: nowrap;
+  gap: 3px;
 }
 
-.input-group {
-  display: flex;
-  align-items: flex-start;
-  gap: 5px;
+.input-row .chat-input {
   flex-grow: 1;
+  margin: 0;
+  padding: 8px;
+  min-height: 38px;
+  box-sizing: border-box;
+  border: 1px solid #ffffff00 !important;
 }
 
-.input-group .btn {
-  border-radius: 50%;
-  border: 1px solid #e0e0e0;
+.input-row #sendButton {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0;
+  height: 32px;
+  align-self: flex-end;
 }
 
+/* Ajuste del button-row */
 .button-row {
   display: flex;
   justify-content: flex-start;
@@ -181,24 +259,24 @@
   flex-shrink: 0;
 }
 
+/* Estilos del textarea */
 .chat-input.form-control {
   font-size: 14px;
   padding: 8px;
   min-height: 38px;
   max-height: 150px;
-  border: 1px solid #ffffff00;
+  border: 1px solid #ffffff00 !important;
   border-radius: 8px;
   white-space: pre-wrap;
   overflow-wrap: break-word;
   word-break: break-word;
   resize: none;
   line-height: 1.5;
-  width: 100%;
   box-sizing: border-box;
   overflow-y: hidden;
+  margin: 0 !important;
 }
 
-/* Estilizar el scrollbar del textarea */
 .chat-input.form-control::-webkit-scrollbar {
   width: 4px;
 }
@@ -217,7 +295,6 @@
   background: rgba(85, 85, 85, 0.7);
 }
 
-/* Compatibilidad con Firefox para textarea */
 .chat-input.form-control {
   scrollbar-width: thin;
   scrollbar-color: rgba(136, 136, 136, 0.5) #ffffff00;
@@ -225,7 +302,7 @@
 
 .chat-input.form-control:focus {
   box-shadow: 0 0 0 0.2rem rgba(0, 151, 58, 0);
-  border-color: #ffffff00;
+  border-color: #ffffff00 !important;
 }
 
 /* Estilos de los mensajes */
@@ -267,81 +344,164 @@
 .chat-button.btn,
 .voice-button.btn,
 .history-button.btn,
-.download-button.btn {
+.download-button.btn,
+.reset-button.btn {
   font-size: 12px;
-  width: 66px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: none;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  transition: transform 0.2s ease, background-color 0.2s ease, background-image 0.2s ease;
+  border: 1.4px solid #006f32;
+  border-color: #006f32;
+  border-radius: 50px;
+  padding: 4px;
+  box-sizing: border-box;
+  transition: transform 0.2s ease, width 0.2s ease, background-color 0.2s ease, background-image 0.2s ease;
+}
+
+/* Hover de los botones */
+.chat-button.btn:hover,
+.voice-button.btn:hover,
+.history-button.btn:hover,
+.download-button.btn:hover,
+.reset-button.btn:hover {
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-color: #95c11f;
+  border-radius: 50px;
+  padding: 4px 12px 4px 10px; /* Ajuste de padding para más espacio a la derecha */
+  box-sizing: border-box;
+  transition: transform 0.2s ease, width 0.2s ease, background-color 0.2s ease, background-image 0.2s ease;
 }
 
 /* Botón de voz */
 .voice-button.btn {
-  background: url('images/MicrophoneWhite2.svg') center/contain no-repeat;
-  background-color: #006f32;
-  background-size: 18px 18px;
+  background: url('images/MicrophoneGreen.svg') center/contain no-repeat;
+  background-color: #ffffff00;
+  background-size: 14px 14px;
 }
 
 .voice-button.btn:hover {
-  background: url('images/MicrophoneWhite2.svg') center/contain no-repeat;
-  background-color: #004d23;
-  background-size: 18px 18px;
-  transform: scale(1.1);
+  width: 48px;
+  height: 32px;
+  background: url('images/MicrophoneGreen2.svg') no-repeat;
+  background-color: #ffffff00;
+  background-size: 14px 14px;
+  background-position: calc(100% - 4px) center; /* Mover ícono a la derecha, con 4px de margen */
+  transform: scale(1);
+}
+
+.voice-button.btn:hover::after {
+  content: "Voz";
+  margin-right: 10px; /* Más espacio entre texto e ícono */
+  font-size: 10px;
+  color: #95c11f;
+  font-family: Arial, sans-serif;
+  font-weight: 600;
 }
 
 /* Botón de historial */
 .history-button.btn {
-  background: url('images/HistoryWhite2.svg') center/contain no-repeat;
-  background-color: #ffc107;
-  background-size: 18px 18px;
+  background: url('images/HistoryGreen.svg') center/contain no-repeat;
+  background-color: #ffffff00;
+  background-size: 14px 14px;
 }
 
 .history-button.btn:hover {
-  background: url('images/HistoryWhite2.svg') center/contain no-repeat;
-  background-color: #e0a800;
-  background-size: 18px 18px;
-  transform: scale(1.1);
+  width: 72px;
+  height: 32px;
+  background: url('images/HistoryGreen2.svg') no-repeat;
+  background-color: #ffffff00;
+  background-size: 14px 14px;
+  background-position: calc(100% - 4px) center;
+  transform: scale(1);
+}
+
+.history-button.btn:hover::after {
+  content: "Historial";
+  margin-right: 10px; /* Más espacio entre texto e ícono */
+  font-size: 10px;
+  color: #95c11f;
+  font-family: Arial, sans-serif;
+  font-weight: 600;
 }
 
 /* Botón de descarga */
 .download-button.btn {
-  background: url('images/downloadWhite2.svg') center/contain no-repeat;
-  background-color: #007bff;
-  background-size: 18px 18px;
+  background: url('images/downloadGreen.svg') center/contain no-repeat;
+  background-color: #ffffff00;
+  background-size: 14px 14px;
 }
 
 .download-button.btn:hover {
-  background: url('images/downloadWhite2.svg') center/contain no-repeat;
-  background-color: #0056b3;
-  background-size: 18px 18px;
-  transform: scale(1.1);
+  width: 80px;
+  height: 32px;
+  background: url('images/downloadGreen2.svg') no-repeat;
+  background-color: #ffffff00;
+  background-size: 14px 14px;
+  background-position: calc(100% - 4px) center;
+  transform: scale(1);
+}
+
+.download-button.btn:hover::after {
+  content: "Descargar";
+  margin-right: 10px; /* Más espacio entre texto e ícono */
+  font-size: 10px;
+  color: #95c11f;
+  font-family: Arial, sans-serif;
+  font-weight: 600;
+}
+
+/* Botón de reinicio */
+.reset-button.btn {
+  background: url('images/Restart-Green.svg') center/contain no-repeat;
+  background-color: #ffffff00;
+  background-size: 13px 13px;
+}
+
+.reset-button.btn:hover {
+  width: 73px;
+  height: 32px;
+  background: url('images/Restart-Green2.svg') no-repeat;
+  background-color: #ffffff00;
+  background-size: 13px 13px;
+  background-position: calc(100% - 4px) center;
+  transform: scale(1);
+}
+
+.reset-button.btn:hover::after {
+  content: "Reiniciar";
+  margin-right: 10px; /* Más espacio entre texto e ícono */
+  font-size: 10px;
+  color: #95c11f;
+  font-family: Arial, sans-serif;
+  font-weight: 600;
 }
 
 #sendButton.btn {
   background: url('images/send-white.svg') center/contain no-repeat;
   background-color: #00973a;
-  background-size: 14px 14px;
+  background-size: 11px 11px;
   border: 1px solid #ffffff00;
   border-radius: 50%;
-  width: 38px;
-  height: 34px;
+  width: 32px;
+  height: 32px;
   transition: background-color 0.2s ease, background-image 0.2s ease;
   padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: 0;
 }
 
 #sendButton.btn:hover {
   background: url('images/send-white.svg') center/contain no-repeat;
-  background-color: #00973a;
-  background-size: 14px 14px;
-  transform: none;
+  background-color: #007b2f;
+  background-size: 11px 11px;
+  transform: scale(1);
 }
 
 #sendButton.btn::before {
@@ -379,9 +539,14 @@
   transition: transform 0.2s ease, background-color 0.2s ease;
 }
 
+.option-button:hover {
+  transform: scale(1.05);
+  background-color: #5a6268;
+}
+
 /* Indicador de escribiendo */
 .typing-indicator {
-  background: #e9ecef; /* Mismo fondo que los mensajes del bot */
+  background: #e9ecef;
   padding: 8px 12px;
   border-radius: 10px;
   margin: 5px 0;
@@ -390,7 +555,7 @@
   align-items: center;
   align-self: flex-start;
   font-size: 14px;
-  color: #6c757d; /* Gris para diferenciarlo del mensaje real */
+  color: #6c757d;
 }
 
 .typing-indicator span.dot {
@@ -418,17 +583,54 @@
   }
 }
 
-.option-button:hover {
-  transform: scale(1.05);
-  background-color: #5a6268;
+/* Mantener el header */
+body.dark-mode .chat-header {
+  background: #006f32;
+  color: #f8f7f9;
 }
 
-:root {
-  --primary: #0f7b35;
-  --primary-hover: #093a21;
+/* Modo oscuro */
+body.dark-mode {
+  background-color: #1a1a1a;
 }
 
-/* Media queries para pantallas pequeñas */
+body.dark-mode .chat-container {
+  background-color: #2a2a2a;
+  border-color: #444;
+}
+
+body.dark-mode .chat-body {
+  background-color: #333;
+  color: #d0d0d0;
+}
+
+body.dark-mode .chat-message.bot-message {
+  background-color: #444;
+  color: #d0d0d0;
+}
+
+body.dark-mode .chat-message.user-message {
+  background-color: #007bff;
+  color: #ffffff;
+}
+
+body.dark-mode .typing-indicator {
+  background-color: #444;
+  color: #999;
+}
+
+body.dark-mode .chat-footer {
+  background-color: #2a2a2a;
+  border-color: #444;
+}
+
+body.dark-mode .chat-input.form-control {
+  background-color: #444;
+  color: #d0d0d0;
+  border-color: #555;
+}
+
+/* Media queries */
 @media (max-width: 480px) {
   .chat-container {
     width: 95%;
@@ -466,10 +668,8 @@
     padding: 6px;
     min-height: 32px;
     max-height: 120px;
-    border-radius: 16px;
   }
 
-  /* Estilizar el scrollbar del textarea en pantallas pequeñas */
   .chat-input.form-control::-webkit-scrollbar {
     width: 3px;
   }
@@ -488,7 +688,6 @@
     background: rgba(85, 85, 85, 0.7);
   }
 
-  /* Estilizar el scrollbar del chat-body en pantallas pequeñas */
   .chat-body::-webkit-scrollbar {
     width: 3px;
   }
@@ -499,7 +698,7 @@
   }
 
   .chat-body::-webkit-scrollbar-thumb {
-    background: rgba(136, 136, 136, 0.5);
+    background: rgba(136, 136, 106, 0.5);
     border-radius: 1.5px;
   }
 
@@ -518,19 +717,42 @@
   .chat-button.btn,
   .voice-button.btn,
   .history-button.btn,
-  .download-button.btn {
+  .download-button.btn,
+  .reset-button.btn {
     width: 32px;
     height: 32px;
     font-size: 10px;
-    background-size: 16px 16px;
+    background-size: 12px 12px; /* Tamaño reducido para pantallas pequeñas */
     border-radius: 6px;
+    padding: 4px;
   }
 
-  #sendButton.btn,
-  .chat-button.btn,
-  .voice-button.btn,
-  .history-button.btn,
-  .download-button.btn {
+  .chat-button.btn:hover,
+  .voice-button.btn:hover,
+  .history-button.btn:hover,
+  .download-button.btn:hover,
+  .reset-button.btn:hover {
+    width: 58px; /* Ajuste para pantallas pequeñas */
+    padding: 4px 10px 4px 6px; /* Ajuste de padding */
+  }
+
+  .voice-button.btn:hover,
+  .history-button.btn:hover,
+  .download-button.btn:hover,
+  .reset-button.btn:hover {
+    background-size: 12px 12px;
+    background-position: calc(100% - 4px) center;
+  }
+
+  .voice-button.btn:hover::after,
+  .history-button.btn:hover::after,
+  .download-button.btn:hover::after,
+  .reset-button.btn:hover::after {
+    margin-right: 8px; /* Ajuste para pantallas pequeñas */
+    font-size: 10px;
+  }
+
+  #sendButton.btn {
     width: 32px;
     height: 32px;
     font-size: 10px;
@@ -540,7 +762,8 @@
     min-height: 50px;
   }
 
-  .input-group .btn {
-    border-radius: 50%;
+  .notification {
+    font-size: 10px;
+    padding: 3px 6px;
   }
 }
