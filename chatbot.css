@@ -154,6 +154,16 @@ body.dark-mode #close-button {
   margin-right: 10px;
 }
 
+.incomelec-avatar {
+  width: fit-content;
+  height: 20px;
+}
+
+.incomelec-profile {
+  width: 27.5px;
+  height: 27.5px;
+}
+
 .incomelec-img {
   width: fit-content;
   height: 20px;
@@ -591,7 +601,7 @@ body.dark-mode .chat-header {
 
 /* Modo oscuro */
 body.dark-mode {
-  background-color: #1a1a1a;
+  background-color: #2a2a2a;
 }
 
 body.dark-mode .chat-container {
@@ -600,7 +610,7 @@ body.dark-mode .chat-container {
 }
 
 body.dark-mode .chat-body {
-  background-color: #333;
+  background-color: #2a2a2a;
   color: #d0d0d0;
 }
 
@@ -620,19 +630,19 @@ body.dark-mode .typing-indicator {
 }
 
 body.dark-mode .chat-footer {
-  background-color: #2a2a2a;
+  background-color: #333;
   border-color: #444;
 }
 
 body.dark-mode .chat-input.form-control {
-  background-color: #2a2a2a;
+  background-color: #333;
   color: #d0d0d0;
   border-color: #555;
 }
 
 body.dark-mode .chat-input.form-control::placeholder {
   color: #b0b0b0; /* Color del placeholder en modo oscuro */
-  opacity: 1; /* Asegurar visibilidad completa */
+  opacity: 0.6; /* Asegurar visibilidad completa */
 }
 
 body.dark-mode .chat-input.form-control:-ms-input-placeholder {

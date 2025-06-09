@@ -144,10 +144,10 @@ document.addEventListener('DOMContentLoaded', function() {
   // Modo oscuro/claro
   let isDarkMode = false;
   themeToggle.addEventListener('click', () => {
-  isDarkMode = !isDarkMode;
-  document.body.classList.toggle('dark-mode', isDarkMode);
-  themeToggle.classList.toggle('dark-mode', isDarkMode);
-});
+    isDarkMode = !isDarkMode;
+    document.body.classList.toggle('dark-mode', isDarkMode);
+    themeToggle.classList.toggle('dark-mode', isDarkMode);
+  });
 
   // Selector de idioma (simulado con botón)
   languageButton.addEventListener('click', () => {
@@ -170,6 +170,14 @@ document.addEventListener('DOMContentLoaded', function() {
     log('Conexión restablecida');
     showNotification(translations[currentLanguage].connectionRestored);
     updateSendButtonState();
+  });
+
+  // Deshabilitar clic derecho sobre imágenes y botones con imágenes de fondo
+  document.addEventListener('contextmenu', function(e) {
+    if (e.target.tagName === 'IMG' || e.target.classList.contains('btn')) {
+      e.preventDefault();
+      return false;
+    }
   });
 
   // Mostrar/Ocultar chat y mostrar mensaje de bienvenida la primera vez
@@ -248,7 +256,7 @@ document.addEventListener('DOMContentLoaded', function() {
     messageDiv.className = `chat-message ${sender === 'bot' ? 'bot-message' : 'user-message'}`;
     if (sender === 'bot') {
       const img = document.createElement('img');
-      img.src = 'images/IncomelecRounded.svg';
+      img.src = 'images/IncomelecRounded.svg'; // Ruta original
       img.alt = 'Bot Avatar';
       const span = document.createElement('span');
       span.innerHTML = text;
