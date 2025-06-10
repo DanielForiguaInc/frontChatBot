@@ -141,6 +141,50 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   log('Elementos del DOM cargados correctamente');
 
+  // Función para deshabilitar interacciones con imágenes y elementos con fondos
+  function disableImageInteractions(element) {
+    if (element.tagName === 'IMG') {
+      element.setAttribute('ondragstart', 'return false');
+      element.setAttribute('onselectstart', 'return false');
+      element.setAttribute('draggable', 'false');
+      element.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+      });
+    } else if (element.classList.contains('btn')) {
+      element.setAttribute('ondragstart', 'return false');
+      element.setAttribute('onselectstart', 'return false');
+      element.style.userSelect = 'none';
+      element.style.webkitUserSelect = 'none';
+      element.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+      });
+    }
+  }
+
+  // Aplicar restricciones a imágenes y botones existentes
+  document.querySelectorAll('img, .btn').forEach(disableImageInteractions);
+
+  // Observador de mutaciones para detectar nuevos elementos
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      mutation.addedNodes.forEach((node) => {
+        if (node.nodeType === Node.ELEMENT_NODE) {
+          if (node.tagName === 'IMG' || node.classList.contains('btn')) {
+            disableImageInteractions(node);
+          }
+          node.querySelectorAll('img, .btn').forEach(disableImageInteractions);
+        }
+      });
+    });
+  });
+
+  // Observar cambios en el body
+  observer.observe(document.body, { childList: true, subtree: true });
+
   // Modo oscuro/claro
   let isDarkMode = false;
   themeToggle.addEventListener('click', () => {
@@ -170,14 +214,6 @@ document.addEventListener('DOMContentLoaded', function() {
     log('Conexión restablecida');
     showNotification(translations[currentLanguage].connectionRestored);
     updateSendButtonState();
-  });
-
-  // Deshabilitar clic derecho sobre imágenes y botones con imágenes de fondo
-  document.addEventListener('contextmenu', function(e) {
-    if (e.target.tagName === 'IMG' || e.target.classList.contains('btn')) {
-      e.preventDefault();
-      return false;
-    }
   });
 
   // Mostrar/Ocultar chat y mostrar mensaje de bienvenida la primera vez
