@@ -3,47 +3,51 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Asistente Técnico</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <title>Asistente Técnico - INCOMELEC S.A.S</title>
   <link rel="stylesheet" href="chatbot.css">
 </head>
 <body>
+  <!-- Botón flotante para abrir/cerrar el chat -->
   <div id="chatBubble" class="chat-bubble">💬</div>
 
+  <!-- Contenedor principal del chat -->
   <div id="chatContainer" class="chat-container" style="display: none;">
+    <!-- Encabezado del chat -->
     <div class="chat-header">
       <div class="header-content">
-        <img src="images/IncomelecRounded1.svg" alt="Logo Izquierdo" class="incomelec-profile">
+        <img src="images/IncomelecRounded.svg" alt="Incomelec Avatar" class="incomelec-profile">
         <span>Asistente Técnico</span>
-        <img src="images/incomelecBlanco.svg" alt="Logo Derecho" class="incomelec-avatar">
       </div>
       <div class="header-buttons">
-        <button id="themeToggle" title="Cambiar Tema"></button>
-        <button id="languageButton" class="language-button" title="Cambiar Idioma"></button>
-        <button id="close-button" title="Minimizar Chat"></button>
+        <button id="themeToggle" class="btn"></button>
+        <button id="languageButton" class="btn"></button>
+        <button id="close-button" class="btn"></button>
       </div>
     </div>
 
-    <div id="notification" class="notification"></div>
+    <!-- Cuerpo del chat -->
     <div id="chatBody" class="chat-body"></div>
 
+    <!-- Footer del chat -->
     <div class="chat-footer">
       <div class="input-row">
-        <div class="input-group">
-          <textarea id="chatInput" class="form-control chat-input" placeholder="Escribe tu mensaje..." rows="1"></textarea>
-          <button id="sendButton" class="btn" disabled></button> <!-- Movido aquí -->
-        </div>
+        <textarea id="chatInput" class="chat-input form-control" placeholder="Escribe tu mensaje..."></textarea>
       </div>
       <div class="button-row">
-        <button id="voiceButton" class="btn voice-button" title="Entrada de Voz"></button>
-        <button id="historyButton" class="btn history-button" title="Ver Historial"></button>
-        <button id="downloadButton" class="btn download-button" title="Descargar Historial"></button>
-        <button id="resetButton" class="btn reset-button" title="Reiniciar Chat"></button>
+        <button id="voiceButton" class="btn voice-button"></button>
+        <button id="historyButton" class="btn history-button"></button>
+        <button id="downloadButton" class="btn download-button"></button>
+        <button id="resetButton" class="btn reset-button"></button>
+      </div>
+      <div class="send-button-container">
+        <button id="sendButton" class="btn"></button>
       </div>
     </div>
+
+    <!-- Notificación -->
+    <div id="notification" class="notification"></div>
   </div>
 
-  <script src="knowledge_base.js"></script>
   <script src="chatbot.js"></script>
 </body>
 </html>

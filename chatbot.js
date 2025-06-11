@@ -4,17 +4,9 @@ document.addEventListener('DOMContentLoaded', function() {
   const DEBUG_ERROR = true;
   const DEBUG_WARN = false;
 
-  function log(...args) {
-    if (DEBUG_LOG) console.log(...args);
-  }
-
-  function logError(...args) {
-    if (DEBUG_ERROR) console.error(...args);
-  }
-
-  function logWarn(...args) {
-    if (DEBUG_WARN) console.warn(...args);
-  }
+  function log(...args) { if (DEBUG_LOG) console.log(...args); }
+  function logError(...args) { if (DEBUG_ERROR) console.error(...args); }
+  function logWarn(...args) { if (DEBUG_WARN) console.warn(...args); }
 
   log('chatbot.js cargado correctamente');
 
@@ -28,12 +20,29 @@ document.addEventListener('DOMContentLoaded', function() {
   let selectedArea = null;
   let isBotTyping = false;
   let currentLanguage = 'es';
+  let availableAreas = [];
+
+  // Cargar áreas dinámicas desde el backend al iniciar
+  function loadAreas() {
+    fetch('http://127.0.0.1:5000/api/areas')
+      .then(response => response.json())
+      .then(data => {
+        availableAreas = data.areas;
+        log('Áreas cargadas desde el backend:', availableAreas);
+      })
+      .catch(error => {
+        logError('Error al cargar áreas:', error);
+        availableAreas = ["Máquina de entrada", "Talanquera", "Control de acceso"]; // Fallback
+        logWarn('Usando áreas de respaldo:', availableAreas);
+      });
+  }
+  loadAreas();
 
   // Traducciones
-const translations = {
+  const translations = {
     es: {
       welcome: '¡Hola! Soy tu asistente técnico de INCOMELEC S.A.S. Estoy aquí para ayudarte a resolver problemas técnicos. ¿Eres técnico o ingeniero?',
-      rolePrompt: 'Por favor, dime si eres técnico o ingeniero.',
+      rolePrompt: 'Por favor, selecciona tu rol: técnico o ingeniero.',
       technician: 'Técnico',
       engineer: 'Ingeniero',
       roleSelected: (role) => `¡Perfecto, ${role === 'technician' ? 'técnico' : 'ingeniero'}! Vamos a ${role === 'technician' ? 'arreglar eso rápido' : 'revisar los detalles técnicos'}. ¿En qué área tienes el problema?`,
@@ -56,14 +65,11 @@ const translations = {
       connectionRestored: 'Conexión restablecida',
       kbError: 'Lo siento, no puedo acceder a la base de conocimiento en este momento. Por favor, contacta a soporte.',
       emptyMessage: 'Por favor, escribe un mensaje válido.',
-      messageTooLong: 'Tu mensaje es demasiado largo. Por favor, escribe un mensaje de menos de 500 caracteres.',
-      machineSuggestion: '¿Es un problema con la Máquina de entrada?',
-      controlSuggestion: '¿Es un problema con el Control de acceso?',
-      talanqueraSuggestion: '¿Es un problema con la Talanquera?'
+      messageTooLong: 'Tu mensaje es demasiado largo. Por favor, escribe un mensaje de menos de 500 caracteres.'
     },
     en: {
       welcome: 'Hello! I am your technical assistant from INCOMELEC S.A.S. I am here to help you solve technical issues. Are you a technician or an engineer?',
-      rolePrompt: 'Please tell me if you are a technician or an engineer.',
+      rolePrompt: 'Please select your role: technician or engineer.',
       technician: 'Technician',
       engineer: 'Engineer',
       roleSelected: (role) => `Great, ${role === 'technician' ? 'technician' : 'engineer'}! Let’s ${role === 'technician' ? 'fix that quickly' : 'review the technical details'}. In which area are you having the issue?`,
@@ -86,39 +92,9 @@ const translations = {
       connectionRestored: 'Connection restored',
       kbError: 'Sorry, I cannot access the knowledge base at this moment. Please contact support.',
       emptyMessage: 'Please enter a valid message.',
-      messageTooLong: 'Your message is too long. Please enter a message with less than 500 characters.',
-      machineSuggestion: 'Is it an issue with the Entry Machine?',
-      controlSuggestion: 'Is it an issue with Access Control?',
-      talanqueraSuggestion: 'Is it an issue with the Talanquera?'
+      messageTooLong: 'Your message is too long. Please enter a message with less than 500 characters.'
     }
-};
-
-  // Base de conocimiento de respaldo
-  const fallbackKnowledgeBase = [
-    {
-      area: "Máquina de entrada",
-      priority: "alta",
-      description: "no lee el ticket",
-      keywords: ["ticket", "lector", "no lee", "máquina"],
-      solution_technician: "Limpia el lector con un paño seco y reinicia la máquina.",
-      solution_engineer: "Verifica el log de errores en el panel de control y actualiza el firmware."
-    }
-  ];
-
-  // Usar la variable global knowledgeBase o la de respaldo
-  const knowledgeBase = window.knowledgeBase || fallbackKnowledgeBase;
-  log('knowledgeBase cargada:', knowledgeBase);
-
-  // Validar la base de conocimiento
-  if (!knowledgeBase || !Array.isArray(knowledgeBase) || knowledgeBase.length === 0) {
-    logError('Error: knowledgeBase no es válida o está vacía');
-    addMessage('bot', translations[currentLanguage].kbError);
-    return;
-  }
-
-  // Obtener áreas únicas
-  const uniqueAreas = [...new Set(knowledgeBase.map(p => p.area))];
-  log('Áreas únicas:', uniqueAreas);
+  };
 
   // Elementos del DOM
   const chatBubble = document.getElementById('chatBubble');
@@ -234,8 +210,16 @@ const translations = {
   });
 
   function updateSendButtonState() {
-    sendButton.disabled = chatInput.value.trim() === '' || isBotTyping || !navigator.onLine;
-    log('Estado del botón de enviar actualizado:', sendButton.disabled);
+    const isDisabled = chatInput.value.trim() === '' || isBotTyping || !navigator.onLine;
+    sendButton.disabled = isDisabled;
+    log('Estado del botón de enviar actualizado:', {
+      disabled: isDisabled,
+      value: chatInput.value,
+      valueLength: chatInput.value.trim().length,
+      isBotTyping: isBotTyping,
+      online: navigator.onLine,
+      sendButtonDisabled: sendButton.disabled // Verificar el estado real del botón
+    });
   }
 
   function adjustTextareaHeight() {
@@ -245,7 +229,10 @@ const translations = {
     const minHeight = parseFloat(getComputedStyle(chatInput).minHeight);
     const maxHeight = 150;
 
-    if (numberOfLines <= 1) {
+    if (content === '') {
+      chatInput.style.height = `${minHeight}px`; // Forzar minHeight cuando está vacío
+      chatInput.style.overflowY = 'hidden';
+    } else if (numberOfLines <= 1) {
       chatInput.style.height = `${minHeight}px`;
       chatInput.style.overflowY = 'hidden';
     } else {
@@ -260,11 +247,6 @@ const translations = {
     }
   }
 
-  chatInput.addEventListener('input', () => {
-    updateSendButtonState();
-    adjustTextareaHeight();
-  });
-
   adjustTextareaHeight();
 
   closeButton.addEventListener('click', () => {
@@ -273,11 +255,11 @@ const translations = {
   });
 
   function setRole(role) {
-    log('Rol seleccionado:', role);
     userRole = role;
-    addMessage('bot', translations[currentLanguage].roleSelected(role), 
-      uniqueAreas.map(area => ({ text: area, action: () => setArea(area) }))
-    );
+    addMessage('bot', translations[currentLanguage].roleSelected(role), availableAreas.map(area => ({
+      text: area,
+      action: () => setArea(area)
+    })));
   }
 
   function setArea(area) {
@@ -286,13 +268,14 @@ const translations = {
     addMessage('bot', translations[currentLanguage].areaSelected(area));
   }
 
+  // Función para añadir mensajes al chat
   function addMessage(sender, text, options = []) {
     log(`Añadiendo mensaje: ${sender} - ${text}`);
     const messageDiv = document.createElement('div');
     messageDiv.className = `chat-message ${sender === 'bot' ? 'bot-message' : 'user-message'}`;
     if (sender === 'bot') {
       const img = document.createElement('img');
-      img.src = 'images/IncomelecRounded.svg'; // Ruta original
+      img.src = 'images/IncomelecRounded.svg';
       img.alt = 'Bot Avatar';
       const span = document.createElement('span');
       span.innerHTML = text;
@@ -303,7 +286,7 @@ const translations = {
     }
     chatBody.appendChild(messageDiv);
 
-    if (options.length) {
+    if (options.length && !userRole) { // Solo añadir opciones si no se ha seleccionado rol
       const optionsDiv = document.createElement('div');
       optionsDiv.className = 'chat-options';
       options.forEach(opt => {
@@ -314,8 +297,28 @@ const translations = {
           if (!isBotTyping) {
             log('Opción seleccionada:', opt.text);
             opt.action();
+            isBotTyping = false;
+            updateSendButtonState();
           }
-        });
+        }); // Removido { once: true } para probar
+        optionsDiv.appendChild(button);
+      });
+      chatBody.appendChild(optionsDiv);
+    } else if (options.length && userRole) { // Para áreas u otras opciones después de seleccionar rol
+      const optionsDiv = document.createElement('div');
+      optionsDiv.className = 'chat-options';
+      options.forEach(opt => {
+        const button = document.createElement('button');
+        button.className = 'option-button';
+        button.textContent = opt.text;
+        button.addEventListener('click', () => {
+          if (!isBotTyping) {
+            log('Opción seleccionada:', opt.text);
+            opt.action();
+            isBotTyping = false;
+            updateSendButtonState();
+          }
+        }); // Removido { once: true } para probar
         optionsDiv.appendChild(button);
       });
       chatBody.appendChild(optionsDiv);
@@ -328,56 +331,64 @@ const translations = {
     } catch (error) {
       logError('Error al guardar en localStorage:', error);
     }
+    updateSendButtonState(); // Asegurar que el estado del botón se actualice tras cada mensaje
   }
 
-function processUserInput(input) {
+  function processUserInput(input) {
     log('processUserInput iniciado con input:', input);
     input = input.trim();
     if (!input) {
-        showTypingAndRespond(translations[currentLanguage].emptyMessage);
-        return;
+      showTypingAndRespond(translations[currentLanguage].emptyMessage);
+      return;
     }
     if (input.length > 500) {
-        showTypingAndRespond(translations[currentLanguage].messageTooLong);
-        return;
+      showTypingAndRespond(translations[currentLanguage].messageTooLong);
+      return;
     }
 
     addMessage('user', input);
 
+    if (!userRole) {
+      showTypingAndRespond(translations[currentLanguage].rolePrompt, [
+        { text: translations[currentLanguage].technician, action: () => setRole('technician') },
+        { text: translations[currentLanguage].engineer, action: () => setRole('engineer') }
+      ]);
+      return;
+    }
+
     fetch('http://127.0.0.1:5000/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: input, userRole, selectedArea, currentLanguage })
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: input, userRole, selectedArea, currentLanguage })
     })
     .then(response => response.json())
     .then(data => {
-        showTypingAndRespond(data.response, data.options ? data.options.map(opt => ({
-            text: opt.text,
-            action: () => {
-                if (opt.action.startsWith('setArea:')) {
-                    setArea(opt.action.split(':')[1]);
-                } else if (opt.action === 'prompt') {
-                    addMessage('bot', translations[currentLanguage].areaPrompt);
-                } else if (opt.action === 'solved') {
-                    addMessage('bot', translations[currentLanguage].problemSolved);
-                } else if (opt.action === 'details') {
-                    addMessage('bot', translations[currentLanguage].moreDetails);
-                }
-            }
-        })) : []);
+      showTypingAndRespond(data.response, data.options ? data.options.map(opt => ({
+        text: opt.text,
+        action: () => {
+          if (opt.action.startsWith('setArea:')) {
+            setArea(opt.action.split(':')[1]);
+          } else if (opt.action === 'prompt') {
+            addMessage('bot', translations[currentLanguage].areaPrompt);
+          } else if (opt.action === 'solved') {
+            addMessage('bot', translations[currentLanguage].problemSolved);
+          } else if (opt.action === 'details') {
+            addMessage('bot', translations[currentLanguage].moreDetails);
+          }
+        }
+      })) : []);
     })
     .catch(() => showTypingAndRespond("Error al conectar con el servidor. Intenta de nuevo."));
-}
+  }
 
-function showTypingAndRespond(text, options = []) {
+  function showTypingAndRespond(text, options = []) {
     log('showTypingAndRespond iniciado con texto:', text);
     isBotTyping = true;
     updateSendButtonState();
 
-    // Limpiar cualquier indicador de "escribiendo" existente
     const existingIndicator = chatBody.querySelector('.typing-indicator');
     if (existingIndicator) {
-        existingIndicator.remove();
+      existingIndicator.remove();
     }
 
     const typingIndicator = document.createElement('div');
@@ -388,25 +399,21 @@ function showTypingAndRespond(text, options = []) {
     log('Indicador de escribiendo añadido al DOM');
 
     setTimeout(() => {
-        try {
-            log('Retraso de 1.5 segundos terminado');
-            if (typingIndicator && typingIndicator.parentNode) {
-                typingIndicator.remove();
-                log('Indicador de escribiendo removido');
-            } else {
-                logWarn('Indicador de escribiendo no encontrado para remover');
-            }
-            isBotTyping = false;
-            updateSendButtonState();
-            addMessage('bot', text, options);
-        } catch (error) {
-            logError('Error dentro de setTimeout:', error);
-            isBotTyping = false;
-            updateSendButtonState();
-            addMessage('bot', 'Ocurrió un error al procesar tu mensaje. Por favor, intenta de nuevo.');
+      try {
+        if (typingIndicator.parentNode) {
+          typingIndicator.remove();
         }
+        isBotTyping = false; // Reseteo garantizado
+        updateSendButtonState(); // Actualización tras reseteo
+        addMessage('bot', text, options);
+      } catch (error) {
+        logError('Error dentro de setTimeout:', error);
+        isBotTyping = false; // Reseteo en caso de error
+        updateSendButtonState();
+        addMessage('bot', 'Ocurrió un error al procesar tu mensaje. Por favor, intenta de nuevo.');
+      }
     }, 1500);
-}
+  }
 
   function showNotification(message, duration = 2000) {
     notification.textContent = message;
@@ -422,18 +429,22 @@ function showTypingAndRespond(text, options = []) {
     if (input && !isBotTyping) {
       processUserInput(input);
       chatInput.value = '';
-      chatInput.style.height = parseFloat(getComputedStyle(chatInput).minHeight) + 'px';
-      chatInput.style.overflowY = 'hidden';
       updateSendButtonState();
-      showNotification(translations[currentLanguage].messageSent);
+      adjustTextareaHeight(); // Añadir ajuste de altura tras limpiar
     }
   });
 
+  chatInput.addEventListener('input', () => {
+    updateSendButtonState();
+    adjustTextareaHeight();
+  });
+
   chatInput.addEventListener('keydown', (e) => {
+    log('Tecla presionada:', e.key, e.shiftKey);
     if (e.key === 'Enter' && !e.shiftKey) {
-      log('Enter presionado');
+      log('Enter presionado sin Shift, simulando clic en sendButton');
       e.preventDefault();
-      sendButton.click();
+      sendButton.click(); // Eliminar la verificación if (!sendButton.disabled)
       updateSendButtonState();
     }
   });
@@ -515,4 +526,10 @@ function showTypingAndRespond(text, options = []) {
     ]);
     hasShownWelcome = true;
   }
+
+  // Inicializar el estado del botón al cargar
+  window.addEventListener('load', () => {
+    chatInput.value = ''; // Asegurar que esté vacío al inicio
+    updateSendButtonState();
+  });
 });

@@ -107,6 +107,7 @@
   display: flex;
   flex-direction: column;
   z-index: 1000;
+  border: none; /* Eliminar borde negro */
 }
 
 /* ===== HEADER DEL CHAT ===== */
@@ -315,6 +316,14 @@
   margin: 10px;
   flex-shrink: 0;
   min-height: 60px;
+  position: relative; /* Para que el botón de enviar se alinee dentro del footer */
+}
+
+/* Contenedor para alinear el botón de enviar */
+.send-button-container {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
 }
 
 /* Fila de entrada */
@@ -333,7 +342,8 @@
   padding: 8px;
   min-height: 38px;
   box-sizing: border-box;
-  border: 1px solid #ffffff00 !important;
+  border: none; /* Eliminar borde negro */
+  background: #ffffff;
 }
 
 /* Textarea de chat */
@@ -348,11 +358,13 @@
   resize: none;
   line-height: 1.5;
   overflow-y: hidden;
+  border: none; /* Eliminar borde negro */
 }
 
 .chat-input.form-control:focus {
   box-shadow: 0 0 0 0.2rem rgba(0, 151, 58, 0);
   border-color: #ffffff00 !important;
+  outline: none; /* Eliminar borde de foco */
 }
 
 /* Fila de botones */
@@ -396,15 +408,25 @@
 }
 
 #sendButton.btn {
-  width: 32px;
-  height: 32px;
-  background-color: #00973a;
-  background-size: 11px 11px;
-  background-repeat: no-repeat;
-  background-position: center;
-  border: 1px solid #ffffff00;
-  padding: 0;
-}
+    width: 32px;
+    height: 32px;
+    background-color: #00973a;
+    background-size: 11px 11px;
+    background-repeat: no-repeat;
+    background-position: center;
+    border: 1px solid #ffffff00;
+    padding: 0;
+  }
+
+  #sendButton.btn:disabled {
+    background-color: #007b2f; /* Gris para indicar deshabilitado */
+    opacity: 0.6;
+  }
+
+  #sendButton.btn:hover {
+    background-color: #007b2f;
+    background-image: url('images/send-white.svg');
+  }
 
 /* Hover para botones */
 .chat-button.btn:hover,
@@ -682,6 +704,10 @@ body.dark-mode .chat-input.form-control::-ms-input-placeholder {
     width: 32px;
     height: 32px;
     font-size: 10px;
+    position: absolute;
+    right: 15px;
+    bottom: 15px;
+    margin: 5px;
   }
 
   .chat-footer {
