@@ -8,11 +8,11 @@ const knowledgeBase = [
     solution_engineer: "Verifica el log de errores en el panel de control y actualiza el firmware."
   },
   {
-    area: "Cacharro",
+    area: "Talanquera",
     priority: "media",
     description: "no abre la puerta",
-    keywords: ["cacharro", "puerta", "no abre", "batería"],
-    solution_technician: "Comprueba la batería del cacharro y reemplázala si está baja.",
+    keywords: ["talanquera", "puerta", "no abre", "batería"],
+    solution_technician: "Comprueba la batería de la talanquera y reemplázala si está baja.",
     solution_engineer: "Revisa la configuración de la señal en el sistema de control."
   },
   {
@@ -32,11 +32,11 @@ const knowledgeBase = [
     solution_engineer: "Comprueba el suministro de energía y revisa el módulo de pantalla en el sistema."
   },
   {
-    area: "Cacharro",
+    area: "Talanquera",
     priority: "alta",
     description: "emite pitidos constantes",
-    keywords: ["pitidos", "constantes", "cacharro"],
-    solution_technician: "Apaga el cacharro y revisa si hay obstrucciones en el mecanismo.",
+    keywords: ["pitidos", "constantes", "talanquera"],
+    solution_technician: "Apaga la talanquera y revisa si hay obstrucciones en el mecanismo.",
     solution_engineer: "Inspecciona el sistema de alertas y recalibra el sensor."
   },
   {

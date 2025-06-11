@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
   let currentLanguage = 'es';
 
   // Traducciones
-  const translations = {
+const translations = {
     es: {
       welcome: '¡Hola! Soy tu asistente técnico de INCOMELEC S.A.S. Estoy aquí para ayudarte a resolver problemas técnicos. ¿Eres técnico o ingeniero?',
       rolePrompt: 'Por favor, dime si eres técnico o ingeniero.',
@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function() {
       messageTooLong: 'Tu mensaje es demasiado largo. Por favor, escribe un mensaje de menos de 500 caracteres.',
       machineSuggestion: '¿Es un problema con la Máquina de entrada?',
       controlSuggestion: '¿Es un problema con el Control de acceso?',
-      cacharroSuggestion: '¿Es un problema con el Cacharro?'
+      talanqueraSuggestion: '¿Es un problema con la Talanquera?'
     },
     en: {
       welcome: 'Hello! I am your technical assistant from INCOMELEC S.A.S. I am here to help you solve technical issues. Are you a technician or an engineer?',
@@ -89,9 +89,9 @@ document.addEventListener('DOMContentLoaded', function() {
       messageTooLong: 'Your message is too long. Please enter a message with less than 500 characters.',
       machineSuggestion: 'Is it an issue with the Entry Machine?',
       controlSuggestion: 'Is it an issue with Access Control?',
-      cacharroSuggestion: 'Is it an issue with the Cacharro?'
+      talanqueraSuggestion: 'Is it an issue with the Talanquera?'
     }
-  };
+};
 
   // Base de conocimiento de respaldo
   const fallbackKnowledgeBase = [
@@ -330,70 +330,56 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  function processUserInput(input) {
+function processUserInput(input) {
     log('processUserInput iniciado con input:', input);
     input = input.trim();
     if (!input) {
-      showTypingAndRespond(translations[currentLanguage].emptyMessage);
-      return;
+        showTypingAndRespond(translations[currentLanguage].emptyMessage);
+        return;
     }
     if (input.length > 500) {
-      showTypingAndRespond(translations[currentLanguage].messageTooLong);
-      return;
+        showTypingAndRespond(translations[currentLanguage].messageTooLong);
+        return;
     }
 
     addMessage('user', input);
 
-    if (!userRole) {
-      showTypingAndRespond(translations[currentLanguage].rolePrompt);
-      return;
-    }
+    fetch('http://127.0.0.1:5000/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: input, userRole, selectedArea, currentLanguage })
+    })
+    .then(response => response.json())
+    .then(data => {
+        showTypingAndRespond(data.response, data.options ? data.options.map(opt => ({
+            text: opt.text,
+            action: () => {
+                if (opt.action.startsWith('setArea:')) {
+                    setArea(opt.action.split(':')[1]);
+                } else if (opt.action === 'prompt') {
+                    addMessage('bot', translations[currentLanguage].areaPrompt);
+                } else if (opt.action === 'solved') {
+                    addMessage('bot', translations[currentLanguage].problemSolved);
+                } else if (opt.action === 'details') {
+                    addMessage('bot', translations[currentLanguage].moreDetails);
+                }
+            }
+        })) : []);
+    })
+    .catch(() => showTypingAndRespond("Error al conectar con el servidor. Intenta de nuevo."));
+}
 
-    if (!selectedArea) {
-      showTypingAndRespond(translations[currentLanguage].areaPrompt, 
-        uniqueAreas.map(area => ({ text: area, action: () => setArea(area) }))
-      );
-      const lowerInput = input.toLowerCase();
-      if (lowerInput.includes('máquina')) {
-        showTypingAndRespond(translations[currentLanguage].machineSuggestion, [
-          { text: translations[currentLanguage].yes, action: () => setArea('Máquina de entrada') },
-          { text: translations[currentLanguage].no, action: () => addMessage('bot', translations[currentLanguage].areaPrompt) }
-        ]);
-      } else if (lowerInput.includes('control') || lowerInput.includes('tarjeta')) {
-        showTypingAndRespond(translations[currentLanguage].controlSuggestion, [
-          { text: translations[currentLanguage].yes, action: () => setArea('Control de acceso') },
-          { text: translations[currentLanguage].no, action: () => addMessage('bot', translations[currentLanguage].areaPrompt) }
-        ]);
-      } else if (lowerInput.includes('cacharro') || lowerInput.includes('puerta')) {
-        showTypingAndRespond(translations[currentLanguage].cacharroSuggestion, [
-          { text: translations[currentLanguage].yes, action: () => setArea('Cacharro') },
-          { text: translations[currentLanguage].no, action: () => addMessage('bot', translations[currentLanguage].areaPrompt) }
-        ]);
-      }
-      return;
-    }
-
-    const areaProblems = knowledgeBase.filter(p => p.area === selectedArea);
-    log('Problemas filtrados:', areaProblems);
-    const problem = areaProblems.find(p => 
-      p.keywords.some(keyword => input.toLowerCase().includes(keyword.toLowerCase()))
-    );
-    log('Problema encontrado:', problem);
-    if (problem) {
-      const solution = userRole === 'technician' ? problem.solution_technician : problem.solution_engineer;
-      showTypingAndRespond(translations[currentLanguage].problemDetected(problem.area, problem.priority, userRole, solution), [
-        { text: translations[currentLanguage].yes, action: () => addMessage('bot', translations[currentLanguage].problemSolved) },
-        { text: translations[currentLanguage].no, action: () => addMessage('bot', translations[currentLanguage].moreDetails) }
-      ]);
-    } else {
-      showTypingAndRespond(translations[currentLanguage].problemNotRecognized);
-    }
-  }
-
-  function showTypingAndRespond(text, options = []) {
+function showTypingAndRespond(text, options = []) {
     log('showTypingAndRespond iniciado con texto:', text);
     isBotTyping = true;
     updateSendButtonState();
+
+    // Limpiar cualquier indicador de "escribiendo" existente
+    const existingIndicator = chatBody.querySelector('.typing-indicator');
+    if (existingIndicator) {
+        existingIndicator.remove();
+    }
+
     const typingIndicator = document.createElement('div');
     typingIndicator.classList.add('typing-indicator');
     typingIndicator.innerHTML = '<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>';
@@ -402,25 +388,25 @@ document.addEventListener('DOMContentLoaded', function() {
     log('Indicador de escribiendo añadido al DOM');
 
     setTimeout(() => {
-      try {
-        log('Retraso de 1.5 segundos terminado');
-        if (typingIndicator && typingIndicator.parentNode) {
-          typingIndicator.remove();
-          log('Indicador de escribiendo removido');
-        } else {
-          logWarn('Indicador de escribiendo no encontrado para remover');
+        try {
+            log('Retraso de 1.5 segundos terminado');
+            if (typingIndicator && typingIndicator.parentNode) {
+                typingIndicator.remove();
+                log('Indicador de escribiendo removido');
+            } else {
+                logWarn('Indicador de escribiendo no encontrado para remover');
+            }
+            isBotTyping = false;
+            updateSendButtonState();
+            addMessage('bot', text, options);
+        } catch (error) {
+            logError('Error dentro de setTimeout:', error);
+            isBotTyping = false;
+            updateSendButtonState();
+            addMessage('bot', 'Ocurrió un error al procesar tu mensaje. Por favor, intenta de nuevo.');
         }
-        isBotTyping = false;
-        updateSendButtonState();
-        addMessage('bot', text, options);
-      } catch (error) {
-        logError('Error dentro de setTimeout:', error);
-        isBotTyping = false;
-        updateSendButtonState();
-        addMessage('bot', 'Ocurrió un error al procesar tu mensaje. Por favor, intenta de nuevo.');
-      }
     }, 1500);
-  }
+}
 
   function showNotification(message, duration = 2000) {
     notification.textContent = message;
