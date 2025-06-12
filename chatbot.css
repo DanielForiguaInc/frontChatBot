@@ -71,27 +71,37 @@
 }
 
 /* ===== CHAT BUBBLE ===== */
-.chat-bubble {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  width: 50px;
-  height: 50px;
-  background: #006f32;
-  color: #f8f7f9;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  font-size: 24px;
-  z-index: 1000;
-  transition: transform 0.3s ease;
-}
+#chatBubble {
+    position: fixed !important;
+    bottom: 20px !important;
+    right: 20px !important;
+    width: 50px !important;
+    height: 50px !important;
+    background: #006f32 !important;
+    color: #f8f7f9;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 24px;
+    z-index: 1000 !important;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    min-width: 50px !important;
+    min-height: 50px !important;
+  }
 
-.chat-bubble:hover {
-  transform: scale(1.1);
-}
+  .chat-bubble-icon {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    display: block; /* Asegurar renderizado */
+  }
+
+  #chatBubble:hover {
+    transform: scale(1.1) !important;
+    background-color: #006f32 !important;
+  }
 
 /* ===== CONTENEDOR PRINCIPAL ===== */
 .chat-container {
@@ -348,6 +358,7 @@
 
 /* Textarea de chat */
 .chat-input.form-control {
+  font-family: Calibri, sans-serif;
   font-size: 14px;
   min-height: 38px;
   max-height: 150px;
@@ -384,6 +395,7 @@
 .download-button.btn,
 .reset-button.btn,
 #sendButton.btn {
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -419,7 +431,7 @@
   }
 
   #sendButton.btn:disabled {
-    background-color: #007b2f; /* Gris para indicar deshabilitado */
+    background-color: #007b2f;
     opacity: 0.6;
   }
 
@@ -453,7 +465,7 @@
   margin-right: 10px;
   font-size: 10px;
   color: #95c11f;
-  font-family: Arial, sans-serif;
+  font-family: Calibri, sans-serif;
   font-weight: 600;
 }
 
@@ -469,7 +481,7 @@
   margin-right: 10px;
   font-size: 10px;
   color: #95c11f;
-  font-family: Arial, sans-serif;
+  font-family: Calibri, sans-serif;
   font-weight: 600;
 }
 
@@ -485,7 +497,7 @@
   margin-right: 10px;
   font-size: 10px;
   color: #95c11f;
-  font-family: Arial, sans-serif;
+  font-family: Calibri, sans-serif;
   font-weight: 600;
 }
 
@@ -505,7 +517,7 @@
   margin-right: 10px;
   font-size: 10px;
   color: #95c11f;
-  font-family: Arial, sans-serif;
+  font-family: Calibri, sans-serif;
   font-weight: 600;
 }
 

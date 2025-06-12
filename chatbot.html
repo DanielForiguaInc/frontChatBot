@@ -8,7 +8,10 @@
 </head>
 <body>
   <!-- Botón flotante para abrir/cerrar el chat -->
-  <div id="chatBubble" class="chat-bubble">💬</div>
+  <div id="chatBubble">
+    <img src="images/ChatIcon-White.svg" alt="Chat Icon" class="chat-bubble-icon" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+    <span class="chat-bubble-text">💬</span>
+  </div>
 
   <!-- Contenedor principal del chat -->
   <div id="chatContainer" class="chat-container" style="display: none;">
@@ -17,6 +20,7 @@
       <div class="header-content">
         <img src="images/IncomelecRounded.svg" alt="Incomelec Avatar" class="incomelec-profile">
         <span>Asistente Técnico</span>
+        <img src="images/IncomelecBlanco.svg" alt="Incomelec Avatar" class="incomelec-img">
       </div>
       <div class="header-buttons">
         <button id="themeToggle" class="btn"></button>

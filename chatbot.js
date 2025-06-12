@@ -98,6 +98,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Elementos del DOM
   const chatBubble = document.getElementById('chatBubble');
+  if (chatBubble) {
+      log('chatBubble encontrado en el DOM:', {
+        style: chatBubble.style,
+        computedStyle: window.getComputedStyle(chatBubble),
+        position: chatBubble.getBoundingClientRect()
+      });
+    } else {
+      logError('chatBubble no encontrado en el DOM');
+    }
   const chatContainer = document.getElementById('chatContainer');
   const chatBody = document.getElementById('chatBody');
   const chatInput = document.getElementById('chatInput');
@@ -194,20 +203,26 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Mostrar/Ocultar chat y mostrar mensaje de bienvenida la primera vez
   chatBubble.addEventListener('click', () => {
-    log('Clic en chatBubble');
-    if (chatContainer.style.display === 'none') {
-      chatContainer.style.display = 'flex';
-      if (!hasShownWelcome) {
-        addMessage('bot', translations[currentLanguage].welcome, [
-          { text: translations[currentLanguage].technician, action: () => setRole('technician') },
-          { text: translations[currentLanguage].engineer, action: () => setRole('engineer') }
-        ]);
-        hasShownWelcome = true;
+      log('Clic en chatBubble');
+      const currentDisplay = chatContainer.style.display;
+      if (currentDisplay === 'none' || currentDisplay === '') {
+        chatContainer.style.display = 'flex';
+        if (!hasShownWelcome) {
+          addMessage('bot', translations[currentLanguage].welcome, [
+            { text: translations[currentLanguage].technician, action: () => setRole('technician') },
+            { text: translations[currentLanguage].engineer, action: () => setRole('engineer') }
+          ]);
+          hasShownWelcome = true;
+        }
+      } else {
+        chatContainer.style.display = 'none';
       }
-    } else {
-      chatContainer.style.display = 'none';
-    }
-  });
+      log('Estado de chatBubble tras clic:', {
+        style: chatBubble.style,
+        computedStyle: window.getComputedStyle(chatBubble),
+        position: chatBubble.getBoundingClientRect()
+      });
+    });
 
   function updateSendButtonState() {
     const isDisabled = chatInput.value.trim() === '' || isBotTyping || !navigator.onLine;
