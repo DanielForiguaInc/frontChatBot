@@ -290,7 +290,7 @@ document.addEventListener('DOMContentLoaded', function() {
     messageDiv.className = `chat-message ${sender === 'bot' ? 'bot-message' : 'user-message'}`;
     if (sender === 'bot') {
       const img = document.createElement('img');
-      img.src = 'images/IncomelecRounded.svg';
+      img.src = 'assets/Images/IncomelecRounded.svg'; // Asegúrate de que la ruta sea correcta
       img.alt = 'Bot Avatar';
       const span = document.createElement('span');
       span.innerHTML = text;
