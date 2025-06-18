@@ -433,6 +433,7 @@
   #sendButton.btn:disabled {
     background-color: #007b2f;
     opacity: 0.6;
+    cursor: auto;
   }
 
   #sendButton.btn:hover {
