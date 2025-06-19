@@ -157,10 +157,15 @@
   margin-right: 10px;
 }
 
-.incomelec-avatar,
-.incomelec-img {
+.incomelec-avatar{
   width: fit-content;
   height: 20px;
+}
+
+.incomelec-img {
+  width: fit-content;
+  height: 23px;
+  margin-left: -3px;
 }
 
 .incomelec-profile {
