@@ -64,21 +64,25 @@ class ChatHandler:
             return {"status": "translation_updated"}
         return {"status": "no changes"}
 
-# Configuración de la aplicación
+# --- CONFIGURACIÓN FLASK ---
 app = Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": "http://127.0.0.1:5500"}})
 
-# Cargar datos desde archivos
-with open('data/knowledge_base.json', 'r', encoding='utf-8') as f:
+# --- CARGAR DATOS DESDE ARCHIVOS ---
+BASE_DIR = Path(__file__).resolve().parent
+DATA_DIR = BASE_DIR / 'data'
+
+with open(DATA_DIR / 'knowledge_base.json', 'r', encoding='utf-8') as f:
     knowledgeBase = json.load(f)
 
-with open('data/translations.json', 'r', encoding='utf-8') as f:
+with open(DATA_DIR / 'translations.json', 'r', encoding='utf-8') as f:
     translations = json.load(f)
 
-# Inicializar modelo NLP y ChatHandler
+# --- INICIALIZAR NLP Y CHATBOT ---
 classifier = pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
 chat_handler = ChatHandler(classifier, knowledgeBase, translations)
 
+# --- RUTAS DE API ---
 @app.route('/api/areas', methods=['GET'])
 def get_areas():
     return jsonify({"areas": chat_handler.get_areas()})
@@ -105,5 +109,6 @@ def config():
         return jsonify(chat_handler.update_translation(language, key, value))
     return jsonify({"status": "no changes"})
 
+# --- ARRANQUE ---
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
