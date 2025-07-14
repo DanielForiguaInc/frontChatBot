@@ -395,6 +395,7 @@
   gap: 8px;
   margin-top: 5px;
   flex-shrink: 0;
+  flex-wrap: nowrap; /* Evita que los botones se envuelvan */
 }
 
 /* ===== BOTONES DE ACCIÓN ===== */
@@ -411,14 +412,6 @@
   justify-content: center;
   border-radius: 50px;
   box-sizing: border-box;
-  transition: transform 0.2s ease, width 0.2s ease, background-color 0.2s ease, background-image 0.2s ease;
-}
-
-/* Botones específicos */
-.voice-button.btn,
-.history-button.btn,
-.download-button.btn,
-.reset-button.btn {
   width: 32px;
   height: 32px;
   border: 1.4px solid #006f32;
@@ -427,6 +420,8 @@
   background-size: 14px 14px;
   background-position: center;
   background-repeat: no-repeat;
+  /*transition: transform 0.2s ease, width 0.2s ease, background-color 0.2s ease, background-image 0.2s ease;*/
+  transition: width 0.2s ease-in-out, background-color 0.2s ease-in-out; /* Solo ancho y color */
 }
 
 #sendButton.btn {
@@ -464,10 +459,19 @@
   padding: 4px 12px 4px 10px;
 }
 
+.voice-button.btn:hover::after,
+.history-button.btn:hover::after,
+.download-button.btn:hover::after,
+.reset-button.btn:hover::after {
+  transition: opacity 0.3s ease-in-out; /* Transición suave para el texto */
+  opacity: 0; /* Oculto por defecto */
+}
+
 /* Botón de voz */
-.voice-button.btn { background-image: url('../assets/Images/MicrophoneGreen.svg'); }
+.voice-button.btn { 
+  background-image: url('../assets/Images/MicrophoneGreen.svg'); }
 .voice-button.btn:hover { 
-  width: 48px;
+  width: 50px;
   background-image: url('../assets/Images/MicrophoneGreen2.svg');
   background-position: calc(100% - 4px) center;
 }
@@ -476,15 +480,17 @@
   margin-right: 10px;
   font-size: 10px;
   color: #95c11f;
-  font-family: Calibri, sans-serif;
-  font-weight: 600;
+  white-space: nowrap; /* Evita división de líneas */
+  max-width: 60px; /* Límite para el texto */
+  opacity: 1;
+  transition: opacity 0.3s ease-in-out;
 }
 
 /* Botón de historial */
-.history-button.btn { background-image: url('../assets/Images/HistoryGreen.svg'); }
+.history-button.btn { background-image: url('../assets/Images/Historygreen.svg'); }
 .history-button.btn:hover { 
   width: 72px;
-  background-image: url('../assets/Images/HistoryGreen2.svg');
+  background-image: url('../assets/Images/Historygreen2.svg');
   background-position: calc(100% - 4px) center;
 }
 .history-button.btn:hover::after {
@@ -492,8 +498,10 @@
   margin-right: 10px;
   font-size: 10px;
   color: #95c11f;
+  white-space: nowrap; /* Evita división de líneas */
   font-family: Calibri, sans-serif;
   font-weight: 600;
+  opacity: 1; /* Aparece al hacer hover */
 }
 
 /* Botón de descarga */
@@ -508,8 +516,10 @@
   margin-right: 10px;
   font-size: 10px;
   color: #95c11f;
+  white-space: nowrap; /* Evita división de líneas */
   font-family: Calibri, sans-serif;
   font-weight: 600;
+  opacity: 1; /* Aparece al hacer hover */
 }
 
 /* Botón de reinicio */
@@ -528,8 +538,10 @@
   margin-right: 10px;
   font-size: 10px;
   color: #95c11f;
+  white-space: nowrap; /* Evita división de líneas */
   font-family: Calibri, sans-serif;
   font-weight: 600;
+  opacity: 1; /* Aparece al hacer hover */
 }
 
 /* Botón de enviar */
@@ -614,131 +626,4 @@ body.dark-mode .chat-input.form-control:-ms-input-placeholder {
 
 body.dark-mode .chat-input.form-control::-ms-input-placeholder {
   color: #b0b0b0;
-}
-
-/* ===== MEDIA QUERIES ===== */
-@media (max-width: 480px) {
-  .chat-container {
-    width: 95%;
-    bottom: 10px;
-    right: 10px;
-    height: 400px;
-  }
-
-  .chat-header {
-    font-size: 14px;
-  }
-
-  .profile-img {
-    width: 25px;
-    height: 25px;
-  }
-
-  .chat-message {
-    font-size: 12px;
-    padding: 6px 10px;
-  }
-
-  .bot-message,
-  .user-message {
-    max-width: 80%;
-  }
-
-  .option-button {
-    font-size: 10px;
-    padding: 5px 10px;
-  }
-
-  .chat-input.form-control {
-    font-size: 12px;
-    min-height: 32px;
-    max-height: 120px;
-  }
-
-  /* Scrollbar móvil */
-  .chat-input.form-control::-webkit-scrollbar,
-  .chat-body::-webkit-scrollbar {
-    width: 3px;
-  }
-
-  .chat-input.form-control::-webkit-scrollbar-track,
-  .chat-body::-webkit-scrollbar-track {
-    border-radius: 1.5px;
-  }
-
-  .chat-input.form-control::-webkit-scrollbar-thumb,
-  .chat-body::-webkit-scrollbar-thumb {
-    background: rgba(136, 136, 106, 0.5);
-    border-radius: 1.5px;
-  }
-
-  .chat-input.form-control::-webkit-scrollbar-thumb:hover,
-  .chat-body::-webkit-scrollbar-thumb:hover {
-    background: rgba(85, 85, 85, 0.7);
-  }
-
-  /* Botones header */
-  #close-button {
-    width: 25px;
-    height: 25px;
-    background-size: 16px 16px;
-    font-size: 12px;
-    padding: 0 8px;
-  }
-
-  /* Botones de acción */
-  .chat-button.btn,
-  .voice-button.btn,
-  .history-button.btn,
-  .download-button.btn,
-  .reset-button.btn {
-    width: 32px;
-    height: 32px;
-    font-size: 10px;
-    background-size: 12px 12px;
-    border-radius: 6px;
-  }
-
-  .chat-button.btn:hover,
-  .voice-button.btn:hover,
-  .history-button.btn:hover,
-  .download-button.btn:hover,
-  .reset-button.btn:hover {
-    width: 58px;
-    padding: 4px 10px 4px 6px;
-  }
-
-  .voice-button.btn:hover,
-  .history-button.btn:hover,
-  .download-button.btn:hover,
-  .reset-button.btn:hover {
-    background-size: 12px 12px;
-  }
-
-  .voice-button.btn:hover::after,
-  .history-button.btn:hover::after,
-  .download-button.btn:hover::after,
-  .reset-button.btn:hover::after {
-    margin-right: 8px;
-    font-size: 10px;
-  }
-
-  #sendButton.btn {
-    width: 32px;
-    height: 32px;
-    font-size: 10px;
-    position: absolute;
-    right: 15px;
-    bottom: 15px;
-    margin: 5px;
-  }
-
-  .chat-footer {
-    min-height: 50px;
-  }
-
-  .notification {
-    font-size: 10px;
-    padding: 3px 6px;
-  }
 }

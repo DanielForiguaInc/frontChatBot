@@ -1,58 +1,50 @@
 [
     {
-        "area": "Máquina de entrada",
+        "area": "Talanquera skidata horus",
         "priority": "alta",
-        "description": "no lee el ticket",
-        "keywords": ["ticket", "lector", "no lee", "máquina"],
-        "solution_technician": "Limpia el lector con un paño seco y reinicia la máquina.",
-        "solution_engineer": "Verifica el log de errores en el panel de control y actualiza el firmware."
+        "description": "Fallo en la entrada y salida de la talanquera",
+        "keywords": ["talanquera", "no funciona", "fallo", "entrada", "ticket"],
+        "solution_technician": "En la tarjeta principal las conexiones serán las del loop y las borneras para envío de pulsos de apertura y cierre verificar si funcionan adecuadamente.",
+        "solution_engineer": "https://incomelec.sharepoint.com/:w:/r/sites/Ingenieria/_layouts/15/Doc.aspx?sourcedoc=%7B52843D93-37A6-4DF3-AC42-790BA7C9B850%7D&file=Adaptaci%C3%B3n%20talanquera%20skidata.docx&action=default&mobileredirect=true"
     },
     {
-        "area": "Talanquera",
+        "area": "Talanquera manual F3080",   
+        "priority": "alta",
+        "description": "no se queda bloqueada",
+        "keywords": ["talanquera", "f3080", "bloqueada", "batería", "hoja"],
+        "solution_technician": "Para el desbloqueo utiliza un mecanismo compuesto por una manigueta, una guaya y un pasador.",
+        "solution_engineer": "https://incomelec-my.sharepoint.com/personal/pedro_garcia_incomelec_com/_layouts/15/onedrive.aspx?listurl=https%3A%2F%2Fincomelec%2Esharepoint%2Ecom%2Fsites%2FIngenieria%2FDocumentos%20compartidos&id=%2Fsites%2FIngenieria%2FDocumentos%20compartidos%2FBiblioteca%2FIncomelec%2FInformaci%C3%B3n%20T%C3%A9cnica%20Hardware%2FPRODUCTOS%20INCOMELEC%2FTalanquera%20Manual%20F3080%2FF3080%2DFT%2DES%2D1%2Epdf&parent=%2Fsites%2FIngenieria%2FDocumentos%20compartidos%2FBiblioteca%2FIncomelec%2FInformaci%C3%B3n%20T%C3%A9cnica%20Hardware%2FPRODUCTOS%20INCOMELEC%2FTalanquera%20Manual%20F3080"
+    },
+    {
+        "area": "Cajero no funciona",
         "priority": "media",
-        "description": "no abre la puerta",
-        "keywords": ["talanquera", "puerta", "no abre", "batería"],
-        "solution_technician": "Comprueba la batería de la talanquera y reemplázala si está baja.",
-        "solution_engineer": "Revisa la configuración de la señal en el sistema de control."
+        "description": "Cajero no funciona de manera correcta y a la misma velocidad",
+        "keywords": ["cajero", "Sensores", "limpieza", "lector"],
+        "solution_technician": "https://incomelec-my.sharepoint.com/personal/pedro_garcia_incomelec_com/_layouts/15/onedrive.aspx?listurl=https%3A%2F%2Fincomelec%2Esharepoint%2Ecom%2Fsites%2FIngenieria%2FDocumentos%20compartidos&id=%2Fsites%2FIngenieria%2FDocumentos%20compartidos%2FBiblioteca%2FIncomelec%2FManuales%20y%20Procedimientos%2FCajero%2Flimpieza%20sensores%20internos%20reciclador%2Epdf&parent=%2Fsites%2FIngenieria%2FDocumentos%20compartidos%2FBiblioteca%2FIncomelec%2FManuales%20y%20Procedimientos%2FCajero",
+        "solution_engineer": "https://incomelec-my.sharepoint.com/personal/pedro_garcia_incomelec_com/_layouts/15/onedrive.aspx?listurl=https%3A%2F%2Fincomelec%2Esharepoint%2Ecom%2Fsites%2FIngenieria%2FDocumentos%20compartidos&id=%2Fsites%2FIngenieria%2FDocumentos%20compartidos%2FBiblioteca%2FIncomelec%2FManuales%20y%20Procedimientos%2FCajero%2FBA%5Fv2%5Feagle%5Fserial%5FEN%5F2%2D1%2Epdf&parent=%2Fsites%2FIngenieria%2FDocumentos%20compartidos%2FBiblioteca%2FIncomelec%2FManuales%20y%20Procedimientos%2FCajero"
     },
     {
-        "area": "Control de acceso",
-        "priority": "baja",
-        "description": "tarjeta no reconocida",
-        "keywords": ["tarjeta", "no reconocida", "control", "lector"],
-        "solution_technician": "Limpia la tarjeta y prueba de nuevo. Asegúrate de que no esté dañada.",
-        "solution_engineer": "Verifica la base de datos de tarjetas en el sistema y reinicia el lector."
-    },
-    {
-        "area": "Máquina de entrada",
+        "area": "Tactil cajero fuera de servicio",
         "priority": "media",
         "description": "pantalla no enciende",
-        "keywords": ["pantalla", "no enciende", "máquina"],
-        "solution_technician": "Verifica la conexión de energía y reinicia la máquina.",
-        "solution_engineer": "Comprueba el suministro de energía y revisa el módulo de pantalla en el sistema."
+        "keywords": ["pantalla", "no enciende", "cajero", "táctil"],
+        "solution_technician": "Limpia la pantalla, calibra el tacto y actualiza los controladores para evitar fallos.",
+        "solution_engineer": "https://incomelec-my.sharepoint.com/personal/pedro_garcia_incomelec_com/_layouts/15/onedrive.aspx?listurl=https%3A%2F%2Fincomelec%2Esharepoint%2Ecom%2Fsites%2FIngenieria%2FDocumentos%20compartidos&id=%2Fsites%2FIngenieria%2FDocumentos%20compartidos%2FBiblioteca%2FIncomelec%2FManuales%20y%20Procedimientos%2FCajero%2FInstalaci%C3%B3n%20T%C3%A1ctil%2FGu%C3%ADa%20de%20instalaci%C3%B3n%20t%C3%A1ctil%20para%20Cajero%20Horus%2Epdf&parent=%2Fsites%2FIngenieria%2FDocumentos%20compartidos%2FBiblioteca%2FIncomelec%2FManuales%20y%20Procedimientos%2FCajero%2FInstalaci%C3%B3n%20T%C3%A1ctil"
     },
     {
-        "area": "Talanquera",
-        "priority": "alta",
-        "description": "emite pitidos constantes",
-        "keywords": ["pitidos", "constantes", "talanquera"],
-        "solution_technician": "Apaga la talanquera y revisa si hay obstrucciones en el mecanismo.",
-        "solution_engineer": "Inspecciona el sistema de alertas y recalibra el sensor."
-    },
-    {
-        "area": "Control de acceso",
-        "priority": "media",
-        "description": "puerta no responde al lector",
-        "keywords": ["puerta", "no responde", "lector", "control"],
-        "solution_technician": "Verifica la conexión del lector y reinicia el sistema.",
-        "solution_engineer": "Revisa los logs del sistema de control y actualiza el software."
-    },
-    {
-        "area": "Máquina de entrada",
+        "area": "Soporte datafono flojo",
         "priority": "baja",
-        "description": "botones no responden",
-        "keywords": ["botones", "no responden", "máquina"],
-        "solution_technician": "Limpia los botones y prueba de nuevo.",
-        "solution_engineer": "Inspecciona el panel de control y reemplaza el módulo de botones si es necesario."
+        "description": "Peligro de soltarse datafono",
+        "keywords": ["datafono", "soporte", "flojo", "peligro"],
+        "solution_technician": "Ubica el datáfono en un soporte firme, seguro, ventilado y alejado de humedad o fuentes de calor.",
+        "solution_engineer": "https://incomelec-my.sharepoint.com/personal/pedro_garcia_incomelec_com/_layouts/15/onedrive.aspx?listurl=https%3A%2F%2Fincomelec%2Esharepoint%2Ecom%2Fsites%2FIngenieria%2FDocumentos%20compartidos&id=%2Fsites%2FIngenieria%2FDocumentos%20compartidos%2FBiblioteca%2FIncomelec%2FManuales%20y%20Procedimientos%2FCajero%2FSoporte%20Datafono%2FSoporte%20para%20Datafono%20en%20ATM%20Horus%2DModelo%2Epdf&parent=%2Fsites%2FIngenieria%2FDocumentos%20compartidos%2FBiblioteca%2FIncomelec%2FManuales%20y%20Procedimientos%2FCajero%2FSoporte%20Datafono."
+    },
+    {
+        "area": "Mantenimiento Talanquera",
+        "priority": "baja",
+        "description": "Mantenimiento preventivo de la talanquera",
+        "keywords": ["mantenimiento", "talanquera", "moovi", "control"],
+        "solution_technician": "Limpiar y lubricar las partes móviles de la talanquera, verificar el estado de los sensores y conexiones.",
+        "solution_engineer": "https://incomelec-my.sharepoint.com/personal/pedro_garcia_incomelec_com/_layouts/15/onedrive.aspx?listurl=https%3A%2F%2Fincomelec%2Esharepoint%2Ecom%2Fsites%2FIngenieria%2FDocumentos%20compartidos&id=%2Fsites%2FIngenieria%2FDocumentos%20compartidos%2FBiblioteca%2FIncomelec%2FInformaci%C3%B3n%20T%C3%A9cnica%20Hardware%2FBFT%2FBFT%5FMoovi%5F30%5F60%5FSP%2Epdf&parent=%2Fsites%2FIngenieria%2FDocumentos%20compartidos%2FBiblioteca%2FIncomelec%2FInformaci%C3%B3n%20T%C3%A9cnica%20Hardware%2FBFT"
     }
 ]
