@@ -240,67 +240,86 @@ document.addEventListener('DOMContentLoaded', function() {
     return keywords.slice(0, 3); // Máximo 3 keywords
   }
 
-  // Procesar input del usuario
-  async function processUserInput(input) {
-    log('Procesando input:', input);
-    input = input.trim();
-    if (!input) {
-      showTypingAndRespond(translations[currentLanguage].emptyMessage);
-      return;
-    }
-    if (input.length > 500) {
-      showTypingAndRespond(translations[currentLanguage].messageTooLong);
-      return;
-    }
 
-    addMessage('user', input);
-
-    const keywords = extractKeywords(input);
-    if (keywords.length < 3) {
-      showTypingAndRespond(translations[currentLanguage].describeMore);
-      return;
-    }
-
-    const query = keywords.map(encodeURIComponent).join(',');
-    const url = `https://backendchatbot-ylq2.onrender.com/api/solucion/buscar?q=${query}`;
-    log('Enviando solicitud al backend:', url);
-
-    try {
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-      });
-
-      if (!response.ok) {
-        throw new Error('Error al consultar el backend');
-      }
-
-      const data = await response.json();
-      let message;
-      if (data.length > 0) {
-        const solution = data[0];
-        const solutionKey = userRole === 'technician' ? 'solution_technician' : 'solution_engineer';
-        const solutionText = solution[solutionKey] || translations[currentLanguage].problemNotRecognized;
-        message = `
-          <strong>Área:</strong> ${solution.area}<br>
-          <strong>Prioridad:</strong> ${solution.priority}<br>
-          <strong>Descripción:</strong> ${solution.description}<br>
-          <strong>Solución:</strong> ${solutionText}
-        `;
-        if (userRole === 'engineer' && solution.solution_engineer.includes('http')) {
-          message += `<br><a href="${solution.solution_engineer}" target="_blank">Ver documento</a>`;
-        }
-      } else {
-        message = translations[currentLanguage].problemNotRecognized;
-      }
-      showTypingAndRespond(message);
-    } catch (error) {
-      logError('Error al conectar con el backend:', error);
-      showTypingAndRespond('Error al conectar con el backend. Intenta de nuevo.');
-    }
-    chatInput.value = ''; // Limpiar el textarea
-    updateSendButtonState(); // Deshabilitar el botón tras enviar
+// Procesar input del usuario
+// Procesar input del usuario
+async function processUserInput(input) {
+  log('Procesando input:', input);
+  input = input.trim();
+  if (!input) {
+    showTypingAndRespond(translations[currentLanguage].emptyMessage);
+    return;
   }
+  if (input.length > 500) {
+    showTypingAndRespond(translations[currentLanguage].messageTooLong);
+    return;
+  }
+  if (!userRole) {
+    showTypingAndRespond(translations[currentLanguage].rolePrompt, [
+      { text: translations[currentLanguage].technician, action: () => setRole('tecnico') }, // Cambiado a 'tecnico'
+      { text: translations[currentLanguage].engineer, action: () => setRole('ingeniero') } // Cambiado a 'ingeniero'
+    ]);
+    return;
+  }
+  if (!selectedArea) {
+    showTypingAndRespond(translations[currentLanguage].areaPrompt, validAreas.map(area => ({
+      text: area.charAt(0).toUpperCase() + area.slice(1),
+      action: () => setArea(area)
+    })));
+    return;
+  }
+
+  addMessage('user', input);
+
+  const keywords = extractKeywords(input);
+  if (keywords.length < 3) {
+    showTypingAndRespond(translations[currentLanguage].describeMore);
+    return;
+  }
+
+  const query = keywords.map(encodeURIComponent).join(',');
+  const adjustedRole = userRole === 'technician' ? 'tecnico' : 'ingeniero'; // Ajuste de rol
+  const url = `https://backendchatbot-ylq2.onrender.com/api/solucion/buscar?q=${query}&rol=${encodeURIComponent(adjustedRole)}`;
+  log('Solicitud enviada a:', url);
+
+  try {
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text(); // Obtener detalles del error
+      logError('Error del backend:', { status: response.status, message: errorText });
+      throw new Error(`Error ${response.status}: ${errorText || 'Solicitud inválida'}`);
+    }
+
+    const data = await response.json();
+    let message;
+    if (data.soluciones && data.soluciones.length > 0) {
+      const solution = data.soluciones[0];
+      message = `
+        <strong>Área:</strong> ${solution.area}<br>
+        <strong>Prioridad:</strong> ${solution.priority}<br>
+        <strong>Descripción:</strong> ${solution.description}<br>
+        <strong>Solución:</strong> 
+      `;
+      if (solution.solucion && solution.solucion.startsWith('http')) {
+        message += `<a href="${solution.solucion}" target="_blank">Ir a solución</a>`;
+      } else {
+        message += solution.solucion || translations[currentLanguage].problemNotRecognized;
+      }
+    } else {
+      message = translations[currentLanguage].problemNotRecognized;
+    }
+    showTypingAndRespond(message);
+  } catch (error) {
+    logError('Error al conectar con el backend:', error.message);
+    showTypingAndRespond('Error al conectar con el backend. Intenta de nuevo.');
+  }
+  chatInput.value = ''; // Limpiar el textarea
+  updateSendButtonState(); // Deshabilitar el botón tras enviar
+}
 
   // Mostrar indicador de escribiendo y responder
   function showTypingAndRespond(text) {
