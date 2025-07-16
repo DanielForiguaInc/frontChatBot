@@ -3,55 +3,47 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Asistente Técnico - INCOMELEC S.A.S</title>
-  <link rel="stylesheet" href="style/chatbot.css">
+  <title>Asistente Técnico</title>
+  <link rel="stylesheet" href="./style/chatbot.css">
 </head>
 <body>
-  <!-- Botón flotante para abrir/cerrar el chat -->
   <div id="chatBubble">
-    <img src="assets/Images/ChatIcon-White.svg" alt="Chat Icon" class="chat-bubble-icon" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
-    <span class="chat-bubble-text"></span>
+    <img src="./assets/Images/ChatIcon-White.svg" alt="Chat Bubble" class="chat-bubble-icon">
   </div>
 
-  <!-- Contenedor principal del chat -->
   <div id="chatContainer" class="chat-container" style="display: none;">
-    <!-- Encabezado del chat -->
     <div class="chat-header">
       <div class="header-content">
-        <img src="assets/Images/IncomelecRounded1.svg" alt="Incomelec Avatar" class="incomelec-profile">
+        <img src="./assets/Images/IncomelecRounded1.svg" alt="Profile" class="profile-img">
         <span>Asistente Técnico</span>
-        <img src="assets/Images/incomelecBlanco.svg" alt="Incomelec Avatar" class="incomelec-img">
       </div>
       <div class="header-buttons">
-        <button id="themeToggle" class="btn"></button>
-        <button id="languageButton" class="btn"></button>
-        <button id="close-button" class="btn"></button>
+        <button id="themeToggle"></button>
+        <button id="languageButton"></button>
+        <button id="close-button"></button>
       </div>
     </div>
 
-    <!-- Cuerpo del chat -->
     <div id="chatBody" class="chat-body"></div>
 
-    <!-- Footer del chat -->
     <div class="chat-footer">
       <div class="input-row">
-        <textarea id="chatInput" class="chat-input form-control" placeholder="Escribe tu mensaje..."></textarea>
+        <textarea id="chatInput" class="chat-input form-control" placeholder="Describe el problema (e.g., 'fallo en la entrada')" rows="1"></textarea>
+        <div class="send-button-container">
+          <button id="sendButton" class="btn" disabled></button>
+        </div>
       </div>
       <div class="button-row">
-        <button id="voiceButton" class="btn voice-button"></button>
-        <button id="historyButton" class="btn history-button"></button>
-        <button id="downloadButton" class="btn download-button"></button>
-        <button id="resetButton" class="btn reset-button"></button>
-      </div>
-      <div class="send-button-container">
-        <button id="sendButton" class="btn"></button>
+        <button id="voiceButton" class="voice-button btn"></button>
+        <button id="historyButton" class="history-button btn"></button>
+        <button id="downloadButton" class="download-button btn"></button>
+        <button id="resetButton" class="reset-button btn"></button>
       </div>
     </div>
 
-    <!-- Notificación -->
     <div id="notification" class="notification"></div>
   </div>
 
-  <script src="scripts/chatbot.js"></script>
+  <script src="./scripts/chatbot.js"></script>
 </body>
 </html>
