@@ -450,6 +450,7 @@
   width: 50px;
   background-image: url('../assets/Images/MicrophoneGreen2.svg');
   background-position: calc(100% - 4px) center;
+  border-color: #95c11f;
 }
 .voice-button.btn:hover::after {
   content: "Voz";
@@ -467,6 +468,7 @@
   width: 72px;
   background-image: url('../assets/Images/Historygreen2.svg');
   background-position: calc(100% - 4px) center;
+  border-color: #95c11f;
 }
 .history-button.btn:hover::after {
   content: "Historial";
@@ -484,6 +486,7 @@
   width: 80px;
   background-image: url('../assets/Images/downloadGreen2.svg');
   background-position: calc(100% - 4px) center;
+  border-color: #95c11f;
 }
 .download-button.btn:hover::after {
   content: "Descargar";
@@ -505,6 +508,7 @@
   background-image: url('../assets/Images/Restart-Green2.svg');
   background-size: 13px 13px;
   background-position: calc(100% - 4px) center;
+  border-color: #95c11f;
 }
 .reset-button.btn:hover::after {
   content: "Reiniciar";

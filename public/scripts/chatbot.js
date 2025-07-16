@@ -42,7 +42,10 @@ document.addEventListener('DOMContentLoaded', function() {
       connectionLost: 'Conexión perdida',
       connectionRestored: 'Conexión restablecida',
       technician: 'Técnico',
-      engineer: 'Ingeniero'
+      engineer: 'Ingeniero',
+      yes: 'Sí',
+      no: 'No',
+      pleasureToHelp: 'Fue un placer ayudarte.'
     },
     en: {
       welcome: 'Hello! I am your technical assistant from INCOMELEC S.A.S. Select your role to start.',
@@ -60,7 +63,10 @@ document.addEventListener('DOMContentLoaded', function() {
       connectionLost: 'Connection lost',
       connectionRestored: 'Connection restored',
       technician: 'Technician',
-      engineer: 'Engineer'
+      engineer: 'Engineer',
+      yes: 'Yes',
+      no: 'No',
+      pleasureToHelp: 'It was a pleasure to help you.'
     }
   };
 
@@ -165,7 +171,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const isMessageWritten = chatInput.value.trim() !== '';
   const isDisabled = !isRoleSelected || !isAreaSelected || !isMessageWritten;
   sendButton.disabled = isDisabled;
-  console.log('Estado del botón:', { isRoleSelected, isAreaSelected, isMessageWritten, isDisabled });
+  // console.log('Estado del botón:', { isRoleSelected, isAreaSelected, isMessageWritten, isDisabled });
 }
 
   // Función para agregar mensajes simples
@@ -240,11 +246,9 @@ document.addEventListener('DOMContentLoaded', function() {
     return keywords.slice(0, 3); // Máximo 3 keywords
   }
 
-
-// Procesar input del usuario
 // Procesar input del usuario
 async function processUserInput(input) {
-  log('Procesando input:', input);
+  log('Procesando input:', input); // Mantendré logs mínimos por si necesitas depurar
   input = input.trim();
   if (!input) {
     showTypingAndRespond(translations[currentLanguage].emptyMessage);
@@ -256,8 +260,8 @@ async function processUserInput(input) {
   }
   if (!userRole) {
     showTypingAndRespond(translations[currentLanguage].rolePrompt, [
-      { text: translations[currentLanguage].technician, action: () => setRole('tecnico') }, // Cambiado a 'tecnico'
-      { text: translations[currentLanguage].engineer, action: () => setRole('ingeniero') } // Cambiado a 'ingeniero'
+      { text: translations[currentLanguage].technician, action: () => setRole('tecnico') },
+      { text: translations[currentLanguage].engineer, action: () => setRole('ingeniero') }
     ]);
     return;
   }
@@ -272,79 +276,123 @@ async function processUserInput(input) {
   addMessage('user', input);
 
   const keywords = extractKeywords(input);
-  if (keywords.length < 3) {
+  if (keywords.length < 3 && !input.toLowerCase().match(/^(si|sí|no)$/i)) {
     showTypingAndRespond(translations[currentLanguage].describeMore);
     return;
   }
 
   const query = keywords.map(encodeURIComponent).join(',');
-  const adjustedRole = userRole === 'technician' ? 'tecnico' : 'ingeniero'; // Ajuste de rol
+  const adjustedRole = userRole === 'technician' ? 'tecnico' : 'ingeniero';
   const url = `https://backendchatbot-ylq2.onrender.com/api/solucion/buscar?q=${query}&rol=${encodeURIComponent(adjustedRole)}`;
   log('Solicitud enviada a:', url);
 
   try {
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    });
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  });
 
-    if (!response.ok) {
-      const errorText = await response.text(); // Obtener detalles del error
-      logError('Error del backend:', { status: response.status, message: errorText });
-      throw new Error(`Error ${response.status}: ${errorText || 'Solicitud inválida'}`);
-    }
-
-    const data = await response.json();
-    let message;
-    if (data.soluciones && data.soluciones.length > 0) {
-      const solution = data.soluciones[0];
-      message = `
-        <strong>Área:</strong> ${solution.area}<br>
-        <strong>Prioridad:</strong> ${solution.priority}<br>
-        <strong>Descripción:</strong> ${solution.description}<br>
-        <strong>Solución:</strong> 
-      `;
-      if (solution.solucion && solution.solucion.startsWith('http')) {
-        message += `<a href="${solution.solucion}" target="_blank">Ir a solución</a>`;
-      } else {
-        message += solution.solucion || translations[currentLanguage].problemNotRecognized;
-      }
-    } else {
-      message = translations[currentLanguage].problemNotRecognized;
-    }
-    showTypingAndRespond(message);
-  } catch (error) {
-    logError('Error al conectar con el backend:', error.message);
-    showTypingAndRespond('Error al conectar con el backend. Intenta de nuevo.');
+  if (!response.ok) {
+    const errorText = await response.text();
+    logError('Error del backend:', { status: response.status, message: errorText });
+    throw new Error(`Error ${response.status}: ${errorText || 'Solicitud inválida'}`);
   }
-  chatInput.value = ''; // Limpiar el textarea
-  updateSendButtonState(); // Deshabilitar el botón tras enviar
+
+  const data = await response.json();
+  let message;
+  if (data.soluciones && data.soluciones.length > 0) {
+    const solution = data.soluciones[0];
+    message = `
+      <strong>Área:</strong> ${solution.area}<br>
+      <strong>Prioridad:</strong> ${solution.priority}<br>
+      <strong>Descripción:</strong> ${solution.description}<br>
+      <strong>Solución:</strong> 
+    `;
+    if (solution.solucion && solution.solucion.startsWith('http')) {
+      message += `<a href="${solution.solucion}" target="_blank">Descargar documento</a>`;
+    } else {
+      message += solution.solucion || translations[currentLanguage].problemNotRecognized;
+    }
+    // Mostrar la solución primero
+    showTypingAndRespond(message);
+
+    // Mostrar la pregunta y los botones inmediatamente después
+    showTypingAndRespond('¿Fue útil esta solución?', [
+      { text: translations[currentLanguage].yes, action: () => handleSolutionConfirmation(true) },
+      { text: translations[currentLanguage].no, action: () => handleSolutionConfirmation(false) }
+    ]);
+  } else {
+    message = translations[currentLanguage].problemNotRecognized;
+    showTypingAndRespond(message);
+  }
+} catch (error) {
+  logError('Error al conectar con el backend:', error.message);
+  showTypingAndRespond('Error al conectar con el backend. Intenta de nuevo.');
+}
+chatInput.value = ''; // Limpiar el textarea
+updateSendButtonState(); // Deshabilitar el botón tras enviar
 }
 
   // Mostrar indicador de escribiendo y responder
-  function showTypingAndRespond(text) {
-    log('Mostrando indicador de escribiendo');
-    isBotTyping = true;
+function showTypingAndRespond(message, options = []) {
+  log('Mostrando indicador de escribiendo');
+  isBotTyping = true;
+  updateSendButtonState();
+
+  const existingIndicator = chatBody.querySelector('.typing-indicator');
+  if (existingIndicator) {
+    existingIndicator.remove();
+  }
+
+  const typingIndicator = document.createElement('div');
+  typingIndicator.classList.add('typing-indicator');
+  typingIndicator.innerHTML = '<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>';
+  chatBody.appendChild(typingIndicator);
+  chatBody.scrollTop = chatBody.scrollHeight;
+
+  setTimeout(() => {
+    typingIndicator.remove();
+    isBotTyping = false;
     updateSendButtonState();
 
-    const existingIndicator = chatBody.querySelector('.typing-indicator');
-    if (existingIndicator) {
-      existingIndicator.remove();
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'bot-message';
+    messageDiv.innerHTML = `<img src="./assets/Images/IncomelecRounded.svg" alt="Bot Avatar"><span>${message}</span>`;
+    chatBody.appendChild(messageDiv);
+
+    if (options.length > 0) {
+      const optionsDiv = document.createElement('div');
+      optionsDiv.className = 'chat-options';
+      options.forEach(opt => {
+        const button = document.createElement('button');
+        button.className = 'option-button';
+        button.textContent = opt.text;
+        button.addEventListener('click', opt.action);
+        optionsDiv.appendChild(button);
+      });
+      chatBody.appendChild(optionsDiv);
     }
 
-    const typingIndicator = document.createElement('div');
-    typingIndicator.classList.add('typing-indicator');
-    typingIndicator.innerHTML = '<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>';
-    chatBody.appendChild(typingIndicator);
     chatBody.scrollTop = chatBody.scrollHeight;
+  }, 1500);
+}
 
+function handleSolutionConfirmation(isSolved) {
+  if (isSolved) {
+    showTypingAndRespond(translations[currentLanguage].pleasureToHelp);
     setTimeout(() => {
-      typingIndicator.remove();
-      isBotTyping = false;
+      selectedArea = null;
+      chatInput.value = '';
       updateSendButtonState();
-      addMessage('bot', text);
-    }, 1500);
+      showTypingAndRespond(translations[currentLanguage].areaPrompt, validAreas.map(area => ({
+        text: area.charAt(0).toUpperCase() + area.slice(1),
+        action: () => setArea(area)
+      })));
+    }, 1000);
+  } else {
+    showTypingAndRespond(translations[currentLanguage].describeMore);
   }
+}
 
   // Mostrar notificación
   function showNotification(message, duration = 2000) {
