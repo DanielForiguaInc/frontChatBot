@@ -23,14 +23,19 @@ document.addEventListener('DOMContentLoaded', function() {
   let userRole = null;
   let currentLanguage = 'es';
   let conversationHistory = JSON.parse(localStorage.getItem('chatHistory') || '[]');
+  let isChatInitialized = false; // Reiniciar a false al cargar
 
+  // Inicializar estado desde localStorage
+  userRole = localStorage.getItem('userRole') || null;
+  selectedArea = localStorage.getItem('selectedArea') || null;
+  
   // Traducciones
   const translations = {
     es: {
       welcome: '¡Hola! Soy tu asistente técnico de INCOMELEC S.A.S. Selecciona tu rol para comenzar.',
       rolePrompt: 'Por favor, selecciona tu rol: técnico o ingeniero.',
       areaPrompt: 'Por favor, selecciona un área del problema.',
-      describeMore: 'Por favor, describe el problema con más detalles, por ejemplo, "no lee el ticket".',
+      describeMore: 'Por favor, describe el problema con más detalles',
       problemNotRecognized: 'No reconozco ese problema. Intenta con otras palabras, como "fallo en la entrada".',
       emptyMessage: 'Por favor, escribe un mensaje válido.',
       messageTooLong: 'Tu mensaje es demasiado largo. Usa menos de 500 caracteres.',
@@ -51,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
       welcome: 'Hello! I am your technical assistant from INCOMELEC S.A.S. Select your role to start.',
       rolePrompt: 'Please select your role: technician or engineer.',
       areaPrompt: 'Please select the area of the issue.',
-      describeMore: 'Please describe the issue in more detail, for example, "the ticket is not being read."',
+      describeMore: 'Please describe the issue in more detail',
       problemNotRecognized: 'I don’t recognize that issue. Try different words, like "screen won’t turn on."',
       emptyMessage: 'Please enter a valid message.',
       messageTooLong: 'Your message is too long. Use less than 500 characters.',
@@ -125,18 +130,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Mostrar/Ocultar chat y mensaje de bienvenida
   chatBubble.addEventListener('click', () => {
-    log('Clic en chatBubble');
-    const currentDisplay = chatContainer.style.display;
-    if (currentDisplay === 'none' || currentDisplay === '') {
-      chatContainer.style.display = 'flex';
+  log('Clic en chatBubble, isChatInitialized:', isChatInitialized, 'userRole:', userRole);
+  const currentDisplay = chatContainer.style.display;
+  if (currentDisplay === 'none' || currentDisplay === '') {
+    chatContainer.style.display = 'flex';
+    if (!isChatInitialized) {
       addMessageWithButtons(translations[currentLanguage].welcome, [
         { text: translations[currentLanguage].technician, action: () => setRole('technician') },
         { text: translations[currentLanguage].engineer, action: () => setRole('engineer') }
       ]);
-    } else {
-      chatContainer.style.display = 'none';
+      isChatInitialized = true;
+      localStorage.setItem('isChatInitialized', 'true'); // Guardar después de inicializar
     }
-  });
+  } else {
+    chatContainer.style.display = 'none';
+  }
+});
 
   closeButton.addEventListener('click', () => {
     log('Clic en closeButton');
@@ -213,20 +222,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Establecer rol y mostrar opciones de área
   function setRole(role) {
-    userRole = role;
-    addMessageWithButtons(translations[currentLanguage].areaPrompt, validAreas.map(area => ({
-      text: area.charAt(0).toUpperCase() + area.slice(1),
-      action: () => setArea(area)
-    })));
-    updateSendButtonState();
-  }
+  userRole = role;
+  localStorage.setItem('userRole', role);
+  addMessageWithButtons(translations[currentLanguage].areaPrompt, validAreas.map(area => ({
+    text: area.charAt(0).toUpperCase() + area.slice(1),
+    action: () => setArea(area)
+  })));
+  updateSendButtonState();
+}
 
   // Establecer área
   function setArea(area) {
-    selectedArea = area;
-    addMessage('bot', translations[currentLanguage].describeMore);
-    updateSendButtonState();
-  }
+  selectedArea = area;
+  localStorage.setItem('selectedArea', area); // Guardar en localStorage
+  addMessage('bot', translations[currentLanguage].describeMore);
+  updateSendButtonState();
+}
 
   // Extraer keywords del input
   function extractKeywords(input) {
@@ -489,16 +500,20 @@ function handleSolutionConfirmation(isSolved) {
   });
 
   function resetConversation() {
-    userRole = null;
-    selectedArea = null;
-    conversationHistory = [];
-    localStorage.removeItem('chatHistory');
-    chatBody.innerHTML = '';
-    addMessageWithButtons(translations[currentLanguage].welcome, [
-      { text: translations[currentLanguage].technician, action: () => setRole('technician') },
-      { text: translations[currentLanguage].engineer, action: () => setRole('engineer') }
-    ]);
-  }
+  userRole = null;
+  selectedArea = null;
+  conversationHistory = [];
+  isChatInitialized = false; // Reiniciar bandera
+  localStorage.removeItem('chatHistory');
+  localStorage.removeItem('userRole');
+  localStorage.removeItem('selectedArea');
+  localStorage.removeItem('isChatInitialized');
+  chatBody.innerHTML = '';
+  addMessageWithButtons(translations[currentLanguage].welcome, [
+    { text: translations[currentLanguage].technician, action: () => setRole('technician') },
+    { text: translations[currentLanguage].engineer, action: () => setRole('engineer') }
+  ]);
+}
 
   // Inicializar
   chatInput.value = '';
