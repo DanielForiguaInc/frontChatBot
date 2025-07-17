@@ -284,7 +284,11 @@ async function processUserInput(input) {
     return;
   }
 
+  // Añadir el mensaje al chat y limpiar el textarea inmediatamente
   addMessage('user', input);
+  chatInput.value = ''; // Limpiar el textarea antes de la llamada al backend
+  updateSendButtonState(); // Actualizar el estado del botón
+  adjustTextareaHeight(); // Ajustar la altura del textarea
 
   const keywords = extractKeywords(input);
   if (keywords.length < 3 && !input.toLowerCase().match(/^(si|sí|no)$/i)) {
@@ -298,49 +302,49 @@ async function processUserInput(input) {
   log('Solicitud enviada a:', url);
 
   try {
-  const response = await fetch(url, {
-    method: 'GET',
-    headers: { 'Content-Type': 'application/json' },
-  });
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    });
 
-  if (!response.ok) {
-    const errorText = await response.text();
-    logError('Error del backend:', { status: response.status, message: errorText });
-    throw new Error(`Error ${response.status}: ${errorText || 'Solicitud inválida'}`);
-  }
-
-  const data = await response.json();
-  let message;
-  if (data.soluciones && data.soluciones.length > 0) {
-    const solution = data.soluciones[0];
-    message = `
-      <strong>Área:</strong> ${solution.area}<br>
-      <strong>Prioridad:</strong> ${solution.priority}<br>
-      <strong>Descripción:</strong> ${solution.description}<br>
-      <strong>Solución:</strong> 
-    `;
-    if (solution.solucion && solution.solucion.startsWith('http')) {
-      message += `<a href="${solution.solucion}" target="_blank">Descargar documento</a>`;
-    } else {
-      message += solution.solucion || translations[currentLanguage].problemNotRecognized;
+    if (!response.ok) {
+      const errorText = await response.text();
+      logError('Error del backend:', { status: response.status, message: errorText });
+      throw new Error(`Error ${response.status}: ${errorText || 'Solicitud inválida'}`);
     }
-    // Mostrar la solución primero
-    showTypingAndRespond(message);
 
-    // Mostrar la pregunta y los botones inmediatamente después
-    showTypingAndRespond('¿Fue útil esta solución?', [
-      { text: translations[currentLanguage].yes, action: () => handleSolutionConfirmation(true) },
-      { text: translations[currentLanguage].no, action: () => handleSolutionConfirmation(false) }
-    ]);
-  } else {
-    message = translations[currentLanguage].problemNotRecognized;
-    showTypingAndRespond(message);
+    const data = await response.json();
+    let message;
+    if (data.soluciones && data.soluciones.length > 0) {
+      const solution = data.soluciones[0];
+      message = `
+        <strong>Área:</strong> ${solution.area}<br>
+        <strong>Prioridad:</strong> ${solution.priority}<br>
+        <strong>Descripción:</strong> ${solution.description}<br>
+        <strong>Solución:</strong> 
+      `;
+      if (solution.solucion && solution.solucion.startsWith('http')) {
+        message += `<a href="${solution.solucion}" target="_blank">Descargar documento</a>`;
+      } else {
+        message += solution.solucion || translations[currentLanguage].problemNotRecognized;
+      }
+      // Mostrar la solución primero
+      showTypingAndRespond(message);
+
+      // Mostrar la pregunta y los botones inmediatamente después
+      showTypingAndRespond('¿Fue útil esta solución?', [
+        { text: translations[currentLanguage].yes, action: () => handleSolutionConfirmation(true) },
+        { text: translations[currentLanguage].no, action: () => handleSolutionConfirmation(false) }
+      ]);
+    } else {
+      message = translations[currentLanguage].problemNotRecognized;
+      showTypingAndRespond(message);
+    }
+  } catch (error) {
+    logError('Error al conectar con el backend:', error.message);
+    showTypingAndRespond('Error al conectar con el backend. Intenta de nuevo.');
   }
-} catch (error) {
-  logError('Error al conectar con el backend:', error.message);
-  showTypingAndRespond('Error al conectar con el backend. Intenta de nuevo.');
-}
-chatInput.value = ''; // Limpiar el textarea
+  // El textarea ya está limpio, no necesitamos repetirlo aquí
 updateSendButtonState(); // Deshabilitar el botón tras enviar
 }
 
