@@ -5,6 +5,15 @@
   100% { opacity: 1; }
 }
 
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 /* ===== BOTONES DE CABECERA ===== */
 #themeToggle, 
 #languageButton, 
@@ -221,6 +230,32 @@
 .chat-input.form-control {
   scrollbar-width: thin;
   scrollbar-color: rgba(136, 136, 136, 0.5) #ffffff00;
+}
+
+/* Contenedor dedicado para el spinner */
+.spinner-container {
+  display: flex;
+  align-items: flex-start;
+  background-color: #f0f0f000; /* Color gris del área de mensaje */
+  padding: 2px; /* Reducir padding para acercar al borde izquierdo */
+  border-radius: 5px; /* Ajustar según el diseño del área gris */
+  margin: 5px 0; /* Mantener margen vertical */
+  justify-content: flex-start; /* Alinear a la izquierda */
+}
+
+/* Estilos del spinner dentro del contenedor */
+.spinner {
+  display: flex;
+  align-items: flex-start;
+  margin: 0; /* Sin margen adicional */
+  padding-left: 0; /* Eliminar padding izquierdo */
+  min-height: 20px; /* Mantener altura mínima reducida */
+}
+
+.spinner-img {
+  width: 20px; /* Mantener tamaño */
+  height: 20px; /* Mantener tamaño */
+  display: inline-block; /* Alinear con texto */
 }
 
 /* ===== MENSAJES ===== */

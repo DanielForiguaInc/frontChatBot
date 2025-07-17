@@ -286,12 +286,23 @@ async function processUserInput(input) {
 
   // Añadir el mensaje al chat y limpiar el textarea inmediatamente
   addMessage('user', input);
-  chatInput.value = ''; // Limpiar el textarea antes de la llamada al backend
+  chatInput.value = ''; // Limpiar el textarea
   updateSendButtonState(); // Actualizar el estado del botón
   adjustTextareaHeight(); // Ajustar la altura del textarea
 
+  // Mostrar el spinner en su propio contenedor
+  const spinnerContainer = document.createElement('div');
+  spinnerContainer.className = 'spinner-container'; // Contenedor específico
+  const spinner = document.createElement('div');
+  spinner.className = 'spinner';
+  spinner.innerHTML = `<img src="./assets/Images/spinner.svg" alt="Cargando" class="spinner-img">`;
+  spinnerContainer.appendChild(spinner);
+  chatBody.appendChild(spinnerContainer);
+  chatBody.scrollTop = chatBody.scrollHeight;
+
   const keywords = extractKeywords(input);
   if (keywords.length < 3 && !input.toLowerCase().match(/^(si|sí|no)$/i)) {
+    spinnerContainer.remove(); // Remover el contenedor completo
     showTypingAndRespond(translations[currentLanguage].describeMore);
     return;
   }
@@ -329,6 +340,7 @@ async function processUserInput(input) {
         message += solution.solucion || translations[currentLanguage].problemNotRecognized;
       }
       // Mostrar la solución primero
+      spinnerContainer.remove(); // Remover el contenedor completo
       showTypingAndRespond(message);
 
       // Mostrar la pregunta y los botones inmediatamente después
@@ -338,10 +350,12 @@ async function processUserInput(input) {
       ]);
     } else {
       message = translations[currentLanguage].problemNotRecognized;
+      spinnerContainer.remove(); // Remover el contenedor completo
       showTypingAndRespond(message);
     }
   } catch (error) {
     logError('Error al conectar con el backend:', error.message);
+    spinnerContainer.remove(); // Remover el contenedor completo
     showTypingAndRespond('Error al conectar con el backend. Intenta de nuevo.');
   }
   // El textarea ya está limpio, no necesitamos repetirlo aquí
