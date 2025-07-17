@@ -21,6 +21,8 @@ document.addEventListener('DOMContentLoaded', function() {
   let isBotTyping = false;
   let selectedArea = null;
   let userRole = null;
+  localStorage.removeItem('userRole');
+  localStorage.removeItem('selectedArea');
   let currentLanguage = 'es';
   let conversationHistory = JSON.parse(localStorage.getItem('chatHistory') || '[]');
   let isChatInitialized = false; // Reiniciar a false al cargar
@@ -180,7 +182,6 @@ document.addEventListener('DOMContentLoaded', function() {
   const isMessageWritten = chatInput.value.trim() !== '';
   const isDisabled = !isRoleSelected || !isAreaSelected || !isMessageWritten;
   sendButton.disabled = isDisabled;
-  // console.log('Estado del botón:', { isRoleSelected, isAreaSelected, isMessageWritten, isDisabled });
 }
 
   // Función para agregar mensajes simples

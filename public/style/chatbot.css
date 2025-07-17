@@ -253,8 +253,8 @@
 }
 
 .spinner-img {
-  width: 20px; /* Mantener tamaño */
-  height: 20px; /* Mantener tamaño */
+  width: 15px; /* Mantener tamaño */
+  height: 15px; /* Mantener tamaño */
   display: inline-block; /* Alinear con texto */
 }
 
