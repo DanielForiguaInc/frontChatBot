@@ -225,10 +225,39 @@ document.addEventListener('DOMContentLoaded', function() {
   function setRole(role) {
   userRole = role;
   localStorage.setItem('userRole', role);
-  addMessageWithButtons(translations[currentLanguage].areaPrompt, validAreas.map(area => ({
-    text: area.charAt(0).toUpperCase() + area.slice(1),
-    action: () => setArea(area)
-  })));
+  
+  // Crear el contenedor del dropdown
+  const messageDiv = document.createElement('div');
+  messageDiv.className = 'bot-message';
+  messageDiv.innerHTML = `<img src="./assets/Images/IncomelecRounded.svg" alt="Bot Avatar"><span>${translations[currentLanguage].areaPrompt}</span>`;
+  chatBody.appendChild(messageDiv);
+
+  // Crear el dropdown
+  const selectDiv = document.createElement('div');
+  selectDiv.className = 'chat-options';
+  const select = document.createElement('select');
+  select.className = 'area-dropdown';
+  select.innerHTML = '<option value="">Selecciona un área</option>' + 
+    validAreas.map(area => `<option value="${area}">${area.charAt(0).toUpperCase() + area.slice(1)}</option>`).join('');
+  
+  // Crear el botón de selección
+  const selectButton = document.createElement('button');
+  selectButton.className = 'option-button';
+  selectButton.textContent = 'Seleccionar';
+  selectButton.addEventListener('click', () => {
+    const selectedAreaValue = select.value;
+    if (selectedAreaValue) {
+      setArea(selectedAreaValue);
+      selectDiv.remove(); // Eliminar el dropdown después de seleccionar
+    }
+  });
+
+  // Añadir dropdown y botón al chat
+  selectDiv.appendChild(select);
+  selectDiv.appendChild(selectButton);
+  chatBody.appendChild(selectDiv);
+  chatBody.scrollTop = chatBody.scrollHeight;
+
   updateSendButtonState();
 }
 
@@ -310,8 +339,8 @@ async function processUserInput(input) {
 
   const query = keywords.map(encodeURIComponent).join(',');
   const adjustedRole = userRole === 'technician' ? 'tecnico' : 'ingeniero';
-  const url = `https://backendchatbot-ylq2.onrender.com/api/solucion/buscar?q=${query}&rol=${encodeURIComponent(adjustedRole)}`;
-  log('Solicitud enviada a:', url);
+  const url = `https://backendchatbot-ylq2.onrender.com/api/solucion/buscar?q=${query}&rol=${encodeURIComponent(adjustedRole)}&area=${encodeURIComponent(selectedArea)}`;
+  console.log('Solicitud enviada a:', url);
 
   try {
     const response = await fetch(url, {
@@ -321,7 +350,7 @@ async function processUserInput(input) {
 
     if (!response.ok) {
       const errorText = await response.text();
-      logError('Error del backend:', { status: response.status, message: errorText });
+      console.error('Error del backend:', { status: response.status, message: errorText });
       throw new Error(`Error ${response.status}: ${errorText || 'Solicitud inválida'}`);
     }
 
@@ -355,16 +384,16 @@ async function processUserInput(input) {
       showTypingAndRespond(message);
     }
   } catch (error) {
-    logError('Error al conectar con el backend:', error.message);
+    console.error('Error al conectar con el backend', error.message);
     spinnerContainer.remove(); // Remover el contenedor completo
-    showTypingAndRespond('Error al conectar con el backend. Intenta de nuevo.');
+    showTypingAndRespond('Error al conectar con el servidor interno. Intenta de nuevo.');
   }
   // El textarea ya está limpio, no necesitamos repetirlo aquí
 updateSendButtonState(); // Deshabilitar el botón tras enviar
 }
 
   // Mostrar indicador de escribiendo y responder
-function showTypingAndRespond(message, options = []) {
+function showTypingAndRespond(message, options = [], delay = 2000, callback = () => {}) {
   log('Mostrando indicador de escribiendo');
   isBotTyping = true;
   updateSendButtonState();
@@ -404,21 +433,52 @@ function showTypingAndRespond(message, options = []) {
     }
 
     chatBody.scrollTop = chatBody.scrollHeight;
-  }, 1500);
+    // Ejecutar callback después de mostrar el mensaje
+    setTimeout(callback, delay); // Retraso adicional para el callback
+  }, 1500); // Retraso original del indicador
 }
 
 function handleSolutionConfirmation(isSolved) {
   if (isSolved) {
-    showTypingAndRespond(translations[currentLanguage].pleasureToHelp);
-    setTimeout(() => {
+    // Mostrar el mensaje de despedida primero
+    showTypingAndRespond(translations[currentLanguage].pleasureToHelp, [], 1000, () => {
+      // Reiniciar estado después del mensaje
       selectedArea = null;
       chatInput.value = '';
       updateSendButtonState();
-      showTypingAndRespond(translations[currentLanguage].areaPrompt, validAreas.map(area => ({
-        text: area.charAt(0).toUpperCase() + area.slice(1),
-        action: () => setArea(area)
-      })));
-    }, 1000);
+
+      // Crear el contenedor del dropdown
+      const messageDiv = document.createElement('div');
+      messageDiv.className = 'bot-message';
+      messageDiv.innerHTML = `<img src="./assets/Images/IncomelecRounded.svg" alt="Bot Avatar"><span>${translations[currentLanguage].areaPrompt}</span>`;
+      chatBody.appendChild(messageDiv);
+
+      // Crear el dropdown
+      const selectDiv = document.createElement('div');
+      selectDiv.className = 'chat-options';
+      const select = document.createElement('select');
+      select.className = 'area-dropdown';
+      select.innerHTML = '<option value="">Selecciona un área</option>' + 
+        validAreas.map(area => `<option value="${area}">${area.charAt(0).toUpperCase() + area.slice(1)}</option>`).join('');
+      
+      // Crear el botón de selección
+      const selectButton = document.createElement('button');
+      selectButton.className = 'option-button';
+      selectButton.textContent = 'Seleccionar';
+      selectButton.addEventListener('click', () => {
+        const selectedAreaValue = select.value;
+        if (selectedAreaValue) {
+          setArea(selectedAreaValue);
+          selectDiv.remove();
+        }
+      });
+
+      // Añadir dropdown y botón al chat
+      selectDiv.appendChild(select);
+      selectDiv.appendChild(selectButton);
+      chatBody.appendChild(selectDiv);
+      chatBody.scrollTop = chatBody.scrollHeight;
+    });
   } else {
     showTypingAndRespond(translations[currentLanguage].describeMore);
   }

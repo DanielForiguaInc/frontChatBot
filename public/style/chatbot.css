@@ -334,6 +334,15 @@
   animation-delay: 0.4s;
 }
 
+.area-dropdown {
+  padding: 5px;
+  margin: 5px 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  width: 200px; /* Ajusta según necesites */
+}
+
 /* ===== OPCIONES DE MENSAJE ===== */
 .chat-options {
   display: flex;
@@ -362,6 +371,8 @@
   transform: scale(1.05);
   background-color: #5a6268;
 }
+
+
 
 /* ===== FOOTER DEL CHAT ===== */
 .chat-footer {
