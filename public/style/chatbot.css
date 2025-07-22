@@ -685,10 +685,25 @@
 #roleOptions .btn-secondary { /* Botón Técnico */
   background-color: #00973a !important; /* Verde */
   border-color: #00973a !important;
+  padding: 0.2rem 0.4rem !important;
+  font-size: 0.75rem !important;
 }
-#roleOptions .btn-primary { /* Botón Ingeniero */
-  background-color: #00973a !important; /* Verde, por ejemplo */
+
+#roleOptions .btn-secondary:hover {
+  background-color: #007b2f !important; /* Verde más oscuro */
+  border-color: #007b2f !important;
+}
+
+#roleOptions .btn-primary {
+  background-color: #00973a !important; /* Verde */
   border-color: #00973a !important;
+  padding: 0.2rem 0.4rem !important;
+  font-size: 0.75rem !important;
+}
+
+#roleOptions .btn-primary:hover {
+  background-color: #007b2f !important; /* Verde más oscuro */
+  border-color: #007b2f !important;
 }
 
 #roleOptions .dropdown-menu {
@@ -697,34 +712,64 @@
   z-index: 1000;
 }
 
+#roleOptions .dropdown-menu.show {
+  border: 1px solid #00973a; /* Borde más oscuro */
+}
+
 /* Ajustes para el formulario */
 #roleOptions .p-2 {
   padding: 0.03rem !important; /* Asegurar consistencia */
 }
 
+/* Ajustes para el formulario en modo claro */
 #roleOptions .form-control-sm {
-  font-size: 0.875rem !important; /* Ajustar tamaño de fuente de inputs */
+  font-size: 0.875rem !important; /* Tamaño de fuente de inputs */
+  background-color: #ffffff; /* Fondo blanco */
+  border: 1px solid #00973a; /* Borde gris claro */
+  border-radius: 0.25rem;
+  color: #093a21; /* Texto verde oscuro */
 }
 
-#roleOptions .form-control::placeholder {
+#roleOptions .form-control-sm::placeholder {
   font-size: 0.78rem !important; /* Tamaño pequeño */
-  color: #6c757d !important; /* Opcional: gris para que combine con tus labels */
+  color: #6c757d !important; /* Gris para placeholders */
 }
 
 #roleOptions .form-check-input {
-  transform: scale(0.8); /* Reduce el tamaño del checkbox */
+  transform: scale(0.8); /* Checkbox más pequeño */
+  border-color: #00973a; /* Borde verde */
 }
+
+#roleOptions .form-check-input:checked {
+  background-color: #00973a; /* Color verde para el check */
+  border-color: #00973a; /* Borde del check */
+  accent-color: #00973a; /* Asegura el color en navegadores modernos */
+}
+#roleOptions .form-check-input:focus {
+  box-shadow: 0 0 0 0.2rem rgba(9, 115, 58, 0.25); /* Sombra verde sutil */
+}
+#roleOptions .form-check-input:checked:focus {
+  box-shadow: 0 0 0 0.2rem rgba(0, 151, 58, 0.25); /* Sombra verde sutil */
+}
+
 #roleOptions .form-check-label {
-  font-size: 0.78rem !important; /* Reduce el texto "Recordarme" */
+  font-size: 0.78rem !important; /* Texto "Recordarme" */
+  color: #093a21; /* Verde oscuro */
 }
 
 #roleOptions .text-muted {
-  color: #6c757d !important; /* Color gris suave para etiquetas */
+  color: #6c757d !important; /* Gris suave para etiquetas */
+  font-size: 0.78rem !important;
 }
 
 /* Asegurar que los márgenes sean pequeños */
 #roleOptions .mb-2 {
   margin-bottom: 0.5rem !important;
+}
+
+#roleOptions .form-control-sm:focus {
+  border-color: #00973a !important; /* Borde verde claro */
+  box-shadow: 0 0 0 0.2rem rgba(9, 115, 58, 0.25) !important; /* Sombra verde claro */
 }
 
 #chatInput:focus {
@@ -735,6 +780,67 @@
 /* ===== MODO OSCURO ===== */
 body.dark-mode {
   background-color: #2a2a2a;
+}
+
+body.dark-mode #roleOptions .form-control-sm {
+  background-color: #333; /* Fondo gris oscuro */
+  border: 1px solid #00973a; /* Borde más oscuro */
+  color: #d0d0d0; /* Texto claro */
+}
+
+body.dark-mode #roleOptions .dropdown-menu.show {
+  background-color: #333; /* Fondo gris oscuro */
+  border: 1px solid #00973a; /* Borde más oscuro */
+  color: #d0d0d0; /* Texto claro */
+}
+
+body.dark-mode #roleOptions .form-control-sm:focus {
+  border-color: #00973a !important; /* Borde verde claro */
+  box-shadow: 0 0 0 0.2rem rgba(9, 115, 58, 0.25) !important; /* Sombra verde claro */
+}
+
+body.dark-mode #roleOptions .exampleDropdownFormEmail2 {
+  color: #d0d0d0 !important;
+}
+
+body.dark-mode #roleOptions .form-control-sm::placeholder {
+  color: #b0b0b0 !important; /* Placeholder gris claro */
+}
+
+body.dark-mode #roleOptions .text-muted {
+  color: #999 !important; /* Gris medio para etiquetas */
+}
+
+body.dark-mode #roleOptions .form-check-input {
+  transform: scale(0.8); /* Checkbox más pequeño */
+  border-color: #00973a; /* Borde verde claro */
+  background-color: #ffffff00; /* Fondo checkbox */
+}
+
+body.dark-mode #roleOptions .form-check-input:checked {
+  background-color: #00973a; /* Color verde para el check */
+  border-color: #00973a; /* Borde del check */
+  accent-color: #00973a; /* Asegura el color en navegadores modernos */
+}
+body.dark-mode #roleOptions .form-check-input:focus {
+  box-shadow: 0 0 0 0.2rem rgba(9, 115, 58, 0.25); /* Sombra verde sutil */
+}
+body.dark-mode #roleOptions .form-check-input:checked:focus {
+  box-shadow: 0 0 0 0.2rem rgba(0, 151, 58, 0.25); /* Sombra verde sutil */
+}
+
+body.dark-mode #roleOptions .form-check-label {
+  color: #d0d0d0; /* Texto claro */
+}
+
+body.dark-mode #roleOptions .btn-primary {
+  background-color: #00973a !important; /* Verde claro */
+  border-color: #00973a !important;
+}
+
+body.dark-mode #roleOptions .btn-primary:hover {
+  background-color: #007b2f !important; /* Verde más oscuro */
+  border-color: #007b2f !important;
 }
 
 body.dark-mode .dropdown-list {

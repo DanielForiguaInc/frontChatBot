@@ -524,7 +524,7 @@ document.addEventListener('DOMContentLoaded', function() {
         <strong>Solución:</strong> 
       `;
       if (solution.solucion && solution.solucion.startsWith('http')) {
-        message += `<a href="${solution.solucion}" target="_blank">Descargar documento</a>`;
+        message += `<a href="${solution.solucion}" target="_blank">Ver solución</a>`;
       } else {
         message += solution.solucion || translations[currentLanguage].problemNotRecognized;
       }
