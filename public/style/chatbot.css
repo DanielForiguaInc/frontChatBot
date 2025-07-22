@@ -127,7 +127,7 @@
   width: 90%;
   max-width: 400px;
   height: 500px;
-  background: #f8f7f9;
+  background: #f9f9f9;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0,0,0,0.3);
   display: flex;
@@ -365,7 +365,7 @@
 }
 
 .area-dropdown:hover {
-  border-color: #357abd; /* Cambio de borde al pasar el mouse */
+  border-color: #357abd !important; /* Cambio de borde al pasar el mouse */
 }
 
 .area-dropdown:focus {
@@ -383,15 +383,17 @@
   list-style: none;
   padding: 0;
   margin: 0;
-  border: 2px solid #4a90e2;
+  border: 2px solid #00973a;
   border-radius: 6px;
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff00;
+  /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
   max-height: 200px;
+  max-width: 180px;
   overflow-y: auto;
 }
 
 .dropdown-item {
+  color: #093a21 !important;
   padding: 5px 10px;
   cursor: pointer;
   display: flex;
@@ -400,11 +402,11 @@
 }
 
 .dropdown-item:hover {
-  background-color: #f0f0f0;
+  background-color: #e1e8cd !important; /* Fondo verde al pasar el mouse */
 }
 
 .dropdown-item.selected {
-  background-color: #e6f0fa;
+  background-color: #95c11f;
   font-weight: bold;
 }
 
@@ -429,10 +431,10 @@
 }
 
 .option-button {
-  padding: 8px 16px;
-  background-color: #4a90e2; /* Fondo azul */
-  color: #fff;
-  border: none;
+  padding: 4px 10px;
+  background-color: #ffffff00; /* Fondo verde */
+  color: #00973a;
+  border: #00973a solid 1.4px;
   border-radius: 5px;
   cursor: pointer;
   font-size: 12px;
@@ -443,12 +445,15 @@
 }
 
 .option-button:hover {
+  color: #f8f7f9;
   transform: scale(1.05);
-  background-color: #5a6268;
+  background-color: #00973a; /* Fondo verde */
+  border: #f8f7f9 solid 1.4px;
 }
 
 .option-button:active {
-  background-color: #1e5ba6; /* Cambio al hacer clic */
+  color: #f8f7f9;
+  background-color: #00973a; /* Cambio al hacer clic */
 }
 
 /* ===== FOOTER DEL CHAT ===== */
@@ -539,6 +544,18 @@
   transition: width 0.2s ease-in-out, background-color 0.2s ease-in-out;
 }
 
+/* Estilos para el estado :active de los botones del footer */
+.voice-button.btn:active,
+.history-button.btn:active,
+.download-button.btn:active,
+.reset-button.btn:active,
+#sendButton.btn:active {
+  border-color: #95c11f !important; /* Mantener el borde verde */
+  outline: none; /* Quitar el contorno predeterminado */
+  box-shadow: none; /* Eliminar cualquier sombra no deseada */
+  transform: scale(0.98); /* Opcional: pequeño efecto de clic */
+}
+
 #sendButton.btn {
   width: 32px;
   height: 32px;
@@ -552,6 +569,13 @@
   bottom: 10px;
   right: 10px;
   background-image: url('../assets/Images/send-white.svg');
+}
+
+/* Asegurar que #sendButton mantenga su estilo especial en :active */
+#sendButton.btn:active {
+  background-color: #007b2f; /* Un verde más oscuro para feedback */
+  border-color: #ffffff00; /* Sin borde visible */
+  background-image: url('../assets/Images/send-white.svg'); /* Mantener el ícono */
 }
 
 #sendButton.btn:disabled {
@@ -645,7 +669,6 @@
 }
 
 /* Estilos para los botones */
-
 #roleOptions {
   position: relative;
 }
@@ -712,6 +735,64 @@
 /* ===== MODO OSCURO ===== */
 body.dark-mode {
   background-color: #2a2a2a;
+}
+
+body.dark-mode .dropdown-list {
+  border: 2px solid #00973a; /* Borde verde claro para contraste */
+  background-color: #2a2a2a; /* Fondo oscuro consistente con el chat */
+  /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Opcional: sombra más marcada en modo oscuro */
+  max-height: 200px;
+  max-width: 180px;
+  overflow-y: auto;
+}
+
+body.dark-mode .dropdown-item {
+  color: #95c11f !important; /* Texto claro legible */
+}
+
+body.dark-mode .dropdown-item:hover {
+  background-color: #e1e8cd !important; /* Fondo gris oscuro al pasar el mouse */
+  color: #093a21 !important;
+}
+
+body.dark-mode .dropdown-item.selected {
+  background-color: #006f32; /* Verde oscuro para selección, contrastando con el fondo */
+  font-weight: bold;
+}
+
+body.dark-mode .option-button {
+  background-color: #ffffff00; /* Fondo oscuro */
+  color: #00973a; /* Texto verde claro para contraste */
+  border: #00973a solid 1.4px; /* Borde verde claro */
+}
+
+body.dark-mode .option-button:hover {
+  color: #13261c; /* Texto oscuro para contraste con fondo */
+  background-color: #95c11f; /* Fondo verde claro */
+  border: #13261c solid 1.4px; /* Borde oscuro */
+  transform: scale(1.05);
+}
+
+body.dark-mode .option-button:active {
+  color: #00973a; /* Texto oscuro */
+  background-color: #95c11f; /* Fondo verde claro */
+}
+
+body.dark-mode .voice-button.btn:active,
+body.dark-mode .history-button.btn:active,
+body.dark-mode .download-button.btn:active,
+body.dark-mode .reset-button.btn:active,
+body.dark-mode #sendButton.btn:active {
+  background-color: #006f32; /* Mismo color que en modo claro */
+  border-color: #006f32; /* Mismo borde */
+  outline: none;
+  box-shadow: none;
+}
+
+body.dark-mode #sendButton.btn:active {
+  background-color: #007b2f;
+  border-color: #ffffff00;
+  background-image: url('../assets/Images/send-white.svg');
 }
 
 body.dark-mode .chat-header {
