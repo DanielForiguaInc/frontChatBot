@@ -14,6 +14,11 @@
   }
 }
 
+#chatBody {
+  text-align: left; /* Asegura que el contenido se alinee a la izquierda */
+  padding: 10px; /* Opcional: mejora la presentación */
+}
+
 /* ===== BOTONES DE CABECERA ===== */
 #themeToggle, 
 #languageButton, 
@@ -282,6 +287,19 @@
   align-self: flex-start;
 }
 
+.bot-message .dropdown {
+  margin: 5px 0;
+}
+
+.bot-message .dropdown, .bot-message button {
+  margin: 5px 0;
+}
+
+.dropdown-menu {
+  min-width: 200px !important; /* Asegura que el ancho sea fijo */
+  padding: 0.5rem !important; /* Reducir padding interno */
+}
+
 .bot-message img {
   width: 25px;
   height: 25px;
@@ -335,12 +353,69 @@
 }
 
 .area-dropdown {
-  padding: 5px;
+  padding: 8px;
   margin: 5px 10px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-  font-size: 14px;
-  width: 200px; /* Ajusta según necesites */
+  border-radius: 6px;
+  border: 2px solid #4a90e2; /* Borde azul */
+  font-size: 12px;
+  width: 220px;
+  background-color: #fff; /* Fondo blanco */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+  transition: border-color 0.3s; /* Transición suave */
+}
+
+.area-dropdown:hover {
+  border-color: #357abd; /* Cambio de borde al pasar el mouse */
+}
+
+.area-dropdown:focus {
+  outline: none;
+  border-color: #1e5ba6; /* Borde destacado al enfocar */
+  box-shadow: 0 0 5px rgba(74, 144, 226, 0.5); /* Resplandor */
+}
+
+.custom-dropdown {
+  position: relative;
+  margin: 10px 0;
+}
+
+.dropdown-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border: 2px solid #4a90e2;
+  border-radius: 6px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.dropdown-item {
+  padding: 5px 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dropdown-item:hover {
+  background-color: #f0f0f0;
+}
+
+.dropdown-item.selected {
+  background-color: #e6f0fa;
+  font-weight: bold;
+}
+
+.dropdown-icon {
+  width: 20px; /* Ajusta el tamaño del ícono */
+  height: 20px;
+  object-fit: contain; /* Asegura que la imagen no se deforme */
+}
+
+.icon {
+  font-size: 16px;
 }
 
 /* ===== OPCIONES DE MENSAJE ===== */
@@ -355,8 +430,8 @@
 
 .option-button {
   padding: 8px 16px;
-  background: #6c757d;
-  color: white;
+  background-color: #4a90e2; /* Fondo azul */
+  color: #fff;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -372,7 +447,9 @@
   background-color: #5a6268;
 }
 
-
+.option-button:active {
+  background-color: #1e5ba6; /* Cambio al hacer clic */
+}
 
 /* ===== FOOTER DEL CHAT ===== */
 .chat-footer {
@@ -565,6 +642,71 @@
   font-family: Calibri, sans-serif;
   font-weight: 600;
   opacity: 1;
+}
+
+/* Estilos para los botones */
+
+#roleOptions {
+  position: relative;
+}
+
+#roleOptions > div {
+  text-align: left !important;
+  justify-content: flex-start !important;
+}
+
+#roleOptions .btn {
+  padding: 0.2rem 0.4rem !important; /* Más pequeños */
+  font-size: 0.75rem !important; /* Texto más pequeño */
+}
+#roleOptions .btn-secondary { /* Botón Técnico */
+  background-color: #00973a !important; /* Verde */
+  border-color: #00973a !important;
+}
+#roleOptions .btn-primary { /* Botón Ingeniero */
+  background-color: #00973a !important; /* Verde, por ejemplo */
+  border-color: #00973a !important;
+}
+
+#roleOptions .dropdown-menu {
+  min-width: 180px;
+  position: absolute;
+  z-index: 1000;
+}
+
+/* Ajustes para el formulario */
+#roleOptions .p-2 {
+  padding: 0.03rem !important; /* Asegurar consistencia */
+}
+
+#roleOptions .form-control-sm {
+  font-size: 0.875rem !important; /* Ajustar tamaño de fuente de inputs */
+}
+
+#roleOptions .form-control::placeholder {
+  font-size: 0.78rem !important; /* Tamaño pequeño */
+  color: #6c757d !important; /* Opcional: gris para que combine con tus labels */
+}
+
+#roleOptions .form-check-input {
+  transform: scale(0.8); /* Reduce el tamaño del checkbox */
+}
+#roleOptions .form-check-label {
+  font-size: 0.78rem !important; /* Reduce el texto "Recordarme" */
+}
+
+#roleOptions .text-muted {
+  color: #6c757d !important; /* Color gris suave para etiquetas */
+}
+
+/* Asegurar que los márgenes sean pequeños */
+#roleOptions .mb-2 {
+  margin-bottom: 0.5rem !important;
+}
+
+#chatInput:focus {
+  border-color: #ffffff00 !important;
+  /* box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25) !important; Sombra azul */
 }
 
 /* ===== MODO OSCURO ===== */
