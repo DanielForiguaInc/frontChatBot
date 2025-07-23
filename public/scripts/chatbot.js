@@ -1,12 +1,12 @@
 document.addEventListener('DOMContentLoaded', function() {
   console.log('DOM completamente cargado');
   const tempUsers = {
-  soporte: { username: 'soporte', password: 'S0p0rt3_S3gur0!', role: 'support' },
-  mantenimiento: { username: 'mantenimiento', password: 'M4nt3n_S3gur0!', role: 'maintenance' }
-};
+    soporte: { username: 'soporte', password: 'S0p0rt3_S3gur0!', role: 'support' },
+    mantenimiento: { username: 'mantenimiento', password: 'M4nt3n_S3gur0!', role: 'maintenance' }
+  };
 
   // Configuración de logs
-  const DEBUG_LOG = false;
+  const DEBUG_LOG = true;
   const DEBUG_ERROR = true;
   const DEBUG_WARN = false;
 
@@ -16,11 +16,73 @@ document.addEventListener('DOMContentLoaded', function() {
 
   log('chatbot.js cargado correctamente');
 
-  // Áreas válidas y keywords basadas en el JSON del backend
-  const validAreas = ['talanquera', 'cajero', 'datafono', 'mantenimiento'];
-  const commonKeywords = [
-    'no funciona', 'fallo', 'entrada', 'ticket', 'bloqueada', 'batería', 'hoja',
-    'sensores', 'limpieza', 'lector', 'no enciende', 'táctil', 'flojo', 'peligro', 'moovi', 'control'
+  // Áreas válidas
+  const validAreas = ['talanquera', 'cajero', 'datafono', 'mantenimiento', 'TVM'];
+
+  // Keywords organizadas por área, basadas en el JSON del backend
+  const commonKeywordsByArea = {
+    talanquera: [
+      'Adaptación', 'Skidata', 'Horus', 'Incomelec', 'Guía', 'I+D+i', 'Tarjeta', 'Controladora',
+      'Encoder', 'Pictograma', 'CONTOUR', 'Bus', '24Vcc', 'Entradas', 'Salidas', 'Software',
+      'Selector', 'Modo', 'Bomera', 'Pulsos', 'Boot', 'OEM', 'Automática', 'Semiautomática',
+      'Señal', 'Loop', 'Firmware', 'LEDs', 'CHANGE_OUTPUT', 'Abierto', 'Cerrado', 'Captura',
+      'Ciclo', 'Parqueadero', 'Errores', 'Posicionamiento', 'f3080', 'bloqueada', 'batería',
+      'hoja', 'tornillos', 'laterales', 'tapa', 'placa', 'sensor', 'interior', 'pieza', 'trasera',
+      'limpiar', 'Moovi', 'barrera', 'electromecánica', 'mástil', 'muelle', 'cimentación',
+      'fotocélula', 'lampeggiante', 'receptor', 'radiocomando', 'memorización', 'transmisor',
+      'cancelación', 'SW1', 'SW2', 'DL1', 'trimmer', 'diagnóstico', 'desbloqueo', 'emergencia',
+      'actuador', 'programación', 'canal', 'Rolling', 'Replay', 'clonación', 'programador',
+      'antena', 'coaxial', 'RG58', 'engrane', 'reductor', 'condensador', 'apertura', 'cierre',
+      'automatización', 'peatonal', 'fijación', 'pulsador', 'intermitente', 'lubricación',
+      'resorte', 'contacto', 'desgaste', 'soporte', 'inversión', 'fusible', 'aislamiento'
+    ],
+    cajero: [
+      'validador', 'monedas', 'clasificación', 'mecanismo', 'colector', 'canales', 'interruptores',
+      'firmware', 'latido', 'canaleta', 'anulación', 'configuración', 'memoria', 'diagnóstico',
+      'ccTalk', 'sensores', 'aceptación', 'rechazo', 'trayectoria', 'cubierta', 'solenoide',
+      'dimensiones', 'baudios', 'protocolo', 'montaje', 'tolerancia', 'cadena', 'reconocimiento',
+      'enseñanza', 'estrecho', 'DIL', 'modo', 'calibración', 'bloquememoria', 'disparo', 'destello',
+      'limpieza', 'residuos', 'cepillo', 'húmedo', 'validación', 'atasco', 'actualización',
+      'interfaz', 'tornillos', 'tapa', 'placa', 'sensor', 'interior', 'pieza', 'reciclador',
+      'trasera', 'táctil', 'cajero', 'panel', 'convertidor', 'HDMI', 'VGA', 'chip', 'EETI',
+      'EXC80Hxx', 'I2C', 'RTPC190F1', 'flex', 'cristal', 'transparente', 'hub', 'enmascarar',
+      'eGalax', 'eGalaxUpdate2', 'eGalaxCalibration', 'demo', 'marcador', 'espejo', 'objetivo',
+      'presión', 'proyección', 'pantalla', 'frontal', 'bordes', 'tapadera', 'vidrio', 'montaje',
+      'doblefaz', 'software', 'USB', 'admin', 'cancelar', 'esc', 'calibrador'
+    ],
+    datafono: [
+      'datafono', 'soporte', 'flojo', 'peligro'
+    ],
+    TVM: [
+      'Ubuntu', 'VirtualBox', 'VMware', 'QT', 'Creator', 'Framework', 'CQtDeployer', 'Toolchain',
+      'qmake', 'Configuration', 'lupdate', 'lrelease', 'Deployment', 'Build', 'mvr', 'cnet',
+      'configFTP', 'libNPrint', 'udev', 'Snap', 'makeSelf', 'app', 'Application', 'UPDATEGENERATOR',
+      'toolchain', 'instalador', 'libopencv', 'libqt5core5a', 'libqt5gui5', 'libqt5widgets5',
+      'libcrypto', 'libhidapi', 'libmysqlcppconn', 'openjdk', 'gstreamer', 'Recompilación',
+      'Despliegue', 'Traducciones', 'Release', 'Mode', 'Maintenance', 'Script', 'Reader', 'EMV',
+      'Impresora', 'archivos', 'param', 'installUpdate', 'updater', 'configuracionType',
+      'aplicaciones', 'mvrQuito', 'mvrMCC', 'terminal', 'comando', 'arranque', 'cierre', 'Quito',
+      'horus_adm1', 'teclado', 'PC', 'industrial', 'showroom', 'versión', 'manual', 'técnico',
+      'pausa', 'instalacion', 'chmod', 'configuración', 'red', 'sonido', 'privacidad', 'zip',
+      'descompresión', 'UPS', 'Login', 'PowerMaster', 'Jonathan', 'Rojas', 'Ricardo', 'Monroy',
+      'departamento', 'producción', 'dirección', 'máscara', 'subred', 'gateway', 'servidor',
+      'DNS', 'over', 'amplification', 'screen', 'lock', 'keyboard', 'layout', 'input', 'source'
+    ],
+    General: [
+      'Winpark', 'Empresas', 'ID', 'parqueadero', 'número', 'caja', 'Ctrl', 'Alt', 'Spark',
+      'Pparking', 'registradora', 'conexión', 'perdida', 'fallo', 'segmento', 'GDB', 'Windows',
+      'Defender', 'puerto', 'comandos', 'configuración', 'reinicio', 'Firebird', 'asistencia'
+    ]
+  };
+
+  // Lista de palabras comunes a excluir (artículos, preposiciones, palabras genéricas)
+  const stopWords = [
+    'el', 'la', 'los', 'las', 'un', 'una', 'de', 'en', 'con', 'por', 'para', 'y', 'o', 'al',
+    'tengo', 'problema', 'intentar', 'usar', 'es', 'que', 'a', 'se', 'del', 'como', 'cuando',
+    'esto', 'esta', 'este', 'hacer', 'no', 'si', 'sí', 'me', 'mi', 'lo', 'le', 'una', 'uno', 
+    'Hola', 'adiós', 'gracias', 'por favor', 'bueno', 'bien', 'mal', 'sí', 'no', 'tal vez',
+    'quizás', 'ok', 'vale', 'claro', 'perfecto', 'entendido', 'listo', 'listos', 'listo',
+    'listos', 'dias', 'tardes', 'noches', 'mañana', 'ayer', 'hoy', 'pasa', 'ocurre', 'sucede'
   ];
 
   // Estado del bot
@@ -31,7 +93,7 @@ document.addEventListener('DOMContentLoaded', function() {
   localStorage.removeItem('selectedArea');
   let currentLanguage = 'es';
   let conversationHistory = JSON.parse(localStorage.getItem('chatHistory') || '[]');
-  let isChatInitialized = false; // Reiniciar a false al cargar
+  let isChatInitialized = false;
 
   // Inicializar estado desde localStorage
   userRole = localStorage.getItem('userRole') || null;
@@ -43,8 +105,8 @@ document.addEventListener('DOMContentLoaded', function() {
       welcome: '¡Hola! Soy tu asistente técnico de INCOMELEC S.A.S. Selecciona tu rol para comenzar.',
       rolePrompt: 'Por favor, selecciona tu rol: técnico o ingeniero.',
       areaPrompt: 'Por favor, selecciona un área del problema.',
-      describeMore: 'Por favor, describe el problema con más detalles',
-      problemNotRecognized: 'No reconozco ese problema. Intenta con otras palabras, como "fallo en la entrada".',
+      describeMore: 'Por favor, describe el problema con más detalles usando palabras técnicas específicas (por ejemplo, "Toolchain", "VirtualBox", "validador", "táctil").',
+      problemNotRecognized: 'No reconozco ese problema. Intenta con palabras técnicas específicas del área seleccionada, como "Toolchain", "VirtualBox", "validador" o "táctil".',
       emptyMessage: 'Por favor, escribe un mensaje válido.',
       messageTooLong: 'Tu mensaje es demasiado largo. Usa menos de 500 caracteres.',
       voiceError: 'Error en reconocimiento de voz. Usa texto, por favor.',
@@ -64,8 +126,8 @@ document.addEventListener('DOMContentLoaded', function() {
       welcome: 'Hello! I am your technical assistant from INCOMELEC S.A.S. Select your role to start.',
       rolePrompt: 'Please select your role: technician or engineer.',
       areaPrompt: 'Please select the area of the issue.',
-      describeMore: 'Please describe the issue in more detail',
-      problemNotRecognized: 'I don’t recognize that issue. Try different words, like "screen won’t turn on."',
+      describeMore: 'Please describe the issue in more detail using specific technical terms (e.g., "Toolchain", "VirtualBox", "validator", "touchscreen").',
+      problemNotRecognized: 'I don’t recognize that issue. Try specific technical terms for the selected area, like "Toolchain", "VirtualBox", "validator", or "touchscreen".',
       emptyMessage: 'Please enter a valid message.',
       messageTooLong: 'Your message is too long. Use less than 500 characters.',
       voiceError: 'Error in voice recognition. Please use text instead.',
@@ -105,7 +167,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const languageButton = document.getElementById('languageButton');
   const notification = document.getElementById('notification');
 
-  // Verificación de elementos esenciales del DOM (sin roleSelector ni areaSelector)
+  // Verificación de elementos esenciales del DOM
   if (!chatBody || !chatInput || !sendButton || !resetButton || !themeToggle || !languageButton || !notification) {
     logError('Error: No se encontraron elementos del DOM necesarios');
     return;
@@ -145,120 +207,112 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Mostrar/Ocultar chat y mensaje de bienvenida
   chatBubble.addEventListener('click', () => {
-  log('Clic en chatBubble, isChatInitialized:', isChatInitialized, 'userRole:', userRole);
-  const currentDisplay = chatContainer.style.display;
-  if (currentDisplay === 'none' || currentDisplay === '') {
-    chatContainer.style.display = 'flex';
-    if (!isChatInitialized) {
-      const messageDiv = document.createElement('div');
-      messageDiv.className = 'bot-message';
-      messageDiv.innerHTML = `<img src="./assets/Images/IncomelecRounded.svg" alt="Bot Avatar"><span>${translations[currentLanguage].welcome}</span>`;
-      chatBody.appendChild(messageDiv);
+    log('Clic en chatBubble, isChatInitialized:', isChatInitialized, 'userRole:', userRole);
+    const currentDisplay = chatContainer.style.display;
+    if (currentDisplay === 'none' || currentDisplay === '') {
+      chatContainer.style.display = 'flex';
+      if (!isChatInitialized) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'bot-message';
+        messageDiv.innerHTML = `<img src="./assets/Images/IncomelecRounded.svg" alt="Bot Avatar"><span>${translations[currentLanguage].welcome}</span>`;
+        chatBody.appendChild(messageDiv);
 
-      const roleOptions = document.createElement('div');
-      roleOptions.id = 'roleOptions';
-      roleOptions.innerHTML = `
-        <div style="display: flex; align-items: center; gap: 5px; margin-top: 0.5rem; text-align: left;">
-          <button class="btn btn-secondary btn-sm" style="background-color: #6c757d; border-color: #6c757d;" onclick="window.setRole('technician')">Técnico</button>
-          <div class="dropdown">
-            <button type="button" class="btn btn-primary btn-sm dropdown-toggle" style="background-color: #006f32; border-color: #00973a;" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
-              Ingeniero
-            </button>
-            <ul class="dropdown-menu" style="min-width: 180px; position: absolute; z-index: 1000;">
-              <li>
-                <div class="p-2">
-                  <form id="loginForm">
-                    <div class="mb-2">
-                      <label for="exampleDropdownFormEmail2" class="form-label text-muted" style="font-size: 0.78rem;">Usuario (soporte o soporte@dominio.com)</label>
-                      <input type="text" class="form-control form-control-sm" id="exampleDropdownFormEmail2" placeholder="soporte o soporte@dominio.com" style="font-size: 0.78rem;" required pattern="^(soporte|mantenimiento)$">
-                    </div>
-                    <div class="mb-2">
-                      <label for="exampleDropdownFormPassword2" class="form-label text-muted" style="font-size: 0.78rem;">Contraseña</label>
-                      <input type="password" class="form-control form-control-sm" id="exampleDropdownFormPassword2" placeholder="Contraseña" style="font-size: 0.78rem;" required>
-                    </div>
-                    <div class="mb-2">
-                      <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="rememberMe">
-                        <label class="form-check-label" for="rememberMe" style="font-size: 0.75rem;">Recordarme</label>
+        const roleOptions = document.createElement('div');
+        roleOptions.id = 'roleOptions';
+        roleOptions.innerHTML = `
+          <div style="display: flex; align-items: center; gap: 5px; margin-top: 0.5rem; text-align: left;">
+            <button class="btn btn-secondary btn-sm" style="background-color: #6c757d; border-color: #6c757d;" onclick="window.setRole('technician')">Técnico</button>
+            <div class="dropdown">
+              <button type="button" class="btn btn-primary btn-sm dropdown-toggle" style="background-color: #006f32; border-color: #00973a;" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                Ingeniero
+              </button>
+              <ul class="dropdown-menu" style="min-width: 180px; position: absolute; z-index: 1000;">
+                <li>
+                  <div class="p-2">
+                    <form id="loginForm">
+                      <div class="mb-2">
+                        <label for="exampleDropdownFormEmail2" class="form-label text-muted" style="font-size: 0.78rem;">Usuario (soporte o soporte@dominio.com)</label>
+                        <input type="text" class="form-control form-control-sm" id="exampleDropdownFormEmail2" placeholder="soporte o soporte@dominio.com" style="font-size: 0.78rem;" required pattern="^(soporte|mantenimiento)$">
                       </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-sm" style="background-color: #006f32; border-color: #006f32;">Iniciar Sesión</button>
-                  </form>
-                </div>
-              </li>
-            </ul>
+                      <div class="mb-2">
+                        <label for="exampleDropdownFormPassword2" class="form-label text-muted" style="font-size: 0.78rem;">Contraseña</label>
+                        <input type="password" class="form-control form-control-sm" id="exampleDropdownFormPassword2" placeholder="Contraseña" style="font-size: 0.78rem;" required>
+                      </div>
+                      <div class="mb-2">
+                        <div class="form-check">
+                          <input type="checkbox" class="form-check-input" id="rememberMe">
+                          <label class="form-check-label" for="rememberMe" style="font-size: 0.75rem;">Recordarme</label>
+                        </div>
+                      </div>
+                      <button type="submit" class="btn btn-primary btn-sm" style="background-color: #006f32; border-color: #006f32;">Iniciar Sesión</button>
+                    </form>
+                  </div>
+                </li>
+              </ul>
+            </div>
           </div>
-        </div>
-      `;
-      chatBody.appendChild(roleOptions);
+        `;
+        chatBody.appendChild(roleOptions);
 
-      // Registrar el evento submit dentro de este contexto
-      const loginForm = document.getElementById('loginForm');
-      if (loginForm) {
-        console.log('Formulario de login encontrado');
-        loginForm.addEventListener('submit', function(e) {
-          e.preventDefault();
-          console.log('Formulario enviado');
-          const email = document.getElementById('exampleDropdownFormEmail2').value.trim();
-          const password = document.getElementById('exampleDropdownFormPassword2').value;
+        const loginForm = document.getElementById('loginForm');
+        if (loginForm) {
+          console.log('Formulario de login encontrado');
+          loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            console.log('Formulario enviado');
+            const email = document.getElementById('exampleDropdownFormEmail2').value.trim();
+            const password = document.getElementById('exampleDropdownFormPassword2').value;
 
-          // Validar el input
-          const emailPattern = /^(soporte|mantenimiento)$/;
-          if (!emailPattern.test(email)) {
-            addMessage('bot', 'El usuario debe ser "soporte" o "mantenimiento".');
-            return;
-          }
+            const emailPattern = /^(soporte|mantenimiento)$/;
+            if (!emailPattern.test(email)) {
+              addMessage('bot', 'El usuario debe ser "soporte" o "mantenimiento".');
+              return;
+            }
 
-          const user = Object.values(tempUsers).find(u => u.username === email && u.password === password);
-          if (user) {
-            window.setRole(user.role);
-            document.getElementById('roleOptions').style.display = 'none';
-            addMessage('bot', `Bienvenido, ${user.role === 'support' ? 'soporte' : user.role === 'maintenance' ? 'mantenimiento' : user.role}!`);
-          } else {
-            addMessage('bot', 'Credenciales incorrectas. Intenta de nuevo.');
-          }
-        });
+            const user = Object.values(tempUsers).find(u => u.username === email && u.password === password);
+            if (user) {
+              window.setRole(user.role);
+              document.getElementById('roleOptions').style.display = 'none';
+              addMessage('bot', `Bienvenido, ${user.role === 'support' ? 'soporte' : user.role === 'maintenance' ? 'mantenimiento' : user.role}!`);
+            } else {
+              addMessage('bot', 'Credenciales incorrectas. Intenta de nuevo.');
+            }
+          });
+        } else {
+          console.error('No se encontró el formulario de login después de crearlo');
+        }
+
+        isChatInitialized = true;
+        localStorage.setItem('isChatInitialized', 'true');
+      } else if (userRole) {
+        log('Usuario ya logueado, no se muestra mensaje de bienvenida');
       } else {
-        console.error('No se encontró el formulario de login después de crearlo');
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'bot-message';
+        messageDiv.innerHTML = `<img src="./assets/Images/IncomelecRounded.svg" alt="Bot Avatar"><span>${translations[currentLanguage].rolePrompt}</span>`;
+        chatBody.appendChild(messageDiv);
       }
-
-      isChatInitialized = true;
-      localStorage.setItem('isChatInitialized', 'true');
-    } else if (userRole) {
-      // Si ya está logueado, no mostrar mensaje de bienvenida ni roleOptions
-      log('Usuario ya logueado, no se muestra mensaje de bienvenida');
     } else {
-      // Si isChatInitialized es true pero no hay userRole, mostrar solo el mensaje de selección de rol
-      const messageDiv = document.createElement('div');
-      messageDiv.className = 'bot-message';
-      messageDiv.innerHTML = `<img src="./assets/Images/IncomelecRounded.svg" alt="Bot Avatar"><span>${translations[currentLanguage].rolePrompt}</span>`;
-      chatBody.appendChild(messageDiv);
+      chatContainer.style.display = 'none';
     }
-  } else {
-    chatContainer.style.display = 'none';
-  }
-});
+  });
 
-  // Manejar el submit del formulario de login
   const loginForm = document.getElementById('loginForm');
   if (loginForm) {
-    console.log('Formulario de login encontrado'); // Depuración
+    console.log('Formulario de login encontrado');
     loginForm.addEventListener('submit', function(e) {
       e.preventDefault();
-      console.log('Formulario enviado'); // Depuración
+      console.log('Formulario enviado');
       const email = document.getElementById('exampleDropdownFormEmail2').value.trim();
       const password = document.getElementById('exampleDropdownFormPassword2').value;
 
-      // Validar el input
       const emailPattern = /^(soporte|mantenimiento|[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
       if (!emailPattern.test(email)) {
         addMessage('bot', 'El usuario debe ser "soporte", "mantenimiento" o un correo válido.');
         return;
       }
 
-      // Normalizar el email
       const normalizedEmail = email.match(/^(soporte|mantenimiento)$/) ? email : email;
-
       const user = Object.values(tempUsers).find(u => u.username === normalizedEmail && u.password === password);
       if (user) {
         window.setRole(user.role);
@@ -272,26 +326,21 @@ document.addEventListener('DOMContentLoaded', function() {
     console.error('No se encontró el formulario de login');
   }
 
-  // Establecer rol y mostrar opciones de área
   window.setRole = function(role) {
-    // Verificar que el rol sea válido
     const validRoles = ['technician', 'engineer', 'support', 'maintenance'];
     if (!validRoles.includes(role)) {
       addMessage('bot', 'Rol no reconocido. Por favor, selecciona un rol válido.');
       return;
     }
 
-    // Asignar el rol y guardarlo
     userRole = role;
     localStorage.setItem('userRole', role);
 
-    // Mostrar mensaje solicitando selección de área
     const messageDiv = document.createElement('div');
     messageDiv.className = 'bot-message';
     messageDiv.innerHTML = `<img src="./assets/Images/IncomelecRounded.svg" alt="Bot Avatar"><span>${translations[currentLanguage].areaPrompt}</span>`;
     chatBody.appendChild(messageDiv);
 
-    // Crear el dropdown personalizado
     const selectDiv = document.createElement('div');
     selectDiv.className = 'custom-dropdown';
 
@@ -301,7 +350,8 @@ document.addEventListener('DOMContentLoaded', function() {
       'talanquera': './assets/Images/talanquera.png',
       'cajero': './assets/Images/cajero.png',
       'datafono': './assets/Images/datafono.png',
-      'mantenimiento': './assets/Images/mantenimiento.png'
+      'mantenimiento': './assets/Images/mantenimiento.png',
+      'TVM': './assets/Images/tvm.png'
     };
     dropdownList.innerHTML = `
       <li class="dropdown-item" data-value="">Selecciona un área</li>
@@ -313,7 +363,6 @@ document.addEventListener('DOMContentLoaded', function() {
       `).join('')}
     `;
 
-    // Crear el botón de selección
     const selectButton = document.createElement('button');
     selectButton.className = 'option-button';
     selectButton.textContent = 'Seleccionar';
@@ -321,13 +370,12 @@ document.addEventListener('DOMContentLoaded', function() {
       const selectedItem = dropdownList.querySelector('.dropdown-item.selected');
       if (selectedItem && selectedItem.dataset.value) {
         setArea(selectedItem.dataset.value);
-        selectDiv.remove(); // Eliminar el dropdown después de seleccionar
+        selectDiv.remove();
       } else {
         addMessage('bot', 'Por favor, selecciona un área antes de continuar.');
       }
     });
 
-    // Añadir evento para seleccionar al hacer clic en las opciones
     dropdownList.querySelectorAll('.dropdown-item').forEach(item => {
       item.addEventListener('click', () => {
         dropdownList.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('selected'));
@@ -335,17 +383,14 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     });
 
-    // Añadir elementos al chat
     selectDiv.appendChild(dropdownList);
     selectDiv.appendChild(selectButton);
     chatBody.appendChild(selectDiv);
     chatBody.scrollTop = chatBody.scrollHeight;
 
-    // Actualizar estado del botón de enviar
     updateSendButtonState();
   };
 
-  // Definir setArea
   function setArea(area) {
     selectedArea = area;
     localStorage.setItem('selectedArea', area);
@@ -358,7 +403,6 @@ document.addEventListener('DOMContentLoaded', function() {
     chatContainer.style.display = 'none';
   });
 
-  // Ajustar altura del textarea
   function adjustTextareaHeight() {
     chatInput.style.height = 'auto';
     const content = chatInput.value;
@@ -379,7 +423,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  // Actualizar estado del botón de enviar
   function updateSendButtonState() {
     const isRoleSelected = userRole !== null;
     const isAreaSelected = selectedArea !== null;
@@ -388,7 +431,6 @@ document.addEventListener('DOMContentLoaded', function() {
     sendButton.disabled = isDisabled;
   }
 
-  // Función para agregar mensajes simples
   function addMessage(sender, text) {
     const messageDiv = document.createElement('div');
     messageDiv.className = sender === 'bot' ? 'bot-message' : 'user-message';
@@ -405,7 +447,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  // Función para agregar mensajes con botones
   function addMessageWithButtons(text, options) {
     const messageDiv = document.createElement('div');
     messageDiv.className = 'bot-message';
@@ -425,129 +466,162 @@ document.addEventListener('DOMContentLoaded', function() {
     chatBody.scrollTop = chatBody.scrollHeight;
   }
 
-  // Extraer keywords del input
+  // Función mejorada para extraer keywords
   function extractKeywords(input) {
-    const words = input.toLowerCase().split(/\s+/);
-    let keywords = [selectedArea]; // El área ya seleccionada es la primera keyword
+    // Dividir el mensaje en palabras, preservando palabras con mayúsculas
+    const words = input.split(/\s+/).filter(word => word.length > 2 && !stopWords.includes(word.toLowerCase()));
+    let keywords = [];
 
-    // Buscar keywords relevantes
-    const matchedKeywords = words.filter(word => commonKeywords.includes(word));
-    keywords = keywords.concat(matchedKeywords);
+    // Priorizar palabras que coincidan con commonKeywordsByArea para el área seleccionada
+    if (selectedArea && commonKeywordsByArea[selectedArea.toLowerCase()]) {
+      const areaKeywords = commonKeywordsByArea[selectedArea.toLowerCase()];
+      const matchedKeywords = words.filter(word => 
+        areaKeywords.some(keyword => keyword.toLowerCase() === word.toLowerCase())
+      ).map(word => {
+        // Conservar el caso original de la palabra si está en areaKeywords
+        const matchedKeyword = areaKeywords.find(keyword => keyword.toLowerCase() === word.toLowerCase());
+        return matchedKeyword || word;
+      });
+      keywords = keywords.concat(matchedKeywords);
+    }
 
-    // Completar con otras palabras si es necesario
-    if (keywords.length < 3) {
-      const remainingWords = words.filter(word => !keywords.includes(word) && word.length > 3);
+    // Si no hay suficientes keywords, buscar en keywords de General
+    if (keywords.length < 2 && commonKeywordsByArea.General) {
+      const generalKeywords = commonKeywordsByArea.General;
+      const matchedGeneralKeywords = words.filter(word => 
+        !keywords.includes(word) && 
+        generalKeywords.some(keyword => keyword.toLowerCase() === word.toLowerCase())
+      ).map(word => {
+        const matchedKeyword = generalKeywords.find(keyword => keyword.toLowerCase() === word.toLowerCase());
+        return matchedKeyword || word;
+      });
+      keywords = keywords.concat(matchedGeneralKeywords);
+    }
+
+    // Priorizar palabras con mayúsculas (como VirtualBox, Toolchain) que no estén en commonKeywords
+    if (keywords.length < 2) {
+      const capitalizedWords = words.filter(word => 
+        !keywords.includes(word) && /[A-Z]/.test(word[0]) && word.length > 3
+      );
+      keywords = keywords.concat(capitalizedWords);
+    }
+
+    // Completar con otras palabras relevantes si es necesario
+    if (keywords.length < 2) {
+      const remainingWords = words.filter(word => 
+        !keywords.includes(word) && word.length > 3
+      );
       keywords = keywords.concat(remainingWords);
     }
 
-    return keywords.slice(0, 3); // Máximo 3 keywords
+    // Limitar a un máximo de 3 keywords, pero permitir un mínimo de 2
+    return keywords.slice(0, 3);
   }
 
-  // Procesar input del usuario
   async function processUserInput(input) {
-  log('Procesando input:', input);
-  input = input.trim();
-  if (!input) {
-    showTypingAndRespond(translations[currentLanguage].emptyMessage);
-    return;
-  }
-  if (input.length > 500) {
-    showTypingAndRespond(translations[currentLanguage].messageTooLong);
-    return;
-  }
-  if (!userRole) {
-    showTypingAndRespond(translations[currentLanguage].rolePrompt, [
-      { text: translations[currentLanguage].technician, action: () => window.setRole('technician') },
-      { text: translations[currentLanguage].engineer, action: () => window.setRole('engineer') }
-    ]);
-    return;
-  }
-  if (!selectedArea) {
-    showTypingAndRespond(translations[currentLanguage].areaPrompt, validAreas.map(area => ({
-      text: area.charAt(0).toUpperCase() + area.slice(1),
-      action: () => setArea(area)
-    })));
-    return;
-  }
-
-  addMessage('user', input);
-  chatInput.value = '';
-  updateSendButtonState();
-  adjustTextareaHeight();
-
-  const spinnerContainer = document.createElement('div');
-  spinnerContainer.className = 'spinner-container';
-  const spinner = document.createElement('div');
-  spinner.className = 'spinner';
-  spinner.innerHTML = `<img src="./assets/Images/spinner.svg" alt="Cargando" class="spinner-img">`;
-  spinnerContainer.appendChild(spinner);
-  chatBody.appendChild(spinnerContainer);
-  chatBody.scrollTop = chatBody.scrollHeight;
-
-  const keywords = extractKeywords(input);
-  if (keywords.length < 3 && !input.toLowerCase().match(/^(si|sí|no)$/i)) {
-    spinnerContainer.remove();
-    showTypingAndRespond(translations[currentLanguage].describeMore);
-    return;
-  }
-
-  const query = keywords.map(encodeURIComponent).join(',');
-  const adjustedRole = userRole === 'technician' ? 'tecnico' : 'ingeniero';
-  const area = selectedArea.charAt(0).toUpperCase() + selectedArea.slice(1); // Capitalizar para consistencia
-  const url = `https://backendchatbot-ylq2.onrender.com/api/solucion/buscar?q=${query}&rol=${encodeURIComponent(adjustedRole)}&area=${encodeURIComponent(area)}`;
-  console.log('Solicitud enviada a:', url);
-
-  try {
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      spinnerContainer.remove();
-      if (response.status === 404 && errorData.mensaje === "No se encontraron coincidencias de palabras clave en el área '" + area.toLowerCase() + "'.") {
-        showTypingAndRespond(`Parece que no hay información disponible de ${area} con esta consulta. Intenta de nuevo con otras palabras.`);
-      } else {
-        throw new Error(`Error ${response.status}: ${errorData.mensaje || 'Solicitud inválida'}`);
-      }
+    log('Procesando input:', input);
+    input = input.trim();
+    if (!input) {
+      showTypingAndRespond(translations[currentLanguage].emptyMessage);
+      return;
+    }
+    if (input.length > 500) {
+      showTypingAndRespond(translations[currentLanguage].messageTooLong);
+      return;
+    }
+    if (!userRole) {
+      showTypingAndRespond(translations[currentLanguage].rolePrompt, [
+        { text: translations[currentLanguage].technician, action: () => window.setRole('technician') },
+        { text: translations[currentLanguage].engineer, action: () => window.setRole('engineer') }
+      ]);
+      return;
+    }
+    if (!selectedArea) {
+      showTypingAndRespond(translations[currentLanguage].areaPrompt, validAreas.map(area => ({
+        text: area.charAt(0).toUpperCase() + area.slice(1),
+        action: () => setArea(area)
+      })));
       return;
     }
 
-    const data = await response.json();
-    let message;
-    if (data.soluciones && data.soluciones.length > 0) {
-      const solution = data.soluciones[0];
-      message = `
-        <strong>Área:</strong> ${solution.area}<br>
-        <strong>Descripción:</strong> ${solution.description}<br>
-        <strong>Solución:</strong> 
-      `;
-      if (solution.solucion && solution.solucion.startsWith('http')) {
-        message += `<a href="${solution.solucion}" target="_blank">Ver solución</a>`;
-      } else {
-        message += solution.solucion || translations[currentLanguage].problemNotRecognized;
-      }
-      spinnerContainer.remove();
-      showTypingAndRespond(message);
-      showTypingAndRespond('¿Fue útil esta solución?', [
-        { text: translations[currentLanguage].yes, action: () => handleSolutionConfirmation(true) },
-        { text: translations[currentLanguage].no, action: () => handleSolutionConfirmation(false) }
-      ]);
-    } else {
-      message = translations[currentLanguage].problemNotRecognized;
-      spinnerContainer.remove();
-      showTypingAndRespond(message);
-    }
-  } catch (error) {
-    console.error('Error al conectar con el backend', error.message);
-    spinnerContainer.remove();
-    showTypingAndRespond('Error al conectar con el servidor interno. Intenta de nuevo.');
-  }
-  updateSendButtonState();
-}
+    addMessage('user', input);
+    chatInput.value = '';
+    updateSendButtonState();
+    adjustTextareaHeight();
 
-  // Mostrar indicador de escribiendo y responder
+    const spinnerContainer = document.createElement('div');
+    spinnerContainer.className = 'spinner-container';
+    const spinner = document.createElement('div');
+    spinner.className = 'spinner';
+    spinner.innerHTML = `<img src="./assets/Images/spinner.svg" alt="Cargando" class="spinner-img">`;
+    spinnerContainer.appendChild(spinner);
+    chatBody.appendChild(spinnerContainer);
+    chatBody.scrollTop = chatBody.scrollHeight;
+
+    const keywords = extractKeywords(input);
+    log('Keywords extraídas:', keywords); // Log para depuración
+    if (keywords.length < 2 && !input.toLowerCase().match(/^(si|sí|no)$/i)) {
+      spinnerContainer.remove();
+      showTypingAndRespond(translations[currentLanguage].describeMore);
+      return;
+    }
+
+    const query = keywords.map(encodeURIComponent).join(',');
+    const adjustedRole = userRole === 'technician' ? 'tecnico' : 'ingeniero';
+    const area = selectedArea.charAt(0).toUpperCase() + selectedArea.slice(1);
+    const url = `https://backendchatbot-ylq2.onrender.com/api/solucion/buscar?q=${query}&rol=${encodeURIComponent(adjustedRole)}&area=${encodeURIComponent(area)}`;
+    console.log('Solicitud enviada a:', url);
+
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        spinnerContainer.remove();
+        if (response.status === 404 && errorData.mensaje === "No se encontraron coincidencias de palabras clave en el área '" + area.toLowerCase() + "'.") {
+          showTypingAndRespond(`Parece que no hay información disponible de ${area} con esta consulta. Intenta de nuevo con palabras técnicas específicas, como "${commonKeywordsByArea[selectedArea.toLowerCase()]?.slice(0, 3).join('", "') || 'términos técnicos'}".`);
+        } else {
+          throw new Error(`Error ${response.status}: ${errorData.mensaje || 'Solicitud inválida'}`);
+        }
+        return;
+      }
+
+      const data = await response.json();
+      let message;
+      if (data.soluciones && data.soluciones.length > 0) {
+        const solution = data.soluciones[0];
+        message = `
+          <strong>Área:</strong> ${solution.area}<br>
+          <strong>Descripción:</strong> ${solution.description}<br>
+          <strong>Solución:</strong> 
+        `;
+        if (solution.solucion && solution.solucion.startsWith('http')) {
+          message += `<a href="${solution.solucion}" target="_blank">Ver solución</a>`;
+        } else {
+          message += solution.solucion || translations[currentLanguage].problemNotRecognized;
+        }
+        spinnerContainer.remove();
+        showTypingAndRespond(message);
+        showTypingAndRespond('¿Fue útil esta solución?', [
+          { text: translations[currentLanguage].yes, action: () => handleSolutionConfirmation(true) },
+          { text: translations[currentLanguage].no, action: () => handleSolutionConfirmation(false) }
+        ]);
+      } else {
+        message = translations[currentLanguage].problemNotRecognized;
+        spinnerContainer.remove();
+        showTypingAndRespond(message);
+      }
+    } catch (error) {
+      console.error('Error al conectar con el backend', error.message);
+      spinnerContainer.remove();
+      showTypingAndRespond('Error al conectar con el servidor interno. Intenta de nuevo.');
+    }
+    updateSendButtonState();
+  }
+
   function showTypingAndRespond(message, options = [], delay = 1500, callback = () => {}) {
     log('Mostrando indicador de escribiendo');
     isBotTyping = true;
@@ -588,26 +662,22 @@ document.addEventListener('DOMContentLoaded', function() {
       }
 
       chatBody.scrollTop = chatBody.scrollHeight;
-      setTimeout(callback, delay); // Ejecutar callback después del retraso
+      setTimeout(callback, delay);
     }, 1500);
   }
 
   function handleSolutionConfirmation(isSolved) {
     if (isSolved) {
-      // Mostrar el mensaje de despedida primero
       showTypingAndRespond(translations[currentLanguage].pleasureToHelp, [], 1000, () => {
-        // Reiniciar estado después del mensaje
         selectedArea = null;
         chatInput.value = '';
         updateSendButtonState();
 
-        // Crear el contenedor del dropdown
         const messageDiv = document.createElement('div');
         messageDiv.className = 'bot-message';
         messageDiv.innerHTML = `<img src="./assets/Images/IncomelecRounded.svg" alt="Bot Avatar"><span>${translations[currentLanguage].areaPrompt}</span>`;
         chatBody.appendChild(messageDiv);
 
-        // Crear el dropdown personalizado
         const selectDiv = document.createElement('div');
         selectDiv.className = 'custom-dropdown';
 
@@ -617,7 +687,8 @@ document.addEventListener('DOMContentLoaded', function() {
           'talanquera': './assets/Images/talanquera.png',
           'cajero': './assets/Images/cajero.png',
           'datafono': './assets/Images/datafono.png',
-          'mantenimiento': './assets/Images/mantenimiento.png'
+          'mantenimiento': './assets/Images/mantenimiento.png',
+          'TVM': './assets/Images/tvm.png'
         };
         dropdownList.innerHTML = `
           <li class="dropdown-item" data-value="">Selecciona un área</li>
@@ -629,7 +700,6 @@ document.addEventListener('DOMContentLoaded', function() {
           `).join('')}
         `;
 
-        // Crear el botón de selección
         const selectButton = document.createElement('button');
         selectButton.className = 'option-button';
         selectButton.textContent = 'Seleccionar';
@@ -641,7 +711,6 @@ document.addEventListener('DOMContentLoaded', function() {
           }
         });
 
-        // Añadir evento para seleccionar al hacer clic
         dropdownList.querySelectorAll('.dropdown-item').forEach(item => {
           item.addEventListener('click', () => {
             dropdownList.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('selected'));
@@ -649,7 +718,6 @@ document.addEventListener('DOMContentLoaded', function() {
           });
         });
 
-        // Añadir elementos al chat
         selectDiv.appendChild(dropdownList);
         selectDiv.appendChild(selectButton);
         chatBody.appendChild(selectDiv);
@@ -660,7 +728,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  // Mostrar notificación
   function showNotification(message, duration = 2000) {
     notification.textContent = message;
     notification.style.display = 'block';
@@ -669,7 +736,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }, duration);
   }
 
-  // Eventos
   sendButton.addEventListener('click', () => {
     log('Clic en sendButton');
     if (!isBotTyping && !sendButton.disabled) {
@@ -758,7 +824,7 @@ document.addEventListener('DOMContentLoaded', function() {
     userRole = null;
     selectedArea = null;
     conversationHistory = [];
-    isChatInitialized = false; // Reiniciar bandera
+    isChatInitialized = false;
     localStorage.removeItem('chatHistory');
     localStorage.removeItem('userRole');
     localStorage.removeItem('selectedArea');
@@ -813,7 +879,6 @@ document.addEventListener('DOMContentLoaded', function() {
     updateSendButtonState();
   }
 
-  // Inicializar
   chatInput.value = '';
   updateSendButtonState();
 });

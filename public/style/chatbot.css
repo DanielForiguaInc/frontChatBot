@@ -438,6 +438,7 @@
   border-radius: 5px;
   cursor: pointer;
   font-size: 12px;
+  font-weight: bold;
   white-space: nowrap;
   max-width: 100%;
   box-sizing: border-box;
@@ -445,6 +446,7 @@
 }
 
 .option-button:hover {
+  font-weight: bold;
   color: #f8f7f9;
   transform: scale(1.05);
   background-color: #00973a; /* Fondo verde */
@@ -452,6 +454,7 @@
 }
 
 .option-button:active {
+  font-weight: bold;
   color: #f8f7f9;
   background-color: #00973a; /* Cambio al hacer clic */
 }
@@ -853,7 +856,7 @@ body.dark-mode .dropdown-list {
 }
 
 body.dark-mode .dropdown-item {
-  color: #95c11f !important; /* Texto claro legible */
+  color: #e1e8cd !important; /* Texto claro legible */
 }
 
 body.dark-mode .dropdown-item:hover {
@@ -867,12 +870,14 @@ body.dark-mode .dropdown-item.selected {
 }
 
 body.dark-mode .option-button {
+  font-weight: bold;
   background-color: #ffffff00; /* Fondo oscuro */
   color: #00973a; /* Texto verde claro para contraste */
   border: #00973a solid 1.4px; /* Borde verde claro */
 }
 
 body.dark-mode .option-button:hover {
+  font-weight: bold;
   color: #13261c; /* Texto oscuro para contraste con fondo */
   background-color: #95c11f; /* Fondo verde claro */
   border: #13261c solid 1.4px; /* Borde oscuro */
@@ -880,6 +885,7 @@ body.dark-mode .option-button:hover {
 }
 
 body.dark-mode .option-button:active {
+  font-weight: bold;
   color: #00973a; /* Texto oscuro */
   background-color: #95c11f; /* Fondo verde claro */
 }
