@@ -120,7 +120,8 @@ document.addEventListener('DOMContentLoaded', function() {
       engineer: 'Ingeniero',
       yes: 'Sí',
       no: 'No',
-      pleasureToHelp: 'Fue un placer ayudarte.'
+      pleasureToHelp: 'Fue un placer ayudarte.',
+      loginError: 'Error al iniciar sesión. Por favor, verifica tus credenciales.'
     },
     en: {
       welcome: 'Hello! I am your technical assistant from INCOMELEC S.A.S. Select your role to start.',
@@ -141,7 +142,8 @@ document.addEventListener('DOMContentLoaded', function() {
       engineer: 'Engineer',
       yes: 'Yes',
       no: 'No',
-      pleasureToHelp: 'It was a pleasure to help you.'
+      pleasureToHelp: 'It was a pleasure to help you.',
+      loginError: 'Error logging in. Please check your credentials.'
     }
   };
 
@@ -155,20 +157,13 @@ document.addEventListener('DOMContentLoaded', function() {
   const historyButton = document.getElementById('historyButton');
   const downloadButton = document.getElementById('downloadButton');
   const resetButton = document.getElementById('resetButton');
-  if (resetButton) {
-    resetButton.addEventListener('click', () => {
-      log('Clic en resetButton (DOMContentLoaded)');
-      if (isBotTyping) return;
-      resetConversation();
-    });
-  }
   const closeButton = document.getElementById('close-button');
   const themeToggle = document.getElementById('themeToggle');
   const languageButton = document.getElementById('languageButton');
   const notification = document.getElementById('notification');
 
   // Verificación de elementos esenciales del DOM
-  if (!chatBody || !chatInput || !sendButton || !resetButton || !themeToggle || !languageButton || !notification) {
+  if (!chatBody || !chatInput || !sendButton || !resetButton || !themeToggle || !languageButton || !notification || !chatBubble || !chatContainer || !closeButton) {
     logError('Error: No se encontraron elementos del DOM necesarios');
     return;
   }
@@ -205,6 +200,56 @@ document.addEventListener('DOMContentLoaded', function() {
     updateSendButtonState();
   });
 
+  // Función para inicializar el formulario de login
+  function initializeLoginForm(formElement) {
+    if (!formElement) {
+      logError('No se encontró el formulario de login para inicializar');
+      return;
+    }
+    log('Inicializando formulario de login');
+    
+    // Remover manejadores previos para evitar duplicados
+    const newForm = formElement.cloneNode(true);
+    formElement.parentNode.replaceChild(newForm, formElement);
+    
+    newForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      log('Formulario de login enviado');
+      const emailInput = newForm.querySelector('#exampleDropdownFormEmail2');
+      const passwordInput = newForm.querySelector('#exampleDropdownFormPassword2');
+      
+      if (!emailInput || !passwordInput) {
+        logError('No se encontraron los campos de email o contraseña');
+        addMessage('bot', translations[currentLanguage].loginError);
+        return;
+      }
+
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
+
+      const emailPattern = /^(soporte|mantenimiento)$/;
+      if (!emailPattern.test(email)) {
+        logError('Usuario inválido:', email);
+        addMessage('bot', 'El usuario debe ser "soporte" o "mantenimiento".');
+        return;
+      }
+
+      const user = Object.values(tempUsers).find(u => u.username === email && u.password === password);
+      if (user) {
+        log('Inicio de sesión exitoso para:', email, 'Rol:', user.role);
+        window.setRole(user.role);
+        const roleOptions = document.getElementById('roleOptions');
+        if (roleOptions) {
+          roleOptions.style.display = 'none';
+        }
+        addMessage('bot', `Bienvenido, ${user.role === 'support' ? 'soporte' : user.role === 'maintenance' ? 'mantenimiento' : user.role}!`);
+      } else {
+        logError('Credenciales incorrectas para:', email);
+        addMessage('bot', translations[currentLanguage].loginError);
+      }
+    });
+  }
+
   // Mostrar/Ocultar chat y mensaje de bienvenida
   chatBubble.addEventListener('click', () => {
     log('Clic en chatBubble, isChatInitialized:', isChatInitialized, 'userRole:', userRole);
@@ -229,7 +274,7 @@ document.addEventListener('DOMContentLoaded', function() {
               <ul class="dropdown-menu" style="min-width: 180px; position: absolute; z-index: 1000;">
                 <li>
                   <div class="p-2">
-                    <form id="loginForm">
+                    <form id="loginForm" action="javascript:void(0)">
                       <div class="mb-2">
                         <label for="exampleDropdownFormEmail2" class="form-label text-muted" style="font-size: 0.78rem;">Usuario (soporte o soporte@dominio.com)</label>
                         <input type="text" class="form-control form-control-sm" id="exampleDropdownFormEmail2" placeholder="soporte o soporte@dominio.com" style="font-size: 0.78rem;" required pattern="^(soporte|mantenimiento)$">
@@ -256,30 +301,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const loginForm = document.getElementById('loginForm');
         if (loginForm) {
-          console.log('Formulario de login encontrado');
-          loginForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            console.log('Formulario enviado');
-            const email = document.getElementById('exampleDropdownFormEmail2').value.trim();
-            const password = document.getElementById('exampleDropdownFormPassword2').value;
-
-            const emailPattern = /^(soporte|mantenimiento)$/;
-            if (!emailPattern.test(email)) {
-              addMessage('bot', 'El usuario debe ser "soporte" o "mantenimiento".');
-              return;
-            }
-
-            const user = Object.values(tempUsers).find(u => u.username === email && u.password === password);
-            if (user) {
-              window.setRole(user.role);
-              document.getElementById('roleOptions').style.display = 'none';
-              addMessage('bot', `Bienvenido, ${user.role === 'support' ? 'soporte' : user.role === 'maintenance' ? 'mantenimiento' : user.role}!`);
-            } else {
-              addMessage('bot', 'Credenciales incorrectas. Intenta de nuevo.');
-            }
-          });
+          initializeLoginForm(loginForm);
         } else {
-          console.error('No se encontró el formulario de login después de crearlo');
+          logError('No se encontró el formulario de login después de crearlo');
         }
 
         isChatInitialized = true;
@@ -295,36 +319,8 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
       chatContainer.style.display = 'none';
     }
+    chatBody.scrollTop = chatBody.scrollHeight;
   });
-
-  const loginForm = document.getElementById('loginForm');
-  if (loginForm) {
-    console.log('Formulario de login encontrado');
-    loginForm.addEventListener('submit', function(e) {
-      e.preventDefault();
-      console.log('Formulario enviado');
-      const email = document.getElementById('exampleDropdownFormEmail2').value.trim();
-      const password = document.getElementById('exampleDropdownFormPassword2').value;
-
-      const emailPattern = /^(soporte|mantenimiento|[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
-      if (!emailPattern.test(email)) {
-        addMessage('bot', 'El usuario debe ser "soporte", "mantenimiento" o un correo válido.');
-        return;
-      }
-
-      const normalizedEmail = email.match(/^(soporte|mantenimiento)$/) ? email : email;
-      const user = Object.values(tempUsers).find(u => u.username === normalizedEmail && u.password === password);
-      if (user) {
-        window.setRole(user.role);
-        document.getElementById('roleOptions').style.display = 'none';
-        addMessage('bot', translations[currentLanguage].welcome);
-      } else {
-        addMessage('bot', 'Credenciales incorrectas. Intenta de nuevo.');
-      }
-    });
-  } else {
-    console.error('No se encontró el formulario de login');
-  }
 
   window.setRole = function(role) {
     const validRoles = ['technician', 'engineer', 'support', 'maintenance'];
@@ -466,26 +462,22 @@ document.addEventListener('DOMContentLoaded', function() {
     chatBody.scrollTop = chatBody.scrollHeight;
   }
 
-  // Función mejorada para extraer keywords
+  // Función para extraer keywords
   function extractKeywords(input) {
-    // Dividir el mensaje en palabras, preservando palabras con mayúsculas
     const words = input.split(/\s+/).filter(word => word.length > 2 && !stopWords.includes(word.toLowerCase()));
     let keywords = [];
 
-    // Priorizar palabras que coincidan con commonKeywordsByArea para el área seleccionada
     if (selectedArea && commonKeywordsByArea[selectedArea.toLowerCase()]) {
       const areaKeywords = commonKeywordsByArea[selectedArea.toLowerCase()];
       const matchedKeywords = words.filter(word => 
         areaKeywords.some(keyword => keyword.toLowerCase() === word.toLowerCase())
       ).map(word => {
-        // Conservar el caso original de la palabra si está en areaKeywords
         const matchedKeyword = areaKeywords.find(keyword => keyword.toLowerCase() === word.toLowerCase());
         return matchedKeyword || word;
       });
       keywords = keywords.concat(matchedKeywords);
     }
 
-    // Si no hay suficientes keywords, buscar en keywords de General
     if (keywords.length < 2 && commonKeywordsByArea.General) {
       const generalKeywords = commonKeywordsByArea.General;
       const matchedGeneralKeywords = words.filter(word => 
@@ -498,7 +490,6 @@ document.addEventListener('DOMContentLoaded', function() {
       keywords = keywords.concat(matchedGeneralKeywords);
     }
 
-    // Priorizar palabras con mayúsculas (como VirtualBox, Toolchain) que no estén en commonKeywords
     if (keywords.length < 2) {
       const capitalizedWords = words.filter(word => 
         !keywords.includes(word) && /[A-Z]/.test(word[0]) && word.length > 3
@@ -506,7 +497,6 @@ document.addEventListener('DOMContentLoaded', function() {
       keywords = keywords.concat(capitalizedWords);
     }
 
-    // Completar con otras palabras relevantes si es necesario
     if (keywords.length < 2) {
       const remainingWords = words.filter(word => 
         !keywords.includes(word) && word.length > 3
@@ -514,7 +504,6 @@ document.addEventListener('DOMContentLoaded', function() {
       keywords = keywords.concat(remainingWords);
     }
 
-    // Limitar a un máximo de 3 keywords, pero permitir un mínimo de 2
     return keywords.slice(0, 3);
   }
 
@@ -559,7 +548,7 @@ document.addEventListener('DOMContentLoaded', function() {
     chatBody.scrollTop = chatBody.scrollHeight;
 
     const keywords = extractKeywords(input);
-    log('Keywords extraídas:', keywords); // Log para depuración
+    log('Keywords extraídas:', keywords);
     if (keywords.length < 2 && !input.toLowerCase().match(/^(si|sí|no)$/i)) {
       spinnerContainer.remove();
       showTypingAndRespond(translations[currentLanguage].describeMore);
@@ -821,6 +810,7 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   function resetConversation() {
+    log('Reiniciando conversación');
     userRole = null;
     selectedArea = null;
     conversationHistory = [];
@@ -848,10 +838,10 @@ document.addEventListener('DOMContentLoaded', function() {
           <ul class="dropdown-menu" style="min-width: 180px; position: absolute; z-index: 1000;">
             <li>
               <div class="p-2">
-                <form id="loginForm">
+                <form id="loginForm" action="javascript:void(0)">
                   <div class="mb-2">
                     <label for="exampleDropdownFormEmail2" class="form-label text-muted" style="font-size: 0.78rem;">Usuario (soporte o soporte@dominio.com)</label>
-                    <input type="text" class="form-control form-control-sm" id="exampleDropdownFormEmail2" placeholder="soporte o soporte@dominio.com" style="font-size: 0.78rem;" required pattern="^(soporte|mantenimiento|[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$">
+                    <input type="text" class="form-control form-control-sm" id="exampleDropdownFormEmail2" placeholder="soporte o soporte@dominio.com" style="font-size: 0.78rem;" required pattern="^(soporte|mantenimiento)$">
                   </div>
                   <div class="mb-2">
                     <label for="exampleDropdownFormPassword2" class="form-label text-muted" style="font-size: 0.78rem;">Contraseña</label>
@@ -872,6 +862,13 @@ document.addEventListener('DOMContentLoaded', function() {
       </div>
     `;
     chatBody.appendChild(roleOptions);
+
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+      initializeLoginForm(loginForm);
+    } else {
+      logError('No se encontró el formulario de login después de reiniciar');
+    }
 
     isChatInitialized = true;
     localStorage.setItem('isChatInitialized', 'true');
