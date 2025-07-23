@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const stopWords = [
     'el', 'la', 'los', 'las', 'un', 'una', 'de', 'en', 'con', 'por', 'para', 'y', 'o', 'al',
     'tengo', 'problema', 'intentar', 'usar', 'es', 'que', 'a', 'se', 'del', 'como', 'cuando',
-    'esto', 'esta', 'este', 'hacer', 'no', 'si', 'sí', 'me', 'mi', 'lo', 'le', 'una', 'uno', 
+    'esto', 'esta', 'este', 'hacer', 'no', 'si', 'sí', 'me', 'mi', 'lo', 'le', 'una', 'uno',
     'Hola', 'adiós', 'gracias', 'por favor', 'bueno', 'bien', 'mal', 'sí', 'no', 'tal vez',
     'quizás', 'ok', 'vale', 'claro', 'perfecto', 'entendido', 'listo', 'listos', 'listo',
     'listos', 'dias', 'tardes', 'noches', 'mañana', 'ayer', 'hoy', 'pasa', 'ocurre', 'sucede'
@@ -311,10 +311,19 @@ document.addEventListener('DOMContentLoaded', function() {
       } else if (userRole) {
         log('Usuario ya logueado, no se muestra mensaje de bienvenida');
       } else {
-        const messageDiv = document.createElement('div');
-        messageDiv.className = 'bot-message';
-        messageDiv.innerHTML = `<img src="./assets/Images/IncomelecRounded.svg" alt="Bot Avatar"><span>${translations[currentLanguage].rolePrompt}</span>`;
-        chatBody.appendChild(messageDiv);
+        // Verificar si el mensaje rolePrompt ya existe
+        const existingPrompt = Array.from(chatBody.querySelectorAll('.bot-message')).some(
+          msg => msg.textContent.includes(translations[currentLanguage].rolePrompt)
+        );
+        if (!existingPrompt) {
+          log('Añadiendo mensaje rolePrompt');
+          const messageDiv = document.createElement('div');
+          messageDiv.className = 'bot-message role-prompt'; // Añadir clase para identificación
+          messageDiv.innerHTML = `<img src="./assets/Images/IncomelecRounded.svg" alt="Bot Avatar"><span>${translations[currentLanguage].rolePrompt}</span>`;
+          chatBody.appendChild(messageDiv);
+        } else {
+          log('Mensaje rolePrompt ya existe, no se añade');
+        }
       }
     } else {
       chatContainer.style.display = 'none';
