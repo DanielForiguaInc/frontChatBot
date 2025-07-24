@@ -242,7 +242,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if (roleOptions) {
           roleOptions.style.display = 'none';
         }
-        addMessage('bot', `Bienvenido, ${user.role === 'support' ? 'soporte' : user.role === 'maintenance' ? 'mantenimiento' : user.role}!`);
       } else {
         logError('Credenciales incorrectas para:', email);
         addMessage('bot', translations[currentLanguage].loginError);
@@ -318,7 +317,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!existingPrompt) {
           log('Añadiendo mensaje rolePrompt');
           const messageDiv = document.createElement('div');
-          messageDiv.className = 'bot-message role-prompt'; // Añadir clase para identificación
+          messageDiv.className = 'bot-message role-prompt';
           messageDiv.innerHTML = `<img src="./assets/Images/IncomelecRounded.svg" alt="Bot Avatar"><span>${translations[currentLanguage].rolePrompt}</span>`;
           chatBody.appendChild(messageDiv);
         } else {
@@ -341,6 +340,19 @@ document.addEventListener('DOMContentLoaded', function() {
     userRole = role;
     localStorage.setItem('userRole', role);
 
+    // Mostrar mensaje de bienvenida personalizado
+    let welcomeMessage;
+    if (currentLanguage === 'es') {
+      welcomeMessage = `Bienvenido, ${role === 'support' ? 'soporte' : role === 'maintenance' ? 'mantenimiento' : role === 'technician' ? 'técnico' : 'ingeniero'}!`;
+    } else {
+      welcomeMessage = `Welcome, ${role === 'support' ? 'support' : role === 'maintenance' ? 'maintenance' : role === 'technician' ? 'technician' : 'engineer'}!`;
+    }
+    const welcomeDiv = document.createElement('div');
+    welcomeDiv.className = 'bot-message';
+    welcomeDiv.innerHTML = `<img src="./assets/Images/IncomelecRounded.svg" alt="Bot Avatar"><span>${welcomeMessage}</span>`;
+    chatBody.appendChild(welcomeDiv);
+
+    // Mostrar mensaje de selección de área
     const messageDiv = document.createElement('div');
     messageDiv.className = 'bot-message';
     messageDiv.innerHTML = `<img src="./assets/Images/IncomelecRounded.svg" alt="Bot Avatar"><span>${translations[currentLanguage].areaPrompt}</span>`;
