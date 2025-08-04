@@ -86,30 +86,31 @@
 /* ===== CHAT BUBBLE ===== */
 #chatBubble {
   position: fixed;
-  bottom: 20px;
-  left: 20px;
-  width: 50px;
-  height: 50px;
+  bottom: 10px;
+  right: 20px;
+  width: 55px;
+  height: 55px;
   background: #006f32;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: width 0.2s ease, height 0.2s ease, bottom 0.2s ease, left 0.2s ease;
+  transition: width 0.2s ease, height 0.2s ease, bottom 0.2s ease, right 0.2s ease;
+  z-index: 10000 !important; /* Aumentado para estar por encima de #customButton (9999) */
 }
 
 #chatBubble:hover {
-  width: 55px;    
-  height: 55px;   
-  bottom: 18px;   
-  left: 18px;    
+  width: 60px;    
+  height: 60px;   
+  bottom: 10px;   
+  right: 18px;    
   box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
 
 .chat-bubble-icon {
-  width: 20px;
-  height: 20px;
+  width: 23px;
+  height: 23px;
   object-fit: contain;
   display: block;
   transition: transform 0.2s ease;  
@@ -122,8 +123,8 @@
 /* ===== CONTENEDOR PRINCIPAL ===== */
 .chat-container {
   position: fixed;
-  bottom: 80px;
-  left: 20px;
+  bottom: 75px;
+  right: 20px;
   width: 90%;
   max-width: 400px;
   height: 500px;
@@ -132,7 +133,7 @@
   box-shadow: 0 0 10px rgba(0,0,0,0.3);
   display: flex;
   flex-direction: column;
-  z-index: 1000;
+  z-index: 10000;
   border: none;
 }
 
@@ -277,6 +278,7 @@
 
 .bot-message {
   background: #e9ecef;
+  color: #093a21 !important;
   padding: 8px 12px;
   border-radius: 10px;
   margin: 5px 0;
@@ -936,7 +938,7 @@ body.dark-mode .chat-body {
 
 body.dark-mode .bot-message {
   background-color: #444;
-  color: #d0d0d0;
+  color: #d0d0d0 !important;
 }
 
 body.dark-mode .user-message {

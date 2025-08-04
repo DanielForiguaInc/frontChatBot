@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const translations = {
     es: {
       welcome: '¡Hola! Soy tu asistente técnico de INCOMELEC S.A.S. Selecciona tu rol para comenzar.',
-      rolePrompt: 'Por favor, selecciona tu rol: técnico o ingeniero.',
+      rolePrompt: 'Por favor, selecciona tu rol: Interno o Externo.',
       areaPrompt: 'Por favor, selecciona un área del problema.',
       describeMore: 'Por favor, describe el problema con más detalles usando palabras técnicas específicas (por ejemplo, "Toolchain", "VirtualBox", "validador", "táctil").',
       problemNotRecognized: 'No reconozco ese problema. Intenta con palabras técnicas específicas del área seleccionada, como "Toolchain", "VirtualBox", "validador" o "táctil".',
@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function() {
     },
     en: {
       welcome: 'Hello! I am your technical assistant from INCOMELEC S.A.S. Select your role to start.',
-      rolePrompt: 'Please select your role: technician or engineer.',
+      rolePrompt: 'Please select your role: Internal or External.',
       areaPrompt: 'Please select the area of the issue.',
       describeMore: 'Please describe the issue in more detail using specific technical terms (e.g., "Toolchain", "VirtualBox", "validator", "touchscreen").',
       problemNotRecognized: 'I don’t recognize that issue. Try specific technical terms for the selected area, like "Toolchain", "VirtualBox", "validator", or "touchscreen".',
@@ -265,10 +265,10 @@ document.addEventListener('DOMContentLoaded', function() {
         roleOptions.id = 'roleOptions';
         roleOptions.innerHTML = `
           <div style="display: flex; align-items: center; gap: 5px; margin-top: 0.5rem; text-align: left;">
-            <button class="btn btn-secondary btn-sm" style="background-color: #6c757d; border-color: #6c757d;" onclick="window.setRole('technician')">Técnico</button>
+            <button class="btn btn-secondary btn-sm" style="background-color: #6c757d; border-color: #6c757d;" onclick="window.setRole('technician')">Externo</button>
             <div class="dropdown">
               <button type="button" class="btn btn-primary btn-sm dropdown-toggle" style="background-color: #006f32; border-color: #00973a;" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
-                Ingeniero
+                Interno
               </button>
               <ul class="dropdown-menu" style="min-width: 180px; position: absolute; z-index: 1000;">
                 <li>
@@ -851,10 +851,10 @@ document.addEventListener('DOMContentLoaded', function() {
     roleOptions.id = 'roleOptions';
     roleOptions.innerHTML = `
       <div style="display: flex; align-items: center; gap: 5px; margin-top: 0.5rem; text-align: left;">
-        <button class="btn btn-secondary btn-sm" style="background-color: #6c757d; border-color: #6c757d;" onclick="window.setRole('technician')">Técnico</button>
+        <button class="btn btn-secondary btn-sm" style="background-color: #6c757d; border-color: #6c757d;" onclick="window.setRole('technician')">Externo</button>
         <div class="dropdown">
           <button type="button" class="btn btn-primary btn-sm dropdown-toggle" style="background-color: #006f32; border-color: #00973a;" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
-            Ingeniero
+            Interno
           </button>
           <ul class="dropdown-menu" style="min-width: 180px; position: absolute; z-index: 1000;">
             <li>

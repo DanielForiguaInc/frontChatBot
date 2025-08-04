@@ -1,0 +1,152 @@
+body {
+  font-family: 'Calibri', sans-serif;
+  background: radial-gradient(circle, rgba(248, 247, 249, 0.26) 79%, rgba(248, 247, 249, 0.12) 100%, rgba(255, 255, 255, 0) 100%);
+  background-color: #F8F7F9;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  color: #000;
+  overflow: hidden;
+  position: relative;
+  z-index: 0;
+}
+
+/* Imagen de fondo en modo claro (por defecto) */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: url('../assets/Images/MapINCOMELEC2.svg') no-repeat center center;
+  background-size: contain;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Imagen de fondo en modo oscuro */
+body.dark-mode::before {
+  background-image: url('../assets/Images/MapINCOMELEC4.svg');
+}
+
+/* ------------------ Oculta todos los elementos de contenido ------------------ */
+header,
+section.container,
+footer {
+  display: none !important;
+}
+
+/* Estilos del botón personalizado */
+#customButton {
+  position: fixed;
+  bottom: 65.75vh; /* Aproximación de 38.9rem */
+  right: 41.4vw; /* Aproximación de 49.72rem */
+  border-radius: 23px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  text-decoration: none;
+  z-index: 9999;
+  opacity: 0; /* Estado inicial para la animación */
+  transition: opacity 0.5s ease-in-out, box-shadow 0.5s ease-in-out, bottom 0.5s ease-in-out, right 0.5s ease-in-out;
+  animation: fadeIn 0.5s ease-in-out forwards 0.2s; /* Animación aplicada en ambos modos */
+  width: 21vw; /* Aumentado de 20vw a 21vw */
+  height: calc(21vw * 70 / 266.72); /* Alto proporcional (≈ 5.51vw) */
+  min-width: 17vw; /* Aumentado de 16vw a 17vw */
+  max-width: 23vw; /* Aumentado de 22vw a 23vw */
+  min-height: calc(17vw * 70 / 266.72); /* Mínimo proporcional (≈ 4.46vw) */
+  max-height: calc(23vw * 70 / 266.72); /* Límite proporcional (≈ 6.04vw) */
+}
+
+.custom-button-icon {
+  width: 100%; /* Ocupa todo el contenedor */
+  height: 100%; /* Ocupa todo el contenedor */
+  background: url('../assets/Images/incomelecFilled.svg') no-repeat center center;
+  background-size: contain;
+  transition: background-image 0.5s ease-in-out;
+  min-height: 1px;
+  background-color: transparent;
+}
+
+#customButton:hover {
+  box-shadow: 0 0 15px rgba(0, 151, 58, 0.5);
+}
+
+/* Estado hover con animación para delay */
+#customButton:hover .custom-button-icon {
+  background-image: url('../assets/Images/incomelecVerde2Filled.svg');
+  animation: none; /* Cancela la animación en hover */
+}
+
+.custom-button-icon {
+  animation: none;
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+
+/* Ajuste en modo oscuro */
+body.dark-mode #customButton:hover {
+ box-shadow: 0 0 15px rgba(149, 193, 31, 0.5);
+}
+
+body.dark-mode .custom-button-icon {
+  background-image: url('../assets/Images/incomelecVerde2Filled.svg');
+}
+
+body.dark-mode #customButton:hover .custom-button-icon {
+  background-image: url('../assets/Images/incomelecVerde3Filled.svg');
+}
+
+body.dark-mode .custom-button-icon {
+  animation: none; /* Desactiva la animación en modo oscuro para evitar el retorno a incomelec.svg */
+}
+
+/* ------------------ Estilos del chatbot ------------------ */
+#chatBubble {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 9999;
+}
+
+.chat-container {
+  z-index: 9998;
+}
+
+/* ------------------ Media queries para tabletas ------------------ */
+@media (min-width: 481px) and (max-width: 768px) {
+  #customButton {
+    width: 30vw; /* Aumentado de 29vw a 30vw */
+    height: calc(30vw * 70 / 266.72); /* Ajusta el alto proporcional (≈ 7.87vw) */
+    top: 1rem;
+    left: 1rem;
+    bottom: auto;
+    right: auto;
+    min-width: 23vw; /* Aumentado de 22vw a 23vw */
+    max-width: 35vw; /* Aumentado de 34vw a 35vw */
+    min-height: calc(23vw * 70 / 266.72); /* Mínimo proporcional (≈ 6.04vw) */
+    max-height: calc(35vw * 70 / 266.72); /* Límite proporcional (≈ 9.19vw) */
+  }
+}
+
+/* ------------------ Media queries para pantallas pequeñas ------------------ */
+@media (max-width: 480px) {
+  #customButton {
+    width: 35vw; /* Aumentado de 34vw a 35vw */
+    height: calc(35vw * 70 / 266.72); /* Ajusta el alto proporcional (≈ 9.19vw) */
+    top: 1rem;
+    left: 1rem;
+    bottom: auto;
+    right: auto;
+    min-width: 29vw; /* Aumentado de 28vw a 29vw */
+    max-width: 40vw; /* Aumentado de 39vw a 40vw */
+    min-height: calc(29vw * 70 / 266.72); /* Mínimo proporcional (≈ 7.62vw) */
+    max-height: calc(40vw * 70 / 266.72); /* Límite proporcional (≈ 10.5vw) */
+  }
+}
