@@ -58,6 +58,7 @@ footer {
   max-width: 23vw; /* Aumentado de 22vw a 23vw */
   min-height: calc(17vw * 70 / 266.72); /* Mínimo proporcional (≈ 4.46vw) */
   max-height: calc(23vw * 70 / 266.72); /* Límite proporcional (≈ 6.04vw) */
+  background-color: #ffffff00;
 }
 
 .custom-button-icon {
@@ -67,21 +68,24 @@ footer {
   background-size: contain;
   transition: background-image 0.5s ease-in-out;
   min-height: 1px;
-  background-color: transparent;
+  background-color: #ffffff00;
 }
 
 #customButton:hover {
   box-shadow: 0 0 15px rgba(0, 151, 58, 0.5);
+  background-color: #ffffff00;
 }
 
 /* Estado hover con animación para delay */
 #customButton:hover .custom-button-icon {
   background-image: url('../assets/Images/incomelecVerde2Filled.svg');
   animation: none; /* Cancela la animación en hover */
+  background-color: #ffffff00; /* Mantiene el fondo transparente */
 }
 
 .custom-button-icon {
   animation: none;
+  background-color: #ffffff00;
 }
 
 @keyframes fadeIn {

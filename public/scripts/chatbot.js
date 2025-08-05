@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
   log('chatbot.js cargado correctamente');
 
   // Áreas válidas
-  const validAreas = ['talanquera', 'cajero', 'datafono', 'mantenimiento', 'TVM'];
+  const validAreas = ['talanquera', 'cajero', 'datafono', 'mantenimiento', 'TVM', 'Aeropuerto'];
 
   // Keywords organizadas por área, basadas en el JSON del backend
   const commonKeywordsByArea = {
@@ -72,7 +72,20 @@ document.addEventListener('DOMContentLoaded', function() {
       'Winpark', 'Empresas', 'ID', 'parqueadero', 'número', 'caja', 'Ctrl', 'Alt', 'Spark',
       'Pparking', 'registradora', 'conexión', 'perdida', 'fallo', 'segmento', 'GDB', 'Windows',
       'Defender', 'puerto', 'comandos', 'configuración', 'reinicio', 'Firebird', 'asistencia'
-    ]
+    ],
+    Aeropuerto: [
+      'eGates', 'migratorios', 'aeropuerto', 'Guayaquil', 'mantenimiento', 'soporte', 'producción',
+      'mesa', 'ayuda', 'TAGSA', 'Zohodesk', 'casos', 'diagnóstico', 'novedad', 'incidencias',
+      'intervención', 'componentes', 'interfaz', 'inventario', 'cronograma', 'reporte', 'plazos',
+      'prioridad', 'actualizaciones', 'inspección', 'periódica', 'lectores', 'pantallas', 'firmware',
+      'verificación', 'obstáculo', 'esclusa', 'gabinete', 'paneles', 'vidrio', 'pictogramas',
+      'rodamiento', 'DIRAS', 'celda', 'ventilador', 'rejilla', 'fusibles', 'voltaje', 'UPS',
+      'pasillo', 'anomalía', 'freno', 'lubricante', 'desengrasante', 'multímetro', 'cautín',
+      'maleta', 'flexómetro', 'brístol', 'torpedo', 'bisturí', 'microfibra', 'silicona', 'desgaste',
+      'alineación', 'conectores', 'parlante', 'reemplazo', 'térmico', 'interruptor', 'tarjeta',
+      'baterías', 'cámara', 'multitoma', 'simulador', 'certificación', 'checklist', 'revisión',
+      'diaria', 'mensual', 'limpieza', 'semanal', 'mayor'
+    ],
   };
 
   // Lista de palabras comunes a excluir (artículos, preposiciones, palabras genéricas)
@@ -368,7 +381,8 @@ document.addEventListener('DOMContentLoaded', function() {
       'cajero': './assets/Images/cajero.png',
       'datafono': './assets/Images/datafono.png',
       'mantenimiento': './assets/Images/mantenimiento.png',
-      'TVM': './assets/Images/tvm.png'
+      'TVM': './assets/Images/tvm.png',
+      'Aeropuerto': './assets/Images/aeropuerto.png'
     };
     dropdownList.innerHTML = `
       <li class="dropdown-item" data-value="">Selecciona un área</li>
@@ -698,7 +712,8 @@ document.addEventListener('DOMContentLoaded', function() {
           'cajero': './assets/Images/cajero.png',
           'datafono': './assets/Images/datafono.png',
           'mantenimiento': './assets/Images/mantenimiento.png',
-          'TVM': './assets/Images/tvm.png'
+          'TVM': './assets/Images/tvm.png',
+          'Aeropuerto': './assets/Images/aeropuerto.png'
         };
         dropdownList.innerHTML = `
           <li class="dropdown-item" data-value="">Selecciona un área</li>
