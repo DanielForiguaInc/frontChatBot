@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-  console.log('DOM completamente cargado');
+  // console.log('DOM completamente cargado');
   const tempUsers = {
     soporte: { username: 'soporte', password: 'S0p0rt3_S3gur0!', role: 'support' },
     mantenimiento: { username: 'mantenimiento', password: 'M4nt3n_S3gur0!', role: 'maintenance' }
@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
   function logError(...args) { if (DEBUG_ERROR) console.error(...args); }
   function logWarn(...args) { if (DEBUG_WARN) console.warn(...args); }
 
-  log('chatbot.js cargado correctamente');
+  // log('chatbot.js cargado correctamente');
 
   // Áreas válidas
   const validAreas = ['talanquera', 'cajero', 'datafono', 'mantenimiento', 'TVM', 'Aeropuerto'];
@@ -118,8 +118,8 @@ document.addEventListener('DOMContentLoaded', function() {
       welcome: '¡Hola! Soy tu asistente técnico de INCOMELEC S.A.S. Selecciona tu rol para comenzar.',
       rolePrompt: 'Por favor, selecciona tu rol: Interno o Externo.',
       areaPrompt: 'Por favor, selecciona un área del problema.',
-      describeMore: 'Por favor, describe el problema con más detalles usando palabras técnicas específicas (por ejemplo, "Toolchain", "VirtualBox", "validador", "táctil").',
-      problemNotRecognized: 'No reconozco ese problema. Intenta con palabras técnicas específicas del área seleccionada, como "Toolchain", "VirtualBox", "validador" o "táctil".',
+      describeMore: 'Por favor, describe el problema con más detalles usando palabras técnicas específicas.',
+      problemNotRecognized: 'No reconozco ese problema. Intenta con palabras técnicas específicas del área seleccionada.',
       emptyMessage: 'Por favor, escribe un mensaje válido.',
       messageTooLong: 'Tu mensaje es demasiado largo. Usa menos de 500 caracteres.',
       voiceError: 'Error en reconocimiento de voz. Usa texto, por favor.',
@@ -140,8 +140,8 @@ document.addEventListener('DOMContentLoaded', function() {
       welcome: 'Hello! I am your technical assistant from INCOMELEC S.A.S. Select your role to start.',
       rolePrompt: 'Please select your role: Internal or External.',
       areaPrompt: 'Please select the area of the issue.',
-      describeMore: 'Please describe the issue in more detail using specific technical terms (e.g., "Toolchain", "VirtualBox", "validator", "touchscreen").',
-      problemNotRecognized: 'I don’t recognize that issue. Try specific technical terms for the selected area, like "Toolchain", "VirtualBox", "validator", or "touchscreen".',
+      describeMore: 'Please describe the issue in more detail using specific technical terms.',
+      problemNotRecognized: 'I don’t recognize that issue. Try specific technical terms for the selected area.',
       emptyMessage: 'Please enter a valid message.',
       messageTooLong: 'Your message is too long. Use less than 500 characters.',
       voiceError: 'Error in voice recognition. Please use text instead.',
@@ -177,10 +177,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Verificación de elementos esenciales del DOM
   if (!chatBody || !chatInput || !sendButton || !resetButton || !themeToggle || !languageButton || !notification || !chatBubble || !chatContainer || !closeButton) {
-    logError('Error: No se encontraron elementos del DOM necesarios');
+    // logError('Error: No se encontraron elementos del DOM necesarios');
     return;
   }
-  log('Elementos del DOM cargados correctamente');
+  // log('Elementos del DOM cargados correctamente');
 
   // Modo oscuro/claro
   let isDarkMode = false;
@@ -192,23 +192,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Selector de idioma
   languageButton.addEventListener('click', () => {
-    log('Clic en languageButton');
+    // log('Clic en languageButton');
     const languages = ['es', 'en'];
     const currentIndex = languages.indexOf(currentLanguage);
     currentLanguage = languages[(currentIndex + 1) % languages.length];
-    log('Idioma cambiado a:', currentLanguage);
+    // log('Idioma cambiado a:', currentLanguage);
     resetConversation();
   });
 
   // Detección de conectividad
   window.addEventListener('offline', () => {
-    log('Conexión perdida');
+    // log('Conexión perdida');
     showNotification(translations[currentLanguage].connectionLost, 5000);
     sendButton.disabled = true;
   });
 
   window.addEventListener('online', () => {
-    log('Conexión restablecida');
+    // log('Conexión restablecida');
     showNotification(translations[currentLanguage].connectionRestored);
     updateSendButtonState();
   });
@@ -216,10 +216,10 @@ document.addEventListener('DOMContentLoaded', function() {
   // Función para inicializar el formulario de login
   function initializeLoginForm(formElement) {
     if (!formElement) {
-      logError('No se encontró el formulario de login para inicializar');
+      // logError('No se encontró el formulario de login para inicializar');
       return;
     }
-    log('Inicializando formulario de login');
+    // log('Inicializando formulario de login');
     
     // Remover manejadores previos para evitar duplicados
     const newForm = formElement.cloneNode(true);
@@ -227,12 +227,12 @@ document.addEventListener('DOMContentLoaded', function() {
     
     newForm.addEventListener('submit', function(e) {
       e.preventDefault();
-      log('Formulario de login enviado');
+      // log('Formulario de login enviado');
       const emailInput = newForm.querySelector('#exampleDropdownFormEmail2');
       const passwordInput = newForm.querySelector('#exampleDropdownFormPassword2');
       
       if (!emailInput || !passwordInput) {
-        logError('No se encontraron los campos de email o contraseña');
+        // logError('No se encontraron los campos de email o contraseña');
         addMessage('bot', translations[currentLanguage].loginError);
         return;
       }
@@ -242,7 +242,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
       const emailPattern = /^(soporte|mantenimiento)$/;
       if (!emailPattern.test(email)) {
-        logError('Usuario inválido:', email);
+        // logError('Usuario inválido:', email);
         addMessage('bot', 'El usuario debe ser "soporte" o "mantenimiento".');
         return;
       }
@@ -256,7 +256,7 @@ document.addEventListener('DOMContentLoaded', function() {
           roleOptions.style.display = 'none';
         }
       } else {
-        logError('Credenciales incorrectas para:', email);
+        // logError('Credenciales incorrectas para:', email);
         addMessage('bot', translations[currentLanguage].loginError);
       }
     });
@@ -264,7 +264,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Mostrar/Ocultar chat y mensaje de bienvenida
   chatBubble.addEventListener('click', () => {
-    log('Clic en chatBubble, isChatInitialized:', isChatInitialized, 'userRole:', userRole);
+    // log('Clic en chatBubble, isChatInitialized:', isChatInitialized, 'userRole:', userRole);
     const currentDisplay = chatContainer.style.display;
     if (currentDisplay === 'none' || currentDisplay === '') {
       chatContainer.style.display = 'flex';
@@ -315,26 +315,26 @@ document.addEventListener('DOMContentLoaded', function() {
         if (loginForm) {
           initializeLoginForm(loginForm);
         } else {
-          logError('No se encontró el formulario de login después de crearlo');
+          // logError('No se encontró el formulario de login después de crearlo');
         }
 
         isChatInitialized = true;
         localStorage.setItem('isChatInitialized', 'true');
       } else if (userRole) {
-        log('Usuario ya logueado, no se muestra mensaje de bienvenida');
+        // log('Usuario ya logueado, no se muestra mensaje de bienvenida');
       } else {
         // Verificar si el mensaje rolePrompt ya existe
         const existingPrompt = Array.from(chatBody.querySelectorAll('.bot-message')).some(
           msg => msg.textContent.includes(translations[currentLanguage].rolePrompt)
         );
         if (!existingPrompt) {
-          log('Añadiendo mensaje rolePrompt');
+          // log('Añadiendo mensaje rolePrompt');
           const messageDiv = document.createElement('div');
           messageDiv.className = 'bot-message role-prompt';
           messageDiv.innerHTML = `<img src="./assets/Images/IncomelecRounded.svg" alt="Bot Avatar"><span>${translations[currentLanguage].rolePrompt}</span>`;
           chatBody.appendChild(messageDiv);
         } else {
-          log('Mensaje rolePrompt ya existe, no se añade');
+          // log('Mensaje rolePrompt ya existe, no se añade');
         }
       }
     } else {
@@ -430,7 +430,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   closeButton.addEventListener('click', () => {
-    log('Clic en closeButton');
+    // log('Clic en closeButton');
     chatContainer.style.display = 'none';
   });
 
@@ -474,7 +474,7 @@ document.addEventListener('DOMContentLoaded', function() {
     try {
       localStorage.setItem('chatHistory', JSON.stringify(conversationHistory));
     } catch (error) {
-      logError('Error al guardar en localStorage:', error);
+      // logError('Error al guardar en localStorage:', error);
     }
   }
 
@@ -543,7 +543,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   async function processUserInput(input) {
-    log('Procesando input:', input);
+    // log('Procesando input:', input);
     input = input.trim();
     if (!input) {
       showTypingAndRespond(translations[currentLanguage].emptyMessage);
@@ -583,7 +583,7 @@ document.addEventListener('DOMContentLoaded', function() {
     chatBody.scrollTop = chatBody.scrollHeight;
 
     const keywords = extractKeywords(input);
-    log('Keywords extraídas:', keywords);
+    // log('Keywords extraídas:', keywords);
     if (keywords.length < 2 && !input.toLowerCase().match(/^(si|sí|no)$/i)) {
       spinnerContainer.remove();
       showTypingAndRespond(translations[currentLanguage].describeMore);
@@ -594,7 +594,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const adjustedRole = userRole === 'technician' ? 'tecnico' : 'ingeniero';
     const area = selectedArea.charAt(0).toUpperCase() + selectedArea.slice(1);
     const url = `https://backendchatbot-ylq2.onrender.com/api/solucion/buscar?q=${query}&rol=${encodeURIComponent(adjustedRole)}&area=${encodeURIComponent(area)}`;
-    console.log('Solicitud enviada a:', url);
+    // console.log('Solicitud enviada a:', url);
 
     try {
       const response = await fetch(url, {
@@ -647,7 +647,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function showTypingAndRespond(message, options = [], delay = 1500, callback = () => {}) {
-    log('Mostrando indicador de escribiendo');
+    // log('Mostrando indicador de escribiendo');
     isBotTyping = true;
     updateSendButtonState();
 
@@ -762,7 +762,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   sendButton.addEventListener('click', () => {
-    log('Clic en sendButton');
+    // log('Clic en sendButton');
     if (!isBotTyping && !sendButton.disabled) {
       processUserInput(chatInput.value);
     }
@@ -783,7 +783,7 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   voiceButton.addEventListener('click', () => {
-    log('Clic en voiceButton');
+    // log('Clic en voiceButton');
     if (isBotTyping) return;
     try {
       const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
@@ -798,17 +798,17 @@ document.addEventListener('DOMContentLoaded', function() {
         addMessage('bot', translations[currentLanguage].voiceError);
       };
       recognition.onend = () => {
-        log('Reconocimiento de voz finalizado');
+        // log('Reconocimiento de voz finalizado');
       };
       recognition.start();
     } catch (error) {
-      logError('Error en reconocimiento de voz:', error);
+      // logError('Error en reconocimiento de voz:', error);
       addMessage('bot', translations[currentLanguage].voiceNotAvailable);
     }
   });
 
   historyButton.addEventListener('click', () => {
-    log('Clic en historyButton');
+    // log('Clic en historyButton');
     if (isBotTyping) return;
     if (conversationHistory.length === 0) {
       addMessage('bot', translations[currentLanguage].noHistory);
@@ -821,7 +821,7 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   downloadButton.addEventListener('click', () => {
-    log('Clic en downloadButton');
+    // log('Clic en downloadButton');
     if (isBotTyping) return;
     if (conversationHistory.length === 0) {
       addMessage('bot', translations[currentLanguage].noHistoryToDownload);
@@ -840,13 +840,13 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   resetButton.addEventListener('click', () => {
-    log('Clic en resetButton');
+    // log('Clic en resetButton');
     if (isBotTyping) return;
     resetConversation();
   });
 
   function resetConversation() {
-    log('Reiniciando conversación');
+    // log('Reiniciando conversación');
     userRole = null;
     selectedArea = null;
     conversationHistory = [];
@@ -903,7 +903,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (loginForm) {
       initializeLoginForm(loginForm);
     } else {
-      logError('No se encontró el formulario de login después de reiniciar');
+      // logError('No se encontró el formulario de login después de reiniciar');
     }
 
     isChatInitialized = true;
