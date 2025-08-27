@@ -1,9 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
   // console.log('DOM completamente cargado');
-  const tempUsers = {
-    soporte: { username: 'soporte', password: 'S0p0rt3_S3gur0!', role: 'support' },
-    mantenimiento: { username: 'mantenimiento', password: 'M4nt3n_S3gur0!', role: 'maintenance' }
-  };
 
   // Configuración de logs
   const DEBUG_LOG = true;
@@ -214,25 +210,24 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   // Función para inicializar el formulario de login
-  function initializeLoginForm(formElement) {
+function initializeLoginForm(formElement) {
     if (!formElement) {
-      // logError('No se encontró el formulario de login para inicializar');
+      logError('No se encontró el formulario de login para inicializar');
       return;
     }
-    // log('Inicializando formulario de login');
-    
-    // Remover manejadores previos para evitar duplicados
+    log('Inicializando formulario de login');
+
     const newForm = formElement.cloneNode(true);
     formElement.parentNode.replaceChild(newForm, formElement);
-    
-    newForm.addEventListener('submit', function(e) {
+
+    newForm.addEventListener('submit', async function(e) {
       e.preventDefault();
-      // log('Formulario de login enviado');
+      log('Formulario de login enviado');
       const emailInput = newForm.querySelector('#exampleDropdownFormEmail2');
       const passwordInput = newForm.querySelector('#exampleDropdownFormPassword2');
-      
+
       if (!emailInput || !passwordInput) {
-        // logError('No se encontraron los campos de email o contraseña');
+        logError('No se encontraron los campos de email o contraseña');
         addMessage('bot', translations[currentLanguage].loginError);
         return;
       }
@@ -242,22 +237,39 @@ document.addEventListener('DOMContentLoaded', function() {
 
       const emailPattern = /^(soporte|mantenimiento)$/;
       if (!emailPattern.test(email)) {
-        // logError('Usuario inválido:', email);
+        logError('Usuario inválido:', email);
         addMessage('bot', 'El usuario debe ser "soporte" o "mantenimiento".');
         return;
       }
 
-      const user = Object.values(tempUsers).find(u => u.username === email && u.password === password);
-      if (user) {
-        log('Inicio de sesión exitoso para:', email, 'Rol:', user.role);
-        window.setRole(user.role);
-        const roleOptions = document.getElementById('roleOptions');
-        if (roleOptions) {
-          roleOptions.style.display = 'none';
+      try {
+        const response = await fetch('https://backendchatbot-ylq2.onrender.com/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: email, password: password })
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          addMessage('bot', errorData.message || translations[currentLanguage].loginError);
+          return;
         }
-      } else {
-        // logError('Credenciales incorrectas para:', email);
-        addMessage('bot', translations[currentLanguage].loginError);
+
+        const data = await response.json();
+        if (data.success) {
+          log('Inicio de sesión exitoso para:', email, 'Rol:', data.rol);
+          window.setRole(data.rol); // Usamos data.rol directamente
+          const roleOptions = document.getElementById('roleOptions');
+          if (roleOptions) {
+            roleOptions.style.display = 'none';
+          }
+          addMessage('bot', data.message); // Mostrar "Login exitoso ✅"
+        } else {
+          addMessage('bot', translations[currentLanguage].loginError);
+        }
+      } catch (error) {
+        console.error('Error al conectar con el backend para login', error.message);
+        addMessage('bot', 'Error al conectar con el servidor. Intenta de nuevo.');
       }
     });
   }
