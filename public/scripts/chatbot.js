@@ -212,17 +212,17 @@ document.addEventListener('DOMContentLoaded', function() {
   // Función para inicializar el formulario de login
 function initializeLoginForm(formElement) {
     if (!formElement) {
-      logError('No se encontró el formulario de login para inicializar');
+      // logError('No se encontró el formulario de login para inicializar');
       return;
     }
-    log('Inicializando formulario de login');
+    // log('Inicializando formulario de login');
 
     const newForm = formElement.cloneNode(true);
     formElement.parentNode.replaceChild(newForm, formElement);
 
     newForm.addEventListener('submit', async function(e) {
       e.preventDefault();
-      log('Formulario de login enviado');
+      // log('Formulario de login enviado');
       const emailInput = newForm.querySelector('#exampleDropdownFormEmail2');
       const passwordInput = newForm.querySelector('#exampleDropdownFormPassword2');
 
@@ -242,6 +242,16 @@ function initializeLoginForm(formElement) {
         return;
       }
 
+      // Agregar spinner al chatBody
+      const spinnerContainer = document.createElement('div');
+      spinnerContainer.className = 'spinner-container';
+      const spinner = document.createElement('div');
+      spinner.className = 'spinner';
+      spinner.innerHTML = `<img src="./assets/Images/spinner.svg" alt="Cargando" class="spinner-img">`;
+      spinnerContainer.appendChild(spinner);
+      chatBody.appendChild(spinnerContainer);
+      chatBody.scrollTop = chatBody.scrollHeight;
+
       try {
         const response = await fetch('https://backendchatbot-ylq2.onrender.com/api/login', {
           method: 'POST',
@@ -252,24 +262,28 @@ function initializeLoginForm(formElement) {
         if (!response.ok) {
           const errorData = await response.json();
           addMessage('bot', errorData.message || translations[currentLanguage].loginError);
+          spinnerContainer.remove();
           return;
         }
 
         const data = await response.json();
         if (data.success) {
-          log('Inicio de sesión exitoso para:', email, 'Rol:', data.rol);
-          window.setRole(data.rol); // Usamos data.rol directamente
+          // log('Inicio de sesión exitoso para:', email, 'Rol:', data.rol);
+          window.setRole(data.rol);
           const roleOptions = document.getElementById('roleOptions');
           if (roleOptions) {
             roleOptions.style.display = 'none';
           }
-          addMessage('bot', data.message); // Mostrar "Login exitoso ✅"
+          // Mostrar "Login exitoso ✅"
+          //addMessage('bot', data.message);
         } else {
           addMessage('bot', translations[currentLanguage].loginError);
         }
+        spinnerContainer.remove();
       } catch (error) {
         console.error('Error al conectar con el backend para login', error.message);
         addMessage('bot', 'Error al conectar con el servidor. Intenta de nuevo.');
+        spinnerContainer.remove();
       }
     });
   }
@@ -300,12 +314,12 @@ function initializeLoginForm(formElement) {
                   <div class="p-2">
                     <form id="loginForm" action="javascript:void(0)">
                       <div class="mb-2">
-                        <label for="exampleDropdownFormEmail2" class="form-label text-muted" style="font-size: 0.78rem;">Usuario (soporte o soporte@dominio.com)</label>
-                        <input type="text" class="form-control form-control-sm" id="exampleDropdownFormEmail2" placeholder="soporte o soporte@dominio.com" style="font-size: 0.78rem;" required pattern="^(soporte|mantenimiento)$">
+                        <label for="exampleDropdownFormEmail2" class="form-label text-muted" style="font-size: 0.78rem;">Usuario</label>
+                        <input type="text" class="form-control form-control-sm" id="exampleDropdownFormEmail2" placeholder="User" style="font-size: 0.78rem;" required pattern="^(soporte|mantenimiento)$">
                       </div>
                       <div class="mb-2">
                         <label for="exampleDropdownFormPassword2" class="form-label text-muted" style="font-size: 0.78rem;">Contraseña</label>
-                        <input type="password" class="form-control form-control-sm" id="exampleDropdownFormPassword2" placeholder="Contraseña" style="font-size: 0.78rem;" required>
+                        <input type="password" class="form-control form-control-sm" id="exampleDropdownFormPassword2" placeholder="Password" style="font-size: 0.78rem;" required>
                       </div>
                       <div class="mb-2">
                         <div class="form-check">
@@ -368,9 +382,9 @@ function initializeLoginForm(formElement) {
     // Mostrar mensaje de bienvenida personalizado
     let welcomeMessage;
     if (currentLanguage === 'es') {
-      welcomeMessage = `Bienvenido, ${role === 'support' ? 'soporte' : role === 'maintenance' ? 'mantenimiento' : role === 'technician' ? 'técnico' : 'ingeniero'}!`;
+      welcomeMessage = `Login exitoso ✅! Bienvenido, ${role === 'support' ? 'soporte' : role === 'maintenance' ? 'mantenimiento' : role === 'technician' ? 'técnico' : 'ingeniero'}!`;
     } else {
-      welcomeMessage = `Welcome, ${role === 'support' ? 'support' : role === 'maintenance' ? 'maintenance' : role === 'technician' ? 'technician' : 'engineer'}!`;
+      welcomeMessage = `Login successful ✅! Welcome, ${role === 'support' ? 'support' : role === 'maintenance' ? 'maintenance' : role === 'technician' ? 'technician' : 'engineer'}!`;
     }
     const welcomeDiv = document.createElement('div');
     welcomeDiv.className = 'bot-message';
@@ -888,12 +902,12 @@ function initializeLoginForm(formElement) {
               <div class="p-2">
                 <form id="loginForm" action="javascript:void(0)">
                   <div class="mb-2">
-                    <label for="exampleDropdownFormEmail2" class="form-label text-muted" style="font-size: 0.78rem;">Usuario (soporte o soporte@dominio.com)</label>
-                    <input type="text" class="form-control form-control-sm" id="exampleDropdownFormEmail2" placeholder="soporte o soporte@dominio.com" style="font-size: 0.78rem;" required pattern="^(soporte|mantenimiento)$">
+                    <label for="exampleDropdownFormEmail2" class="form-label text-muted" style="font-size: 0.78rem;">Usuario</label>
+                    <input type="text" class="form-control form-control-sm" id="exampleDropdownFormEmail2" placeholder="User" style="font-size: 0.78rem;" required pattern="^(soporte|mantenimiento)$">
                   </div>
                   <div class="mb-2">
                     <label for="exampleDropdownFormPassword2" class="form-label text-muted" style="font-size: 0.78rem;">Contraseña</label>
-                    <input type="password" class="form-control form-control-sm" id="exampleDropdownFormPassword2" placeholder="Contraseña" style="font-size: 0.78rem;" required>
+                    <input type="password" class="form-control form-control-sm" id="exampleDropdownFormPassword2" placeholder="Password" style="font-size: 0.78rem;" required>
                   </div>
                   <div class="mb-2">
                     <div class="form-check">
